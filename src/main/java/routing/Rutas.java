@@ -40,9 +40,9 @@ public class Rutas {
             return engine.render(new ModelAndView(model,"index"));
         }));
 
-        get("/blog",(request, response) -> {
+        get("/login",(request, response) -> {
             Map<String,Object> model = new HashMap<>();
-            return engine.render(new ModelAndView(model,"blog"));
+            return engine.render(new ModelAndView(model,"login"));
         });
 
         get("/portfolio",(request, response) -> {
