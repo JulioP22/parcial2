@@ -37,12 +37,18 @@ public class Rutas {
 
         get("/",((request, response) -> {
             Map<String,Object> model = new HashMap<>();
+            model.put("usuariosesion",true); //Reemplazar esto on el objeto de usuario de la sesión, usado para validar que se muestra y que no.
             return engine.render(new ModelAndView(model,"index"));
         }));
 
         get("/login",(request, response) -> {
             Map<String,Object> model = new HashMap<>();
             return engine.render(new ModelAndView(model,"login"));
+        });
+
+
+        post("/login",(request, response) -> {
+           return "GREAT!";
         });
 
         post("/register",(request, response) -> {
@@ -53,9 +59,9 @@ public class Rutas {
             return "";
         });
 
-        get("/portfolio",(request, response) -> {
+        get("/profile",(request, response) -> {
             Map<String,Object> model = new HashMap<>();
-            return engine.render(new ModelAndView(model,"blog"));
+            return engine.render(new ModelAndView(model,"profile"));
         });
 
         get("/contact",(request, response) -> {
