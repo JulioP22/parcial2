@@ -45,6 +45,14 @@ public class Rutas {
             return engine.render(new ModelAndView(model,"login"));
         });
 
+        post("/register",(request, response) -> {
+            System.out.println("El cuerpo de registro recibido");
+            System.out.println(request.body());
+            response.status(200);
+            response.redirect("/");
+            return "";
+        });
+
         get("/portfolio",(request, response) -> {
             Map<String,Object> model = new HashMap<>();
             return engine.render(new ModelAndView(model,"blog"));

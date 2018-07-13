@@ -25,6 +25,7 @@
                 <form id="form-signup" method="post" onsubmit="return false;">
                     <div class="form-element form-stack">
                         <label for="email" class="form-label">Email</label>
+                        <!--<input id="email" type="email" name="email" class="needs-validation">-->
                         <input id="email" type="email" name="email">
                     </div>
                     <div class="form-element form-stack">
@@ -39,17 +40,27 @@
                         <label for="confirm-password-signup" class="form-label">Confirme la contraseña</label>
                         <input id="confirm-password-signup" type="password" name="confirmpassword">
                     </div>
-                    <div class="form-element form-stack">
-                        <label for="address-signup" class="form-label">¿Donde vive?</label>
-                        <input id="address-signup" type="text" name="address">
-                    </div>
+                    <!--<div class="form-element form-stack">-->
+                        <!--<label for="address-signup" class="form-label">¿Donde vive?</label>-->
+                        <!--<input id="address-signup" type="text" name="address">-->
+                    <!--</div>-->
                     <div class="form-element form-stack">
                         <label for="birthdate-signup" class="form-label">Fecha de Nacimiento</label>
                         <input id="birthdate-signup" type="text" name="birthdate">
                     </div>
+
+                    <div class="form-element form-checkbox">
+                        <input type="radio" aria-label="Hombre" id="sex-male" name="sex">
+                        <label for="sex-male" class="form-label">Hombre</label>
+                        <input type="radio" aria-label="Mujer" id="sex-woman" name="sex">
+                        <label for="sex-woman" class="form-label">Mujer</label>
+                        <input type="radio" aria-label="NA" id="sex-na" name="sex">
+                        <label for="sex-na" class="form-label">N/A</label>
+                    </div>
+
                     <div class="form-element form-checkbox">
                         <input id="confirm-terms" type="checkbox" name="confirm" value="yes" class="checkbox">
-                        <label for="confirm-terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+                        <label for="confirm-terms">Acepto los <a href="#">Términos de Servicios</a> y <a href="#">Política de Privacidad</a></label>
                     </div>
                     <div class="form-element form-submit">
                         <button id="signUp" class="signup" type="submit" name="signup">Registrarse</button>

@@ -163,3 +163,37 @@ view.onResize = function paperOnResize() {
         shapeGroup.children[5].opacity = 1;
     }
 };
+
+
+/*Aqui van los métodos de los botones*/
+
+$("#signUp").on("click",function () {
+   $.post("/register",$("#form-signup").serialize(),function(){
+       //Make validation and redirect if correct, else indicate errors.
+       window.location.href = "/";
+   })
+});
+
+$("#logIn").on("click",function () {
+    $.post("/login",$("#form-signup").serialize(),function () {
+        //Make something when login is correct!
+    })
+});
+
+/*Aqui va lo referente a validaciones*/
+
+$("#email").keyup(function () {
+    // if (!validateEmail($(this).val())){
+    //     $(this).toggleClass(".is");
+    // }else{
+    //     alert("Email inválido");
+    //     $(this),addClass(":invalid");
+    // }
+});
+
+/*Aqui las funciones como tal de validación*/
+//
+// function validateEmail(email) {
+//     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+//     return re.test(email);
+// }
