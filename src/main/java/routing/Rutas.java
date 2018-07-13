@@ -3,6 +3,7 @@ package routing;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.thymeleaf.templateresolver.FileTemplateResolver;
 import spark.*;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
 import util.SQL;
@@ -35,8 +36,30 @@ public class Rutas {
         // Aqui se colocaran todas las rutas necesarias. Para la proxima implementacion, separar las rutas dependiendo de para que sirven
 
         get("/",((request, response) -> {
-            return "Hola Facebook";
+            Map<String,Object> model = new HashMap<>();
+            return engine.render(new ModelAndView(model,"index"));
         }));
+
+        get("/blog",(request, response) -> {
+            Map<String,Object> model = new HashMap<>();
+            return engine.render(new ModelAndView(model,"blog"));
+        });
+
+        get("/portfolio",(request, response) -> {
+            Map<String,Object> model = new HashMap<>();
+            return engine.render(new ModelAndView(model,"blog"));
+        });
+
+        get("/contact",(request, response) -> {
+            Map<String,Object> model = new HashMap<>();
+            return engine.render(new ModelAndView(model,"blog"));
+        });
+
+
+
+        get("/text",(request, response) -> {
+            return "Ahora va este texto";
+        });
 
     }
 

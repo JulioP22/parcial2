@@ -20,5 +20,5 @@ dependencies {
     compile "com.sparkjava:spark-template-thymeleaf:2.7.1"
     compile 'org.jasypt:jasypt:1.9.2'
     compile 'org.hibernate:hibernate-agroal:5.3.1.Final'
-
+    compile 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:1.2.5'
 }
