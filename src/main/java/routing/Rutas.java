@@ -54,6 +54,7 @@ public class Rutas {
         post("/register",(request, response) -> {
             System.out.println("El cuerpo de registro recibido");
             System.out.println(request.body());
+            SQL.insertUser(request.body());
             response.status(200);
             response.redirect("/");
             return "";
