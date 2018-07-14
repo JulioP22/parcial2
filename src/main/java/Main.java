@@ -9,13 +9,13 @@ public class Main {
     public static void main(String[] args) {
 
         try{
-//            Servidor.startDb();
-//            SQL.initDatabase();
-            Spark.staticFiles.location("/public");//Indica recursos servidos de forma estática.
+            Servidor.startDb();
+            SQL.initDatabase();
+            Spark.staticFiles.location("/public");
             Rutas.getInstance().initRoutes();
         }
         catch (Exception e){
-//            Servidor.stopDb();
+            Servidor.stopDb();
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Ha ocurrido un error al subir el servidor");
         }

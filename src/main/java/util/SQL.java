@@ -1,23 +1,21 @@
 package util;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 
 public class SQL {
-    private static SessionFactory sessionFactory;
-    private static String URL = "jdbc:h2:tcp://localhost/~/SocialMedia";
 
-//    public static void initDatabase() throws Exception {
-//        sessionFactory = new Configuration().configure()
-//                .buildSessionFactory();
-//        Session session = SQL.getSession();
-//    }
+    private static EntityManagerFactory emf;
 
+    public static void initDatabase() throws Exception {
+        emf =  Persistence.createEntityManagerFactory("Persistencia");
+    }
 
-//    Este método reemplaza al getConexion. Ahora se usa el concepto de sesion.
-    public static Session getSession() {
-        return sessionFactory.openSession();
+    public static EntityManager getSession() {
+        return emf.createEntityManager();
     }
 
 
