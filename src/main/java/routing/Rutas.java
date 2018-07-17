@@ -38,7 +38,14 @@ public class Rutas {
         get("/",((request, response) -> {
             Map<String,Object> model = new HashMap<>();
             model.put("usuariosesion",true); //Reemplazar esto on el objeto de usuario de la sesión, usado para validar que se muestra y que no.
-            return engine.render(new ModelAndView(model,"index"));
+
+            boolean usuariologeado = true;
+
+            if (usuariologeado){ //Si el usuario está autenticado la página principal que se carga es el feed de noticias
+                return engine.render(new ModelAndView(model,"authenticatedIndex"));
+            }else{
+                return engine.render(new ModelAndView(model,"index"));
+            }
         }));
 
         get("/login",(request, response) -> {
@@ -62,6 +69,7 @@ public class Rutas {
 
         get("/profile",(request, response) -> {
             Map<String,Object> model = new HashMap<>();
+            model.put("usuariosesion",true); //Reemplazar esto on el objeto de usuario de la sesión, usado para validar que se muestra y que no.
             return engine.render(new ModelAndView(model,"profile"));
         });
 

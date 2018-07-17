@@ -29,7 +29,7 @@
         <ul>
             <li class="fh5co-active"><a href="/">Mi historia</a></li>
             <!--TODO Recordar negar el botón de "Entrar" una vez se implemente la lógica correctamente-->
-            <li th:if="${usuariosesion}"><a href="/login">¡Entrar!</a></li>
+            <li th:if="!${usuariosesion}"><a href="/login">¡Entrar!</a></li>
             <li th:if="${usuariosesion}"><a href="/profile">Mi Muro</a></li>
             <li th:if="${usuariosesion}"><a href="/settings">Configuraciones</a></li>
             <li th:if="${usuariosesion}"><a href="/friends">Amigos</a></li>
