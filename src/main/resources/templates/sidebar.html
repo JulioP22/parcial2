@@ -27,13 +27,23 @@
     <h1 id="fh5co-logo"><a href="#">NullPointer</a></h1>
     <nav id="fh5co-main-menu" role="navigation">
         <ul>
-            <li class="fh5co-active"><a href="/">Mi historia</a></li>
+            <!--Para fines de marcar cuál es la activa usar la siguiente clase!-->
+            <!--class="fh5co-active"-->
+            <li><a href="/">Mi historia</a></li>
             <!--TODO Recordar negar el botón de "Entrar" una vez se implemente la lógica correctamente-->
             <li th:if="!${usuariosesion}"><a href="/login">¡Entrar!</a></li>
             <li th:if="${usuariosesion}"><a href="/profile">Mi Muro</a></li>
             <li th:if="${usuariosesion}"><a href="/settings">Configuraciones</a></li>
-            <li th:if="${usuariosesion}"><a href="/friends">Amigos</a></li>
+            <!--<li th:if="${usuariosesion}"><a href="/friends">Amigos</a></li>-->
         </ul>
+
+
+        <ul class="nav nav-pills" style="display: flex; justify-content: center; margin-top: 30%;">
+            <li><a href="#"><span class="glyphicon glyphicon-user"></span><span class="badge">7</span></a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-comment"></span><span class="badge">9</span></a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-bell"></span><span class="badge">3</span></a></li>
+        </ul>
+
     </nav>
 </aside>
 
