@@ -65,6 +65,7 @@
     <link rel="stylesheet" href="css/profile-cover.css">
     <link rel="stylesheet" href="css/post.css">
     <link rel="stylesheet" href="css/gallery.css">
+    <link rel="stylesheet" href="css/edit-profile.css">
 
 
     <!-- Modernizr JS -->
@@ -76,10 +77,12 @@
 
 </head>
 <body>
-<header th:insert="sidebar :: sidebarfiles"></header>
-<div th:replace="sidebar :: sidebar"></div>
 
 <div id="fh5co-page">
+
+    <header th:insert="sidebar :: sidebarfiles"></header>
+    <div th:replace="sidebar :: sidebar"></div>
+
     <div id="fh5co-main">
         <div>
             <h2 style="margin: 0px 30px 0 15px" class="fh5co-heading animate-box" data-animate-effect="fadeInLeft">Muro
@@ -129,7 +132,7 @@
                 <li onclick="backToWall()" role="presentation" class="active"><a href="#">Perfil</a></li>
                 <li onclick="goToGallery()" role="presentation"><a href="#">Galería</a></li>
                 <li role="presentation"><a href="#">Amigos</a></li>
-                <li role="presentation"><a href="#">Configuración</a></li>
+                <li onclick="goToEditProfile()" role="presentation"><a href="#">Editar Perfil</a></li>
             </ul>
 
             <!--Aqui termina a barra de navegación permanente-->
@@ -139,8 +142,6 @@
 
         </div>
         <!--Aqui empieza a barra de navegación permanente-->
-
-
 
 
         <div class="container" id="wall_normal">
@@ -316,7 +317,6 @@
         <!--Aqui empieza el código de la galería de imágenes-->
 
         <div hidden="hidden" class="container animate-box" id="wall_gallery" data-animate-effect="fadeIn">
-            <div id="top"></div>
             <section class="gallery">
                 <div class="row">
                     <ul>
@@ -335,17 +335,20 @@
 
                         <li>
                             <a href="#item02">
-                                <img src="https://d13yacurqjgara.cloudfront.net/users/22177/screenshots/1502114/upatnight-city-jb.png" alt="">
+                                <img src="https://d13yacurqjgara.cloudfront.net/users/22177/screenshots/1502114/upatnight-city-jb.png"
+                                     alt="">
                             </a>
                         </li>
                         <li>
                             <a class="image" href="#item01">
-                                <img src="https://d13yacurqjgara.cloudfront.net/users/22177/screenshots/1483213/dog-jeremiahbritton.jpg" alt="">
+                                <img src="https://d13yacurqjgara.cloudfront.net/users/22177/screenshots/1483213/dog-jeremiahbritton.jpg"
+                                     alt="">
                             </a>
                         </li>
                         <li>
                             <a class="image" href="#item02">
-                                <img src="https://d13yacurqjgara.cloudfront.net/users/22177/screenshots/1147375/dwyl-circle-jb.png" alt="">
+                                <img src="https://d13yacurqjgara.cloudfront.net/users/22177/screenshots/1147375/dwyl-circle-jb.png"
+                                     alt="">
                             </a>
                         </li>
                         <li>
@@ -373,7 +376,9 @@
                     <div class="row">
                         <div class="description">
                             <h1>Item 01</h1>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus quis libero erat. Integer ac purus est. Proin erat mi, pulvinar ut magna eget, consectetur auctor turpis.</p>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus quis libero erat.
+                                Integer ac purus est. Proin erat mi, pulvinar ut magna eget, consectetur auctor
+                                turpis.</p>
                         </div>
 
                         <img src="https://images.pexels.com/photos/46710/pexels-photo-46710.jpeg" alt="">
@@ -381,28 +386,111 @@
                 </div>
                 <!-- / row -->
 
-        <!-- / Item 02 -->
+                <!-- / Item 02 -->
 
-        <!-- Item 02 -->
-        <div id="item02" class="port">
+                <!-- Item 02 -->
+                <div id="item02" class="port">
 
-            <div class="row">
-                <div class="description">
-                    <h1>Item 02</h1>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus quis libero erat. Integer ac purus est. Proin erat mi, pulvinar ut magna eget, consectetur auctor turpis.</p>
+                    <div class="row">
+                        <div class="description">
+                            <h1>Item 02</h1>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus quis libero erat.
+                                Integer ac purus est. Proin erat mi, pulvinar ut magna eget, consectetur auctor
+                                turpis.</p>
+                        </div>
+                        <img src="https://images.pexels.com/photos/46710/pexels-photo-46710.jpeg" alt="">
+                    </div>
+                    <!-- / row -->
+
                 </div>
-                <img src="https://images.pexels.com/photos/46710/pexels-photo-46710.jpeg" alt="">
+                <!-- / Item 02 -->
+
+            </section>
+            <!-- / projects -->
+
+        </div>
+
+
+        <!--AQUI EMPIEZA EL EDITAR PEFIL-->
+
+
+        <div hidden="hidden" class="container" id="wall_editP">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad">
+
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Generico Generalizado</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-3 col-lg-3 " align="center"><img alt="User Pic"
+                                                                                    src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg"
+                                                                                    class="img-circle img-responsive">
+                                </div>
+
+                                <div class=" col-md-9 col-lg-9 ">
+                                    <table class="table table-user-information">
+                                        <tbody>
+                                        <tr>
+                                            <td>Correo Electrónico:</td>
+                                            <td><input id="email-signup" type="email" name="email" required disabled></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Fecha de Nacimiento:</td>
+                                            <td><input id="birthdate-edit" type="date" name="birthdate" required disabled></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Lugar de Nacimiento:</td>
+                                            <td><input id="birthplace-edit" type="text" name="birthplace" required disabled></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Lugar de Residencia:</td>
+                                            <td><input id="livingplace-edit" type="text" name="livingplace" required disabled></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Último lugar de estudio:</td>
+                                            <td><input id="laststudyplace-edit" type="text" name="laststudyplace" required disabled></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Último lugar de trabajo:</td>
+                                            <td><input id="lastWorkPlace-edit" type="text" name="lastWorkPlace" required disabled></td>
+                                        </tr>
+
+
+                                        <tr>
+                                        <tr>
+                                            <td>Género:</td>
+                                            <td>Medio Genérico</td>
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+
+                                    <a href="#" class="btn btn-primary">My Sales Performance</a>
+                                    <a href="#" class="btn btn-primary">Team Sales Performance</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-footer">
+                            <span class="pull-right">
+                            <a onclick="enableEdit()" data-original-title="Habilitar Edición" data-toggle="tooltip" type="button"
+                               class="btn btn-sm btn-default"><i class="glyphicon glyphicon-edit"></i></a>
+                            <a onclick="saveEdit()" data-original-title="Guardar Cambios" data-toggle="tooltip" type="button"
+                               class="btn btn-sm btn-success"><i class="glyphicon glyphicon-ok"></i></a>
+                        </span>
+                        </div>
+
+                    </div>
+                </div>
             </div>
-            <!-- / row -->
-
-        </div>
-        <!-- / Item 02 -->
-
-        </section>
-        <!-- / projects -->
-
         </div>
 
+
+        <!--AQUI TERMINA EL EDITAR PERFIL-->
 
 
         <div class="fh5co-narrow-content">
