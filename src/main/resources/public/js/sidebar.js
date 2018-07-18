@@ -3,18 +3,39 @@ $(document).ready({
 });
 
 function notificationHandler(){
-   if($(".notif-header-text").is(":hidden")){
+
+    if ($(".friends-header-text").is(":visible")){
+        $(".friends-header-text").hide();
+        $("#activity-friends").hide();
+    }
+
+
+    if($(".notif-header-text").is(":hidden")){
+
        $(".notif-header-text").show();
-       $(".activity-feed").show();
-       $(this).addClass("fh5co-active");
-       $(this).toggleClass("fh5co-active"); //TODO Make this work
+       $("#activity-notifications").show();
+
    }else{
       $(".notif-header-text").hide();
       $(".activity-feed").hide();
-      $(this).removeClass("fh5co-active"); //TODO make this work
    }
 }
 
-function friendShipHandler(){
-//    Do logic to act over messages!
+function friendshipHandler(){
+
+    if ($(".notif-header-text").is(":visible")){
+        $(".notif-header-text").hide();
+        $("#activity-notifications").hide();
+    }
+
+
+    if($(".friends-header-text").is(":hidden")){
+
+        $(".friends-header-text").show();
+        $("#activity-friends").show();
+
+    }else{
+        $(".friends-header-text").hide();
+        $("#activity-friends").hide();
+    }
 }
