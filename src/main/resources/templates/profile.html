@@ -122,16 +122,31 @@
 
             <hr class="animate-box" data-animate-effect="fadeInTop"
                 style="width: 100%; color: lightslategray; height: 1px; background-color:lightslategray;"/>
-        </div>
 
-        <!--Aqui empieza la division de perfil dejando el carousel e informaciones de un lado y lo demás como los posts y eso del otro-->
+
+            <!--Esta es la barra-->
+            <ul class="nav nav-tabs">
+                <li onclick="backToWall()" role="presentation" class="active"><a href="#">Perfil</a></li>
+                <li onclick="goToGallery()" role="presentation"><a href="#">Galería</a></li>
+                <li role="presentation"><a href="#">Amigos</a></li>
+                <li role="presentation"><a href="#">Configuración</a></li>
+            </ul>
+
+            <!--Aqui termina a barra de navegación permanente-->
+
+            <!--Aqui empieza la division de perfil dejando el carousel e informaciones de un lado y lo demás como los posts y eso del otro-->
+
+
+        </div>
+        <!--Aqui empieza a barra de navegación permanente-->
+
+
+
 
         <div class="container" id="wall_normal">
             <div class="row">
                 <div class="col-sm-12 col-md-4 col-lg-4 animate-box" data-animate-effect="fadeInLeft">
                     <!--Aqui va todo lo de la izquierda-->
-
-                    <button onclick="goToGallery()" style="width: 100%">Galería de Fotos</button>
 
                     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                         <ol class="carousel-indicators">
@@ -298,13 +313,11 @@
             </div>
         </div>
 
-
         <!--Aqui empieza el código de la galería de imágenes-->
 
         <div hidden="hidden" class="container animate-box" id="wall_gallery" data-animate-effect="fadeIn">
             <div id="top"></div>
             <section class="gallery">
-                <li onclick="backToWall()"><a href="#"><span style="font-size: 25px;" class="glyphicon glyphicon-menu-left"></span></a></li>
                 <div class="row">
                     <ul>
                         <a href="#" class="close"></a>
