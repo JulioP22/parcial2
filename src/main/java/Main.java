@@ -12,6 +12,8 @@ public class Main {
             Servidor.startDb();
             SQL.initDatabase();
             Spark.staticFiles.location("/public");
+//            Spark.staticFiles.externalLocation("src/main/resources/public/");
+//            Spark.externalStaticFileLocation("src/main/resources/public/");
             Rutas.getInstance().initRoutes();
         }
         catch (Exception e){

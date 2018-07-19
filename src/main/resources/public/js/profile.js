@@ -1,6 +1,35 @@
 
 var editorHeight = 200;
+
+
+
 $(document).ready(function() {
+
+    //    Custom buttons
+
+
+
+    var addButton = function (context) {
+        var ui = $.summernote.ui;
+
+        // create button
+        var button = ui.button({
+            contents: '<i class="fa fa-child"/> Actualizar Estado',
+            tooltip: 'Actualizar Estado',
+            click: function () {
+                // invoke insertText method with 'hello' on editor module.
+                context.invoke('editor.insertText', 'hello'); //Cambiar a método de guardar texto.
+            }
+        });
+
+        return button.render();   // return button as jquery object
+    }
+
+    //Add buttons
+
+
+
+
     //Sumernote
     $('#summernote').summernote({
         height: editorHeight,
@@ -10,14 +39,19 @@ $(document).ready(function() {
         disableResizeEditor: true,
         toolbar: [
             // [groupName, [list of button]]
-            ['style', ['bold', 'italic', 'underline', 'clear']],
-            ['font', ['strikethrough', 'superscript', 'subscript']],
-            ['fontsize', ['fontsize']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']]
-        ]
+            ['style', ['bold', 'clear']],
+            'picture',
+            'addComment'
+        ],
+
+        buttons:{
+            addComment: addButton
+        }
     });
+
+
+
+
 
 
 //    Edit Profile.
@@ -50,10 +84,10 @@ $(document).ready(function() {
 
     $('[data-toggle="tooltip"]').tooltip();
 
-    $('button').click(function(e) {
-        e.preventDefault();
-        alert("This is a demo.\n :-)");
-    });
+    // $('button').click(function(e) {
+    //     e.preventDefault();
+    //     alert("This is a demo.\n :-)");
+    // });
 
 });
 

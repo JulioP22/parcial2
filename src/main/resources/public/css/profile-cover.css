@@ -15,7 +15,8 @@ a {
 
 .content-profile-page {
     margin: 1em auto;
-    width: 44.23em;
+    width: 70em;
+    /*width: 100%;*/
 }
 
 .card {
@@ -32,7 +33,8 @@ a {
 }
 .profile-user-page .img-user-profile .profile-bgHome {
     border-bottom: .2em solid #f5f5f5;
-    width: 44.23em;
+    /*width: 44.23em;*/
+    width: 70em;
     height: 16em;
 }
 .profile-user-page .img-user-profile .avatar {
