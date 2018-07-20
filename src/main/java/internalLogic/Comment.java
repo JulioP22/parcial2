@@ -7,7 +7,7 @@ import java.util.Date;
 public class Comment {
     private String description;
     private Date date;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

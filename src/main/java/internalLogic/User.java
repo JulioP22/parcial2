@@ -17,12 +17,13 @@ public class User {
     private String sex;
     private String location;
     private String jobs;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<User> friends;
     private String role;
+    private byte[] profilePhoto;
 
 
-    public User(String fullName, String email, String password, Date bornDate, String sex, String location, String jobs, Set<User> friends, String role) {
+    public User(String fullName, String email, String password, Date bornDate, String sex, String location, String jobs, Set<User> friends, String role, byte[] profilePhoto) {
         this.fullName = fullName;
         this.email = email;
         this.password = password;
@@ -32,6 +33,7 @@ public class User {
         this.jobs = jobs;
         this.friends = friends;
         this.role = role;
+        this.profilePhoto = profilePhoto;
     }
 
     public User() {
@@ -115,5 +117,13 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public byte[] getProfilePhoto() {
+        return profilePhoto;
+    }
+
+    public void setProfilePhoto(byte[] profilePhoto) {
+        this.profilePhoto = profilePhoto;
     }
 }

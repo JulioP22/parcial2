@@ -10,7 +10,7 @@ public class MLike { // This name was given to avoid Sara's problem with the wor
     private long id;
     private int action; // Could be 1 means a like and -1 means a dislike
     private Date date;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
     public MLike(int action, Date date, User user) {

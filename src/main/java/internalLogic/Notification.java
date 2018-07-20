@@ -6,12 +6,12 @@ import javax.persistence.*;
 public class Notification {
 
     private String description;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Publication publication;
 
     public Notification(String description, User user, Publication publication) {

@@ -8,9 +8,9 @@ public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private User sender;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private User receiver;
     private String reason;
 
