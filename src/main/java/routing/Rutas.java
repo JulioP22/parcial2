@@ -63,7 +63,7 @@ public class Rutas {
             if (loginUser(user) && user!=null){
                 Session session = request.session(true);
                 session.maxInactiveInterval(600);
-                session.attribute("user",user);//TODO, esto debe cambiarse a findUserByEmail.
+                session.attribute("user",SQL.getUserByEmail(user.getEmail()));//
 
                 //Aqui va la lógica del cookie
             }else{
