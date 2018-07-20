@@ -201,7 +201,7 @@ public class SQL {
             EntityManager enf = getEntityManager();
             EntityTransaction tr = enf.getTransaction();
             tr.begin();
-            List list = enf.createQuery("select c from Publication c where receiverUser_id = :id")
+            List list = enf.createQuery("select c from Publication c where receiverUser_id = :id order by id desc")
                     .setParameter("id",idUser)
                     .getResultList();
             tr.commit();
@@ -218,7 +218,7 @@ public class SQL {
             EntityManager enf = getEntityManager();
             EntityTransaction tr = enf.getTransaction();
             tr.begin();
-            List list = enf.createQuery("select c from Publication c")
+            List list = enf.createQuery("select c from Publication c order by id desc")
                     .getResultList();
             tr.commit();
             enf.close();
