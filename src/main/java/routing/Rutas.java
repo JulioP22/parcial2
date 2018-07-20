@@ -3,6 +3,9 @@ package routing;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import internalLogic.Comment;
+import internalLogic.Publication;
+import internalLogic.User;
 import org.thymeleaf.templateresolver.FileTemplateResolver;
 import spark.*;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
@@ -80,6 +83,12 @@ public class Rutas {
 
         get("/text",(request, response) -> {
             return "Ahora va este texto";
+        });
+
+        post("/insertUser",(request, response) -> {
+            List<User> list = SQL.getUsers();
+            Publication pub = new Publication()
+            return "";
         });
 
     }

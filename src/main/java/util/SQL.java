@@ -43,7 +43,7 @@ public class SQL {
         }
     }
 
-    public static void insert (Object comment){
+    public static <T> void insert (T comment){
         try{
             EntityManager enf = getEntityManager();
             EntityTransaction tr = enf.getTransaction();
@@ -57,12 +57,12 @@ public class SQL {
         }
     }
 
-    public static void delete (Object comment){
+    public static <T> void delete (T comment){
         try{
             EntityManager enf = getEntityManager();
             EntityTransaction tr = enf.getTransaction();
             tr.begin();
-            enf.remove(comment);
+            enf.remove(enf.contains(comment) ? comment : enf.merge(comment));
             tr.commit();
             enf.close();
         }
@@ -71,7 +71,7 @@ public class SQL {
         }
     }
 
-    public static void update (Object comment){
+    public static <T> void update (T comment){
         try{
             EntityManager enf = getEntityManager();
             EntityTransaction tr = enf.getTransaction();
@@ -85,19 +85,34 @@ public class SQL {
         }
     }
 
-    public static List<Object> get (String table){
+    public static List<User> getUsers (){
         try{
             EntityManager enf = getEntityManager();
             EntityTransaction tr = enf.getTransaction();
             tr.begin();
-            List<Object> list = enf.createQuery("SELECT c FROM 1? c")
-                    .setParameter("table",table)
+            List<User> list = enf.createQuery("select c from User c")
                     .getResultList();
             tr.commit();
             enf.close();
             return list;
         }
         catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static List getPublications() {
+        try {
+            EntityManager enf = getEntityManager();
+            EntityTransaction tr = enf.getTransaction();
+            tr.begin();
+            List list = enf.createQuery("select c from Publication c")
+                    .getResultList();
+            tr.commit();
+            enf.close();
+            return list;
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }

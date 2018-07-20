@@ -22,8 +22,7 @@ public class Publication {
     @ManyToOne
     protected User receiverUser;
 
-    public Publication(long id, Set<Comment> commentSet, Set<MLike> likeSet, Date date, User creator, String description, Set<User> taggedUsers, User receiverUser) {
-        this.id = id;
+    public Publication(Set<Comment> commentSet, Set<MLike> likeSet, Date date, User creator, String description, Set<User> taggedUsers, User receiverUser) {
         this.commentSet = commentSet;
         this.likeSet = likeSet;
         this.date = date;

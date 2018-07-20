@@ -16,7 +16,7 @@ public class UserImage extends Publication{
     private byte[] image;
 
     public UserImage(byte[] image, long id, Set<Comment> commentSet, Set<MLike> likeSet, Date date, User creator, String description, Set<User> taggedUsers, User receiverUser) {
-        super(id, commentSet, likeSet, date, creator, description, taggedUsers, receiverUser);
+        super(commentSet, likeSet, date, creator, description, taggedUsers, receiverUser);
         this.image = image;
     }
 

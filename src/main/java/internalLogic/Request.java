@@ -14,11 +14,10 @@ public class Request {
     private User receiver;
     private String reason;
 
-    public Request(User sender, User receiver, String reason, long id) {
+    public Request(User sender, User receiver, String reason) {
         this.sender = sender;
         this.receiver = receiver;
         this.reason = reason;
-        this.id = id;
     }
 
     public Request() {

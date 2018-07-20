@@ -13,11 +13,10 @@ public class MLike { // This name was given to avoid Sara's problem with the wor
     @ManyToOne
     private User user;
 
-    public MLike(int action, Date date, User user, long id) {
+    public MLike(int action, Date date, User user) {
         this.action = action;
         this.date = date;
         this.user = user;
-        this.id = id;
     }
 
     public MLike() {

@@ -11,7 +11,7 @@ public class UserAlbum extends Publication {
     private Set<UserImage> userImages;
 
     public UserAlbum(Set<UserImage> userImages, String description, User creator, Date date, Set<Comment> commentSet, Set<MLike> likeSet, long id, Set<User> taggedUsers, User receiverUser) {
-        super(id, commentSet, likeSet,date, creator, description, taggedUsers, receiverUser);
+        super(commentSet, likeSet,date, creator, description, taggedUsers, receiverUser);
         this.userImages = userImages;
     }
 

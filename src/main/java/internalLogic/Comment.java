@@ -13,11 +13,10 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    public Comment(String description, Date date, User user, long id) {
+    public Comment(String description, Date date, User user) {
         this.description = description;
         this.date = date;
         this.user = user;
-        this.id = id;
     }
 
     public Comment() {

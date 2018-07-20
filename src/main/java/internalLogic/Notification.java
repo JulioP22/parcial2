@@ -12,10 +12,9 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    public Notification(String description, User user, long id) {
+    public Notification(String description, User user) {
         this.description = description;
         this.user = user;
-        this.id = id;
     }
 
     public Notification() {

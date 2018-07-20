@@ -22,8 +22,7 @@ public class User {
     private String role;
 
 
-    public User(long id, String fullName, String email, String password, Date bornDate, String sex, String location, String jobs, Set<User> friends, String role) {
-        this.id = id;
+    public User(String fullName, String email, String password, Date bornDate, String sex, String location, String jobs, Set<User> friends, String role) {
         this.fullName = fullName;
         this.email = email;
         this.password = password;
