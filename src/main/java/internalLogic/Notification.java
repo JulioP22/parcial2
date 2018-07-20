@@ -11,10 +11,13 @@ public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @ManyToOne
+    private Publication publication;
 
-    public Notification(String description, User user) {
+    public Notification(String description, User user, Publication publication) {
         this.description = description;
         this.user = user;
+        this.publication = publication;
     }
 
     public Notification() {
@@ -42,5 +45,13 @@ public class Notification {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public Publication getPublication() {
+        return publication;
+    }
+
+    public void setPublication(Publication publication) {
+        this.publication = publication;
     }
 }

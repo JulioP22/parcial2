@@ -4,22 +4,24 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
 
+import static javax.persistence.FetchType.EAGER;
+
 @Entity
 public class Publication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected long id;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     protected Set<Comment> commentSet;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     protected Set<MLike> likeSet;
     protected Date date;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     protected User creator;
     protected String description;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     protected Set<User> taggedUsers;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     protected User receiverUser;
 
     public Publication(Set<Comment> commentSet, Set<MLike> likeSet, Date date, User creator, String description, Set<User> taggedUsers, User receiverUser) {

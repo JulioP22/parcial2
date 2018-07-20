@@ -4,6 +4,7 @@ package routing;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import internalLogic.Comment;
+import internalLogic.MLike;
 import internalLogic.Publication;
 import internalLogic.User;
 import org.thymeleaf.templateresolver.FileTemplateResolver;
@@ -86,10 +87,12 @@ public class Rutas {
         });
 
         post("/insertUser",(request, response) -> {
-            List<User> list = SQL.getUsers();
-            Publication pub = new Publication()
+            User user = SQL.getUserByEmail("sadas");
+            System.out.println(user.getFullName());
             return "";
         });
+
+
 
     }
 
