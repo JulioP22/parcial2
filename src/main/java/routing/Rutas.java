@@ -2,13 +2,11 @@ package routing;
 
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import internalLogic.Comment;
 import internalLogic.Publication;
 import internalLogic.User;
-import org.thymeleaf.templateresolver.FileTemplateResolver;
 import spark.*;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
+import util.Cypher;
 import util.SQL;
 
 import java.util.*;
@@ -19,7 +17,7 @@ import static spark.Spark.*;
 public class Rutas {
     private static Rutas rut;
     private ThymeleafTemplateEngine engine;
-    private Gson render;
+    private Gson parser;
 
     public static Rutas getInstance() {
         if (rut == null) {
@@ -30,7 +28,7 @@ public class Rutas {
 
     private Rutas() {
         engine = new ThymeleafTemplateEngine();
-        render = new Gson();
+        parser = new Gson();
     }
 
 
@@ -40,15 +38,15 @@ public class Rutas {
 
         get("/",((request, response) -> {
             Map<String,Object> model = new HashMap<>();
-            model.put("usuariosesion",true); //Reemplazar esto on el objeto de usuario de la sesión, usado para validar que se muestra y que no.
+            model.put("usuariosesion",request.session().attribute("user")); //Reemplazar esto on el objeto de usuario de la sesión, usado para validar que se muestra y que no.
 
-            boolean usuariologeado = true;
 
-            if (usuariologeado){ //Si el usuario está autenticado la página principal que se carga es el feed de noticias
+            if (request.session().attribute("user")!=null){ //Si el usuario está autenticado la página principal que se carga es el feed de noticias
                 return engine.render(new ModelAndView(model,"authenticatedIndex"));
             }else{
                 return engine.render(new ModelAndView(model,"index"));
             }
+
         }));
 
         get("/login",(request, response) -> {
@@ -58,7 +56,17 @@ public class Rutas {
 
 
         post("/login",(request, response) -> {
-           return "GREAT!";
+            User user = parser.fromJson(request.body(),User.class);
+            if (loginUser(user) && user!=null){
+                Session session = request.session(true);
+                session.maxInactiveInterval(600);
+                session.attribute("user",user);//TODO, esto debe cambiarse a findUserByEmail.
+
+                //Aqui va la lógica del cookie
+            }else{
+                halt(401,"Credenciales no válidas");
+            }
+           return "Logged In!";
         });
 
         post("/register",(request, response) -> {
@@ -87,10 +95,23 @@ public class Rutas {
 
         post("/insertUser",(request, response) -> {
             List<User> list = SQL.getUsers();
-            Publication pub = new Publication()
+            Publication pub = new Publication();
             return "";
         });
 
+    }
+
+    private boolean loginUser(User user){
+        boolean loggedIn = false;
+        List<User> usuarios = SQL.getUsers();
+        for (User usuario: usuarios){
+            System.out.println("Entre a el usuario: " + usuario.getEmail());
+            if (usuario.getEmail().trim().equalsIgnoreCase(user.getEmail().trim()) && Cypher.getInstance().checkPassword(user.getPassword().trim(),usuario.getPassword().trim())){
+                loggedIn = true;
+            }
+        }
+
+        return loggedIn;
     }
 
 }

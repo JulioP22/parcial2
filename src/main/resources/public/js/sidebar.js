@@ -2,6 +2,7 @@ $(document).ready({
 
 });
 
+
 function notificationHandler(){
 
     if ($(".friends-header-text").is(":visible")){

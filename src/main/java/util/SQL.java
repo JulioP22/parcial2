@@ -4,6 +4,7 @@ package util;
 import com.sun.istack.internal.NotNull;
 import internalLogic.Comment;
 import internalLogic.User;
+import org.hibernate.EntityNameResolver;
 import org.hibernate.Transaction;
 import org.omg.CORBA.INTERNAL;
 
@@ -20,10 +21,46 @@ public class SQL {
 
     public static void initDatabase() throws Exception {
         emf =  Persistence.createEntityManagerFactory("Persistencia");
+        if (!userCreated()) {
+            createDefaultUser();
+        }
     }
 
     public static EntityManager getEntityManager() {
         return emf.createEntityManager();
+    }
+
+
+
+    private static boolean userCreated(){
+        boolean created = false;
+        EntityManager enf = getEntityManager();
+        EntityTransaction tr = enf.getTransaction();
+        tr.begin();
+        long count = (long)enf.createQuery("SELECT count (*) from User ").getSingleResult();
+        if (count>0){
+            created = true;
+        }
+        return created;
+    }
+
+
+    private static void createDummyData(){
+
+    };
+
+    private static void createDefaultUser(){
+        try {
+            User user = new User("Generico Generalizado","a@a.com","j9hp49DuFChzXndy9SVmXtPYDCBKjkoCBxz49vhuUvI8MnwEbsm+0M/AHIQDpX/w",new Date(),"M","Santiago","PUCMM",null,"admin");
+            EntityManager enf = getEntityManager();
+            EntityTransaction tr = enf.getTransaction();
+            tr.begin();
+            enf.persist(user);
+            tr.commit();
+            enf.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public static void insertUser(String data){

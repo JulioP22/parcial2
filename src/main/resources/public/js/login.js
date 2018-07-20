@@ -175,25 +175,17 @@ $("#signUp").on("click",function () {
 });
 
 $("#logIn").on("click",function () {
-    $.post("/login",$("#form-signup").serialize(),function () {
-        //Make something when login is correct!
+    $.post("/login",formToJson($("#form-login")),function (response) {
+        window.location.href = "/";
+    }).fail(function () {
+        console.log("SE JODiÓ") //TODO Hacer algo bonito front End aqui.
     })
 });
 
 /*Aqui va lo referente a validaciones*/
 
 $("#email").keyup(function () {
-    // if (!validateEmail($(this).val())){
-    //     $(this).toggleClass(".is");
-    // }else{
-    //     alert("Email inválido");
-    //     $(this),addClass(":invalid");
-    // }
+
 });
 
 /*Aqui las funciones como tal de validación*/
-//
-// function validateEmail(email) {
-//     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-//     return re.test(email);
-// }
