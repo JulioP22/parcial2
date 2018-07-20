@@ -14,30 +14,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Nullpointer.me</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--
-  //////////////////////////////////////////////////////
-
-  FREE HTML5 TEMPLATE
-  DESIGNED & DEVELOPED by FreeHTML5.co
-
-  Website: 		http://freehtml5.co/
-  Email: 			info@freehtml5.co
-  Twitter: 		http://twitter.com/fh5co
-  Facebook: 		https://www.facebook.com/fh5co
-
-  //////////////////////////////////////////////////////
-  -->
-
-    <!-- Facebook and Twitter integration -->
-    <meta property="og:title" content=""/>
-    <meta property="og:image" content=""/>
-    <meta property="og:url" content=""/>
-    <meta property="og:site_name" content=""/>
-    <meta property="og:description" content=""/>
-    <meta name="twitter:title" content=""/>
-    <meta name="twitter:image" content=""/>
-    <meta name="twitter:url" content=""/>
-    <meta name="twitter:card" content=""/>
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <link rel="shortcut icon" href="favicon.ico">
@@ -88,10 +64,6 @@
             <h2 style="margin: 0px 30px 0 15px" class="fh5co-heading animate-box" data-animate-effect="fadeInLeft">Muro
                 de Usuario</h2>
 
-
-            <!--Aqui empieza todo lo que vaya en el lado-->
-
-
             <!--Empieza el cover del perfil-->
             <div class="content-profile-page animate-box" data-animate-effect="fadeinTop">
                 <div class="profile-user-page card">
@@ -102,17 +74,15 @@
                              alt="jofpin"/>
                     </div>
                     <!--Thif para que el boton y la acción sean según la relación de amistad del usuario logeado.-->
-                    <button>Agregar</button>
+                    <button>Agregar como amigo</button>
                     <div class="user-profile-data">
-                        <h1>Genérico BAKANISMO</h1>
+                        <h1 th:text="${usuariosesion.fullName}"></h1>
                     </div>
-                    <div class="description-profile">Front-end | Security Researcher | CSS Warrior | <a
+                    <div class="description-profile">Descripción Genérica de Usuario<a
                             href="https://twitter.com/bullgit" title="bullgit"><strong>@bullgit</strong></a> | I
-                        love to
-                        create small things for the internet!
                     </div>
                     <ul class="data-user">
-                        <li><a><strong>3390</strong><span>Amigos</span></a></li>
+                        <li><a><strong th:text="${usuariosesion.friends.size}"></strong><span>Amigos</span></a></li>
                         <li><a><strong>718</strong><span>Fotos</span></a></li>
                         <!--<li><a><strong>239</strong><span>Following</span></a></li>-->
                     </ul>
@@ -190,11 +160,19 @@
                     <textarea name="editordata" id="summernote"></textarea>
 
                     <!--Una vez agregado SIEMPRE el summernote para poder hacer posts, entonces se ponen los posts!-->
+
+
+
+
                     <!--AQUI EMPIEZAN LOS POSTS-->
 
-                    <!--Este se puede considerar un panel tipo TEXTO-->
 
-                    <div class="[ panel panel-default ] panel-google-plus">
+
+                    <!--Este se puede considerar un panel tipo TEXTO-->
+                    <!--Cambiar esto a todas las publicaciones donde este usuario sea el objetivo-->
+                    <th:block th:each="comentario : ${comentarios}">
+
+                    <div class="[ panel panel-default ] panel-google-plus" >
                         <div class="dropdown">
                     <span class="dropdown-toggle" type="button" data-toggle="dropdown">
                         <span class="[ glyphicon glyphicon-chevron-down ]"></span>
@@ -211,12 +189,15 @@
                                     link</a></li>
                             </ul>
                         </div>
-                        <div class="panel-google-plus-tags">
-                            <ul>
-                                <li>#Millennials</li>
-                                <li>#Generation</li>
-                            </ul>
-                        </div>
+
+                        <!--No hay nada de tags definido para ls publicaciones.-->
+                        <!--<div class="panel-google-plus-tags">-->
+                            <!--<ul>-->
+                                <!--<li>#Millennials</li>-->
+                                <!--<li>#Generation</li>-->
+                            <!--</ul>-->
+                        <!--</div>-->
+
                         <div class="panel-heading">
                             <img class="[ img-circle pull-left ]"
                                  src="https://lh3.googleusercontent.com/-CxXg7_7ylq4/AAAAAAAAAAI/AAAAAAAAAQ8/LhCIKQC5Aq4/s46-c-k-no/photo.jpg"
@@ -248,6 +229,13 @@
                             <div class="clearfix"></div>
                         </div>
                     </div>
+
+                    </th:block>
+
+
+
+
+
 
                     <!--ESTE SE PUEDE CONSIDERAR UN PANEL TIPO IMAGEN-->
 
