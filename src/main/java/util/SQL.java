@@ -294,6 +294,22 @@ public class SQL {
         }
     }
 
+    public static <T> T getElementById(long id, Class cls){
+        try{
+            EntityManager enf = getEntityManager();
+            EntityTransaction tr = enf.getTransaction();
+            tr.begin();
+            T element = (T) enf.find(cls, id);
+            tr.commit();
+            enf.close();
+            return element;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public static User getUserByEmail(String email){
         try {
             EntityManager enf = getEntityManager();

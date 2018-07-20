@@ -98,14 +98,8 @@ public class Rutas {
         });
 
         post("/insertUser",(request, response) -> {
-            User user = SQL.getUserByEmail("a@a.com");
-//            Publication pub = new Publication(null,null,new Date(),user,"DDAD",null,user);
-//            SQL.insert(pub);
 
-            byte[] image = getImageInBytes();
-
-            UserImage pub = new UserImage(image,null,null,new Date(),user,"SDSAD",null,user);
-            SQL.insert(pub);
+            User user = SQL.getElementById(1, User.class);
 
             return "";
         });
