@@ -18,7 +18,13 @@ $(document).ready(function() {
             tooltip: 'Actualizar Estado',
             click: function () {
                 // invoke insertText method with 'hello' on editor module.
-                context.invoke('editor.insertText', 'hello'); //Cambiar a método de guardar texto.
+                let status = $("#summernote").summernote("code");
+                let publication = {};
+                publication.date = new Date();
+                publication.description = status; //TODO Falta la lógica de tagging
+                $.post("/insertPublication",JSON.stringify(publication),function(){
+                    window.location.href = "/profile";
+                });
             }
         });
 
