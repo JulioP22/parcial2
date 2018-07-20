@@ -20,6 +20,8 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<User> friends;
     private String role;
+    @Column( name = "PROFILEPHOTO" )
+    @Lob
     private byte[] profilePhoto;
 
 
