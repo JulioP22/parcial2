@@ -70,8 +70,11 @@
                     <div class="img-user-profile">
                         <img class="profile-bgHome"
                              src="https://37.media.tumblr.com/88cbce9265c55a70a753beb0d6ecc2cd/tumblr_n8gxzn78qH1st5lhmo1_1280.jpg"/>
-                        <img class="avatar" src="images/avatar.png"
+
+                        <img id="profilePic" class="avatar" src="images/avatar.png"
                              alt="jofpin"/>
+                        <input type="file" class="form-control-file" id="imgupload" style="display:none"/>
+
                     </div>
                     <!--Thif para que el boton y la acción sean según la relación de amistad del usuario logeado.-->
                     <button>Agregar como amigo</button>
@@ -167,10 +170,9 @@
                     <!--AQUI EMPIEZAN LOS POSTS-->
 
 
-
                     <!--Este se puede considerar un panel tipo TEXTO-->
                     <!--Cambiar esto a todas las publicaciones donde este usuario sea el objetivo-->
-                    <th:block th:each="comentario : ${comentarios}">
+                    <th:block th:each="publication : ${publications}">
 
                     <div class="[ panel panel-default ] panel-google-plus" >
                         <div class="dropdown">
@@ -199,22 +201,25 @@
                         <!--</div>-->
 
                         <div class="panel-heading">
+
+
                             <img class="[ img-circle pull-left ]"
-                                 src="https://lh3.googleusercontent.com/-CxXg7_7ylq4/AAAAAAAAAAI/AAAAAAAAAQ8/LhCIKQC5Aq4/s46-c-k-no/photo.jpg"
-                                 alt="Mouse0270"/>
-                            <h3>Robert McIntosh</h3>
-                            <h5><span>Shared publicly</span> - <span>Jun 27, 2014</span></h5>
+                                         src="https://lh3.googleusercontent.com/-CxXg7_7ylq4/AAAAAAAAAAI/AAAAAAAAAQ8/LhCIKQC5Aq4/s46-c-k-no/photo.jpg"
+                                     alt="Mouse0270"/>
+
+                            <h3 th:text="${publication.creator.fullName}"></h3>
+                            <h5><span>Shared publicly</span> - <span th:text="${publication.date}"></span></h5>
                         </div>
-                        <div class="panel-body">
-                            <p>Do people born in 2000 get to choose if they are Generation Y or Generation
-                                Z? How do you decide what generation you want to belong to?</p>
+                        <div class="panel-body" th:text="${publication.description}">
+                            <!--<p>Do people born in 2000 get to choose if they are Generation Y or Generation-->
+                                <!--Z? How do you decide what generation you want to belong to?</p>-->
                         </div>
                         <div class="panel-footer">
                             <button type="button" class="btn btn-default"><span class="glyphicon glyphicon  -thumbs-up "></span></button>
                             <button type="button" class="btn btn-default">
                                 <span class="glyphicon glyphicon-share-alt"></span>
                             </button>
-                            <div class="input-placeholder">Add a comment...</div>
+                            <div class="input-placeholder">Agrega un comentario...</div>
                         </div>
                         <div class="panel-google-plus-comment">
                             <img class="img-circle"

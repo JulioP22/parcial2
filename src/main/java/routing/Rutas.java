@@ -84,6 +84,8 @@ public class Rutas {
         get("/profile",(request, response) -> {
             Map<String,Object> model = new HashMap<>();
             model.put("usuariosesion",request.session().attribute("user")); //Reemplazar esto on el objeto de usuario de la sesión, usado para validar que se muestra y que no.
+            model.put("publications",SQL.getPublicationsFromUser(((User)request.session().attribute("user")).getId()));
+            System.out.println(SQL.getPublicationsFromUser(((User)request.session().attribute("user")).getId()).size());
             return engine.render(new ModelAndView(model,"profile"));
         });
 
@@ -108,6 +110,8 @@ public class Rutas {
         post("/insertPublication",(request, response) -> {
             Publication publication = parser.fromJson(request.body(),Publication.class);
             publication.setCreator(request.session().attribute("user"));
+            publication.setReceiverUser(request.session().attribute("user"));//TODO esto debe cambiar al usuario en cuyo perfil se está.
+
             SQL.insert(publication);
             System.out.println("Publicacion recibidia es: " + publication.getDescription() );
             return "Inserted";

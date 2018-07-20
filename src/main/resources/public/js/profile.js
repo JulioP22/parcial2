@@ -7,8 +7,6 @@ $(document).ready(function() {
 
     //    Custom buttons
 
-
-
     var addButton = function (context) {
         var ui = $.summernote.ui;
 
@@ -18,7 +16,7 @@ $(document).ready(function() {
             tooltip: 'Actualizar Estado',
             click: function () {
                 // invoke insertText method with 'hello' on editor module.
-                let status = $("#summernote").summernote("code");
+                let status = $($("#summernote").summernote("code")).text();
                 let publication = {};
                 publication.date = new Date();
                 publication.description = status; //TODO Falta la lógica de tagging
@@ -34,6 +32,11 @@ $(document).ready(function() {
     //Add buttons
 
 
+
+    $("#profilePic").click(function () {
+        console.log("TA PASANDO ALGO")
+        $("#imgupload").trigger('click');
+    });
 
 
     //Sumernote
