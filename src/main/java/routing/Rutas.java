@@ -97,8 +97,11 @@ public class Rutas {
         });
 
         post("/insertUser",(request, response) -> {
-            User user = SQL.getUserByEmail("sadas");
-            System.out.println(user.getFullName());
+//            User user = SQL.getUserByEmail("a@a.com");
+//            Publication pub = new Publication(null,null,new Date(),user,"DDAD",null,user);
+//            SQL.insert(pub);
+            List<Publication> list = SQL.getPublicationsFromUser(1);
+            System.out.println(list.size());
             return "";
         });
 

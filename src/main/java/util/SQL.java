@@ -4,6 +4,7 @@ package util;
 import com.sun.istack.internal.NotNull;
 import internalLogic.Comment;
 import internalLogic.MLike;
+import internalLogic.Publication;
 import internalLogic.User;
 import org.hibernate.EntityNameResolver;
 import org.hibernate.Transaction;
@@ -48,7 +49,7 @@ public class SQL {
 
     private static void createDummyData(){
 
-    };
+    }
 
     private static void createDefaultUser(){
         try {
@@ -81,15 +82,13 @@ public class SQL {
         }
     }
 
-    public static void insertFriend(User friend, long idUser){
+    public static void insertFriend(long idFriend, long idUser){
         try{
             EntityManager enf = getEntityManager();
             EntityTransaction tr = enf.getTransaction();
             tr.begin();
-            enf.persist(friend);
-            enf.flush();
             enf.createNativeQuery("insert into user_user (user_id, FRIENDS_ID) values(:USER_ID, :FRIENDS_ID)")
-                    .setParameter("FRIENDS_ID", friend.getId())
+                    .setParameter("FRIENDS_ID", idFriend)
                     .setParameter("USER_ID", idUser)
                     .executeUpdate();
             tr.commit();
@@ -242,7 +241,7 @@ public class SQL {
 
     private static User buildUser(Map<String, String> map){
         User user = new User();
-        user.setEmail(map.get("email"));
+        user.setEmail(map.get("email").replace("%40", "@"));
         user.setBornDate(getDateFromStr(map.get("birthdate")));
         user.setFullName(map.get("fullname"));
         user.setPassword(Cypher.getInstance().encryptCookie(map.get("password")));
