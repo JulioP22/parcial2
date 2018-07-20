@@ -10,7 +10,7 @@ public class UserAlbum extends Publication {
     @OneToMany
     private Set<UserImage> userImages;
 
-    public UserAlbum(Set<UserImage> userImages, String description, User creator, Date date, Set<Comment> commentSet, Set<MLike> likeSet, long id, Set<User> taggedUsers, User receiverUser) {
+    public UserAlbum(Set<UserImage> userImages, String description, User creator, Date date, Set<Comment> commentSet, Set<MLike> likeSet, Set<User> taggedUsers, User receiverUser) {
         super(commentSet, likeSet,date, creator, description, taggedUsers, receiverUser);
         this.userImages = userImages;
     }

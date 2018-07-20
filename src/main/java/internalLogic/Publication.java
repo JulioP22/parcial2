@@ -100,4 +100,6 @@ public class Publication {
     public void setReceiverUser(User receiverUser) {
         this.receiverUser = receiverUser;
     }
+
+
 }

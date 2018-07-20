@@ -3,15 +3,16 @@ package routing;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import internalLogic.Comment;
-import internalLogic.MLike;
-import internalLogic.Publication;
-import internalLogic.User;
+import internalLogic.*;
 import spark.*;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
 import util.Cypher;
 import util.SQL;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.*;
 
 import static spark.Spark.*;
@@ -99,11 +100,9 @@ public class Rutas {
         });
 
         post("/insertUser",(request, response) -> {
-//            User user = SQL.getUserByEmail("a@a.com");
-//            Publication pub = new Publication(null,null,new Date(),user,"DDAD",null,user);
-//            SQL.insert(pub);
-            List<Publication> list = SQL.getPublicationsFromUser(1);
-            System.out.println(list.size());
+
+            User user = SQL.getElementById(1, User.class);
+
             return "";
         });
 
@@ -134,4 +133,21 @@ public class Rutas {
         return loggedIn;
     }
 
+    public byte[] getImageInBytes(){
+        try{
+            BufferedImage originalImage =
+                    ImageIO.read(new File("C:\\Users\\Julio\\Pictures\\prueba.jpg"));
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write( originalImage, "jpg", baos );
+            baos.flush();
+            byte[] imageInByte = baos.toByteArray();
+            baos.close();
+            return imageInByte;
+        } catch(Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
 }
+
+    //
