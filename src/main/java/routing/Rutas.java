@@ -78,8 +78,6 @@ public class Rutas {
             return engine.render(new ModelAndView(model,"blog"));
         });
 
-
-
         get("/text",(request, response) -> {
             return "Ahora va este texto";
         });

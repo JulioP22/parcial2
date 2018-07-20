@@ -2,6 +2,7 @@ package util;
 
 
 import com.sun.istack.internal.NotNull;
+import internalLogic.Comment;
 import internalLogic.User;
 import org.hibernate.Transaction;
 import org.omg.CORBA.INTERNAL;
@@ -9,6 +10,7 @@ import org.omg.CORBA.INTERNAL;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -40,6 +42,67 @@ public class SQL {
             e.printStackTrace();
         }
     }
+
+    public static void insert (Object comment){
+        try{
+            EntityManager enf = getEntityManager();
+            EntityTransaction tr = enf.getTransaction();
+            tr.begin();
+            enf.persist(comment);
+            tr.commit();
+            enf.close();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void delete (Object comment){
+        try{
+            EntityManager enf = getEntityManager();
+            EntityTransaction tr = enf.getTransaction();
+            tr.begin();
+            enf.remove(comment);
+            tr.commit();
+            enf.close();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void update (Object comment){
+        try{
+            EntityManager enf = getEntityManager();
+            EntityTransaction tr = enf.getTransaction();
+            tr.begin();
+            enf.merge(comment);
+            tr.commit();
+            enf.close();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static List<Object> get (String table){
+        try{
+            EntityManager enf = getEntityManager();
+            EntityTransaction tr = enf.getTransaction();
+            tr.begin();
+            List<Object> list = enf.createQuery("SELECT c FROM 1? c")
+                    .setParameter("table",table)
+                    .getResultList();
+            tr.commit();
+            enf.close();
+            return list;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     private static Map<String, String> processData(String data){
         Map<String, String> map = new HashMap<>();
         String[] split = data.split("&");
@@ -63,8 +126,7 @@ public class SQL {
     private static Date getDateFromStr(String dat) {
         try{
             String [] parts = dat.split("-");
-            Date date = new Date(Integer.parseInt(parts[0])-1900, Integer.parseInt(parts[1])-1,Integer.parseInt(parts[2]));
-            return date;
+            return new Date(Integer.parseInt(parts[0])-1900, Integer.parseInt(parts[1])-1,Integer.parseInt(parts[2]));
         }
         catch (Exception e){
             e.printStackTrace();
