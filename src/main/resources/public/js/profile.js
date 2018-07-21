@@ -171,3 +171,7 @@ $(".gallery ul li a").click(function() {
     }, 400);
 });
 
+function addComment(idPublication){
+
+}
+

@@ -1,6 +1,7 @@
 package internalLogic;
 
 import javax.persistence.*;
+import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.Set;
 
@@ -18,6 +19,7 @@ public class Publication {
     protected Date date;
     @ManyToOne(fetch = FetchType.EAGER)
     protected User creator;
+    @Column(columnDefinition="text")
     protected String description;
     @ManyToMany(fetch = FetchType.EAGER)
     protected Set<User> taggedUsers;

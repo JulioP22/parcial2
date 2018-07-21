@@ -23,9 +23,12 @@ public class User {
     @Column( name = "PROFILEPHOTO" )
     @Lob
     private byte[] profilePhoto;
+    @Column( name = "PORTRAITPHOTO" )
+    @Lob
+    private byte[] portraitPhoto;
 
 
-    public User(String fullName, String email, String password, Date bornDate, String sex, String location, String jobs, Set<User> friends, String role, byte[] profilePhoto) {
+    public User(String fullName, String email, String password, Date bornDate, String sex, String location, String jobs, Set<User> friends, String role, byte[] profilePhoto, byte[] portraitPhoto) {
         this.fullName = fullName;
         this.email = email;
         this.password = password;
@@ -36,6 +39,7 @@ public class User {
         this.friends = friends;
         this.role = role;
         this.profilePhoto = profilePhoto;
+        this.portraitPhoto = portraitPhoto;
     }
 
     public User() {
@@ -127,5 +131,13 @@ public class User {
 
     public void setProfilePhoto(byte[] profilePhoto) {
         this.profilePhoto = profilePhoto;
+    }
+
+    public byte[] getPortraitPhoto() {
+        return portraitPhoto;
+    }
+
+    public void setPortraitPhoto(byte[] portraitPhoto) {
+        this.portraitPhoto = portraitPhoto;
     }
 }
