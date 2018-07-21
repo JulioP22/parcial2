@@ -127,6 +127,25 @@ public class Rutas {
             return "updated";
         });
 
+        post("/saveComment/:idUser/:idPublication",(request, response) -> {
+            System.out.println(request.body());
+            Comment comment = parser.fromJson(request.body(), Comment.class);
+            long id = Integer.parseInt(request.params("idUser"));
+            long idPublication = Integer.parseInt(request.params("idPublication"));
+            User user = SQL.getElementById(id, User.class);
+            comment.setUser(user);
+            comment.setDate(new Date());
+            SQL.insertCommentIntoPublication(comment,idPublication);
+            return "";
+        });
+
+        get("/getComments/:idPublication",(request, response) -> {
+            long id = Integer.parseInt(request.params("idPublication"));
+            Map<String,Object> model = new HashMap<>();
+            model.put("publication",SQL.getElementById(id, Publication.class));
+            return engine.render( new ModelAndView(model, "THBasis/commentBasis"));
+        });
+
 
 
     }

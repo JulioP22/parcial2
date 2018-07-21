@@ -190,7 +190,15 @@ $(".gallery ul li a").click(function() {
     }, 400);
 });
 
-function addComment(idPublication){
-
+function addComment(idPublication, idUser){
+    let comment = {
+        description: $(`#text${idPublication}`).val()
+    };
+    $.post(`/saveComment/${idUser}/${idPublication}`, JSON.stringify(comment), function(resp){
+        $.get(`/getComments/${idPublication}`, function(resp){
+            console.log(resp);
+            $(`#com${idPublication}`).html(resp);
+        });
+    })
 }
 
