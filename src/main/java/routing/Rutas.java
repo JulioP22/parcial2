@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 import static spark.Spark.*;
@@ -116,6 +117,15 @@ public class Rutas {
             return "Inserted";
         });
 
+        post("/updateProfilePic",(request, response) -> {
+            Base64Image base64Image = parser.fromJson(request.body(),Base64Image.class);
+            byte[] bytesImage = base64ToByteArray(base64Image.getImage());
+            User loggedInUser = request.session().attribute("user");
+            loggedInUser.setProfilePhoto(bytesImage);
+            SQL.update(loggedInUser);
+            return "updated";
+        });
+
 
 
     }
@@ -131,6 +141,20 @@ public class Rutas {
         }
 
         return loggedIn;
+    }
+
+
+    public byte[] base64ToByteArray(String base64Image){
+        byte[] decodedString  = "default".getBytes();
+        try {
+            byte[] encoded = Base64.getEncoder().encode(base64Image.getBytes());
+            decodedString = Base64.getDecoder().decode(new String(encoded).getBytes("UTF-8"));
+            return decodedString;
+        } catch (UnsupportedEncodingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return decodedString;
     }
 
     public byte[] getImageInBytes(){
