@@ -34,8 +34,27 @@ $(document).ready(function() {
 
 
     $("#profilePic").click(function () {
-        console.log("TA PASANDO ALGO")
         $("#imgupload").trigger('click');
+    });
+
+    $("#imgupload").on("change",function () {
+        var input = this;
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                let base64Image = {
+                    image: e.target.result
+                };
+
+                $.post("/updateProfilePic",JSON.stringify(base64Image),function(){
+                    $('#profilePic').attr('src', e.target.result); //La imagen como tal se encuntra en result
+                    // window.location.href = "/profile";
+                });
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
     });
 
 
