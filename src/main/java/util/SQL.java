@@ -2,10 +2,7 @@ package util;
 
 
 import com.sun.istack.internal.NotNull;
-import internalLogic.Comment;
-import internalLogic.MLike;
-import internalLogic.Publication;
-import internalLogic.User;
+import internalLogic.*;
 import org.hibernate.EntityNameResolver;
 import org.hibernate.Transaction;
 import org.omg.CORBA.INTERNAL;
@@ -142,6 +139,24 @@ public class SQL {
         }
         catch (Exception e){
             e.printStackTrace();
+        }
+
+    }
+
+    public static List<UserAlbum> getUserAlbums(long userId){
+        try {
+            EntityManager enf = getEntityManager();
+            EntityTransaction tr = enf.getTransaction();
+            tr.begin();
+            List list = enf.createQuery("select c from UserAlbum c where creator.id = :id order by id desc")
+                    .setParameter("id",userId)
+                    .getResultList();
+            tr.commit();
+            enf.close();
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 

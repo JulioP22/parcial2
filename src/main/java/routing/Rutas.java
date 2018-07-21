@@ -87,7 +87,9 @@ public class Rutas {
             Map<String,Object> model = new HashMap<>();
             model.put("usuariosesion",request.session().attribute("user")); //Reemplazar esto on el objeto de usuario de la sesión, usado para validar que se muestra y que no.
             model.put("publications",SQL.getPublicationsFromUser(((User)request.session().attribute("user")).getId()));
-            System.out.println(SQL.getPublicationsFromUser(((User)request.session().attribute("user")).getId()).size());
+            model.put("albums",SQL.getUserAlbums(((User)request.session().attribute("user")).getId()));
+            System.out.println("ALBUM OBTENIDO: ");
+            System.out.println(SQL.getUserAlbums(((User)request.session().attribute("user")).getId()).get(0).getUserImages().size());
             return engine.render(new ModelAndView(model,"profile"));
         });
 
