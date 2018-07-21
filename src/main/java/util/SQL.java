@@ -413,7 +413,7 @@ public class SQL {
             EntityManager enf = getEntityManager();
             EntityTransaction tr = enf.getTransaction();
             tr.begin();
-            List<Notification> list = enf.createQuery("Select c from Notification c where user.id = :idUser")
+            List<Notification> list = enf.createQuery("Select c from Notification c where user.id = :idUser and state = 0")
                     .setParameter("idUser", idUser)
                     .getResultList();
             tr.commit();
@@ -430,7 +430,7 @@ public class SQL {
             EntityManager enf = getEntityManager();
             EntityTransaction tr = enf.getTransaction();
             tr.begin();
-            List<Request> list = enf.createQuery("Select c from Request c where receiver.id = :idUser")
+            List<Request> list = enf.createQuery("Select c from Request c where sender.id = :idUser and state = 0")
                     .setParameter("idUser", idUser)
                     .getResultList();
             tr.commit();

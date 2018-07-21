@@ -263,8 +263,26 @@ function toggleMenu(idUser){
     $(`#menu${idUser}`).toggle(200);
 }
 
+function toggleMenuu(idNotification){
+    console.log(idNotification);
+    $(`#menuu${idNotification}`).toggle(200);
+}
+
 function sendRequest(idFriend, idUser){
     $.post(`/sendRequest/${idUser}/${idFriend}`).then(resp=>{
         $(`#uss${idFriend}`).remove();
     })
+}
+
+function acceptRequest(idNotification, idSender, idReceiver){
+    $.post(`/acceptRequest/${idNotification}/${idSender}/${idReceiver}`).then(resp=>{
+        $(`#req${idNotification}`).remove();
+    });
+}
+
+function deleteRequest(idNotification){
+    console.log(idNotification);
+    $.post(`/deleteRequest/${idNotification}`).then(resp=>{
+        $(`#req${idNotification}`).remove();
+    });
 }

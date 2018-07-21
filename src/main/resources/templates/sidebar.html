@@ -50,18 +50,20 @@
 
         <h4 hidden="hidden" class = "notif-header-text">Notificaciones</h4>
         <div id="activity-notifications" hidden="hidden" class="activity-feed">
-            <div class="feed-item" th:each="noti : ${notifications}">
-                <div class="date" th:text="${noti.date}"></div>
-                <div class="text" th:text="${noti.description}"></div>
+            <div class="feed-item" th:each="noti : ${notifications}" th:id="${'not'+noti.id}">
+                <div class="date" ><span th:text="${noti.date}"></span></div>
+                <div class="text"><span th:text="${noti.description}"></span></div>
             </div>
         </div>
 
 
         <h4 hidden ="hidden" class = "friends-header-text">Solicitudes de Amistad</h4>
         <div id="activity-friends" hidden="hidden" class="activity-feed">
-            <div class="feed-item" th:each="req : ${requests}">
+            <div class="feed-item" th:each="req : ${requests}" th:id="${'req'+req.id}">
                 <div class="date" th:text="${req.date}"></div>
                 <div class="text" th:text="${req.reason}"></div>
+                <button class="btn btn-xs btn-success" th:onclick="'javascript:acceptRequest(\''+ ${req.id} +'\', \''+ ${req.sender.id} +'\', \''+ ${req.receiver.id} +'\');'"><span class="glyphicon glyphicon-check"></span></button>
+                <button class="btn btn-xs btn-danger" th:onclick="'javascript:deleteRequest(\''+ ${req.id} +'\');'"><span class="glyphicon glyphicon-remove"></span></button>
             </div>
         </div>
 

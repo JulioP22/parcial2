@@ -83,7 +83,7 @@
         <div class="container">
             <!--Se deben crear filas de 3 en 3 articulos o posts-->
 
-            <div class="row">
+            <div class="row" th:hidden="${unknownUsers.size == 0}">
                 <div class="panel panel-default" style="width: 60%;">
                     <div class="panel-heading">Personas que quizás conozcas...</div>
                     <div class="panel-body">
@@ -416,7 +416,6 @@
 </div>
 
 <!-- jQuery -->
-<script src="js/jquery.min.js"></script>
 <!-- jQuery Easing -->
 <script src="js/jquery.easing.1.3.js"></script>
 

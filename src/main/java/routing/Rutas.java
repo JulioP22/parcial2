@@ -211,6 +211,28 @@ public class Rutas {
             return "";
         });
 
+        post("/acceptRequest/:idNot/:idSender/:idReceiver",(request, response) -> {
+            long idNot = Integer.parseInt(request.params("idNot"));
+            long idSender = Integer.parseInt(request.params("idSender"));
+            long idReceiver = Integer.parseInt(request.params("idReceiver"));
+            Request not = SQL.getElementById(idNot, Request.class);
+            not.setState(1);
+            SQL.update(not);
+
+            SQL.insertFriend(idReceiver,idSender);
+
+            return "";
+        });
+
+        post("/deleteRequest/:idNot",(request, response) -> {
+            long idNot = Integer.parseInt(request.params("idNot"));
+
+            Request not = SQL.getElementById(idNot, Request.class);
+            SQL.delete(not);
+
+            return "";
+        });
+
 
 
     }
