@@ -224,6 +224,7 @@ public class SQL {
             tr.begin();
             List list = enf.createQuery("select c from Publication c where receiverUser_id = :id order by id desc")
                     .setParameter("id",idUser)
+                    .setMaxResults(6)
                     .getResultList();
             tr.commit();
             enf.close();
@@ -240,6 +241,7 @@ public class SQL {
             EntityTransaction tr = enf.getTransaction();
             tr.begin();
             List list = enf.createQuery("select c from Publication c order by id desc")
+                    .setMaxResults(6)
                     .getResultList();
             tr.commit();
             enf.close();
@@ -288,7 +290,43 @@ public class SQL {
             tr.begin();
             enf.createNativeQuery("delete from PUBLICATION_COMMENT where PUBLICATION_ID = :PUBLICATION_ID and COMMENTSET_ID = :COMMENTSET_ID")
                     .setParameter("PUBLICATION_ID", idPublication)
-                    .setParameter("COMMENT_ID", idComment)
+                    .setParameter("COMMENTSET_ID", idComment)
+                    .executeUpdate();
+            enf.createNativeQuery("delete from COMMENT where ID = :id")
+                    .setParameter("id", idComment)
+                    .executeUpdate();
+            tr.commit();
+            enf.close();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteComments(long idPublication){
+        try{
+            EntityManager enf = getEntityManager();
+            EntityTransaction tr = enf.getTransaction();
+            tr.begin();
+            enf.createNativeQuery("delete from PUBLICATION_COMMENT where PUBLICATION_ID = :PUBLICATION_ID")
+                    .setParameter("PUBLICATION_ID", idPublication)
+
+                    .executeUpdate();
+            tr.commit();
+            enf.close();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    public static void deleteLikes(long idPublication){
+        try{
+            EntityManager enf = getEntityManager();
+            EntityTransaction tr = enf.getTransaction();
+            tr.begin();
+            enf.createNativeQuery("delete from PUBLICATION_MLIKE where PUBLICATION_ID = :PUBLICATION_ID")
+
+                    .setParameter("PUBLICATION_ID", idPublication)
                     .executeUpdate();
             tr.commit();
             enf.close();
@@ -337,10 +375,10 @@ public class SQL {
             EntityManager enf = getEntityManager();
             EntityTransaction tr = enf.getTransaction();
             tr.begin();
-            List<User> user = enf.createNativeQuery("select * from user where id not in (select user_user.FRIENDS_ID from USER_USER where user_id = :idUser) and id <> :idUser " +
+            List<User> user = enf.createNativeQuery("select * from user where user.id not in (select user_user.FRIENDS_ID from USER_USER where user_id = :idUser) and user.id <> :idUser " +
                     "AND id not in (select REQUEST.RECEIVER_ID\n" +
                     "from REQUEST\n" +
-                    "where REQUEST.SENDER_ID = :idUser)", User.class)
+                    "where REQUEST.SENDER_ID = :idUser AND STATE = 0)", User.class)
                     .setParameter("idUser",idUser)
                     .setMaxResults(10)
                     .getResultList();
@@ -430,7 +468,7 @@ public class SQL {
             EntityManager enf = getEntityManager();
             EntityTransaction tr = enf.getTransaction();
             tr.begin();
-            List<Request> list = enf.createQuery("Select c from Request c where sender.id = :idUser and state = 0")
+            List<Request> list = enf.createQuery("Select c from Request c where receiver.id = :idUser and state = 0")
                     .setParameter("idUser", idUser)
                     .getResultList();
             tr.commit();
@@ -441,5 +479,6 @@ public class SQL {
             return null;
         }
     }
+
 
 }

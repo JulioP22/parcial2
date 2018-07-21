@@ -2,5 +2,12 @@
 
 
 <div th:each="comment : ${publication.commentSet}" xmlns:th="http://www.w3.org/1999/xhtml">
-    <div style="margin-left: 15px; padding: 10px;" class="badge" th:text="${comment.user.fullName+': '+  comment.description}"></div><br><br>
+    <div style="margin-left: 15px; padding: 10px;" class="badge badge-success" th:text="${comment.user.fullName+': '+  comment.description}"></div>
+    <span th:if="${usuariosesion.id == comment.user.id}">
+        <button class="btn btn-xs" style="width: 10px; height: 40px; background-color: white"
+                th:onclick="'javascript:deleteComment(\''+ ${publication.id} +'\', \''+ ${comment.id} +'\', \''+ ${usuariosesion.id} +'\', \''+ ${comment.user.id} +'\');'">
+            <span class="glyphicon glyphicon-remove"></span>
+        </button>
+    </span>
+    <br><br>
 </div>

@@ -10,6 +10,7 @@ import spark.template.thymeleaf.ThymeleafTemplateEngine;
 import util.Cypher;
 import util.SQL;
 
+import javax.crypto.interfaces.PBEKey;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -92,10 +93,8 @@ public class Rutas {
             long idUser = ((User)request.session().attribute("user")).getId();
             model.put("usuariosesion",request.session().attribute("user")); //Reemplazar esto on el objeto de usuario de la sesión, usado para validar que se muestra y que no.
             model.put("albums",SQL.getUserAlbums(((User)request.session().attribute("user")).getId()));
-            model.put("publications",SQL.getPublicationsFromUser(idUser));
             model.put("notifications",SQL.getUserNotifications(idUser));
             model.put("requests",SQL.getUserRequest(idUser));
-            refreshPublications((List<Publication>) model.get("publications"), (User) model.get("usuariosesion"));
             return engine.render(new ModelAndView(model,"profile"));
         });
 
@@ -189,6 +188,7 @@ public class Rutas {
             long id = Integer.parseInt(request.params("idPublication"));
             Map<String,Object> model = new HashMap<>();
             model.put("publication",SQL.getElementById(id, Publication.class));
+            model.put("usuariosesion", request.session().attribute("user"));
             return engine.render( new ModelAndView(model, "THBasis/commentBasis"));
         });
 
@@ -221,6 +221,9 @@ public class Rutas {
 
             SQL.insertFriend(idReceiver,idSender);
 
+            User user = SQL.getElementById(idReceiver, User.class);
+            request.session().attribute("user",user);
+
             return "";
         });
 
@@ -233,6 +236,39 @@ public class Rutas {
             return "";
         });
 
+        post("/deleteComment/:idPublication/:idComment",(request, response) -> {
+            long idPublication = Integer.parseInt(request.params("idPublication"));
+            long idComment = Integer.parseInt(request.params("idComment"));
+
+            SQL.deleteComment(idComment,idPublication);
+
+            return "";
+        });
+
+        post("/deletePublication/:idPublication",(request, response) -> {
+            long idPublication = Integer.parseInt(request.params("idPublication"));
+
+            SQL.deleteComments(idPublication);
+            SQL.deleteLikes(idPublication);
+
+            Publication pub = SQL.getElementById(idPublication,Publication.class);
+            SQL.delete(pub);
+
+            return "";
+        });
+
+        get("/loadPosts/:idUser",(request, response) -> {
+
+            long id = Integer.parseInt(request.params("idUser"));
+            Map<String,Object> model = new HashMap<>();
+            model.put("usuariosesion",request.session().attribute("user"));
+
+            model.put("publications",SQL.getPublicationsFromUser(id));
+            refreshPublications((List<Publication>) model.get("publications"), (User) model.get("usuariosesion"));
+
+            return engine.render(new ModelAndView(model,"THBasis/publicationBasis"));
+
+        });
 
 
     }

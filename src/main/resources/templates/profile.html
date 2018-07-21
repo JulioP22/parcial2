@@ -160,17 +160,10 @@
 
                 </div>
 
-                <div class="col-xs-12" style="margin-left: -15px; margin-bottom: -15px; margin-top: 15px">
-                    <div class="col-xs-4">
-                        <select id="tagSelector" class="form-control" style="height: 40px; width: 250px; margin-bottom: 30px" onchange="tagFriend(value)">
-                            <option value="">Seleccione</option>
-                            <option th:each="friend : ${usuariosesion.friends}" th:value="${friend.id}" th:text="${friend.fullName}"></option>
-                        </select>
-                    </div>
-                    <div class="col-xs-4">
-                        <button class="btn btn-success" onclick="clean()">Clean tags</button>
-                    </div>
-                </div>
+                <select id="tagSelector" class="form-control" style="height: 40px; width: 250px; margin-bottom: 15px; margin-top: 15px" onchange="tagFriend(value)">
+                    <option value="">Etiquete un usuario</option>
+                    <option th:each="friend : ${usuariosesion.friends}" th:value="${friend.id}" th:text="${friend.fullName}"></option>
+                </select>
 
                 <div data-animate-effect="fadeInRight" class="col-sm-12 col-md-8 col-lg-8 animate-box" style="margin-top: 15px">
                     <!--Aqui va todo lo de la derecha-->
@@ -180,91 +173,19 @@
 
                     <!--Una vez agregado SIEMPRE el summernote para poder hacer posts, entonces se ponen los posts!-->
 
+                    <script th:inline="javascript">
+                        /*<![CDATA[*/
 
+                        var id = /*[[${usuariosesion.id}]]*/ 'default';
+                        sessionStorage.setItem("idUser",id);
+
+                        /*]]>*/
+                    </script>
 
 
                     <!--AQUI EMPIEZAN LOS POSTS-->
 
-
-                    <!--Este se puede considerar un panel tipo TEXTO-->
-                    <!--Cambiar esto a todas las publicaciones donde este usuario sea el objetivo-->
-                    <th:block th:each="publication, iterStat : ${publications}">
-
-                    <div class="[ panel panel-default ] panel-google-plus" >
-                        <div class="dropdown">
-                    <span class="dropdown-toggle" type="button" data-toggle="dropdown">
-                        <span class="[ glyphicon glyphicon-chevron-down ]"></span>
-                    </span>
-                            <ul class="dropdown-menu" role="menu">
-                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a>
-                                </li>
-                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another
-                                    action</a></li>
-                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something
-                                    else here</a></li>
-                                <li role="presentation" class="divider"></li>
-                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated
-                                    link</a></li>
-                            </ul>
-                        </div>
-
-                        <!--No hay nada de tags definido para ls publicaciones.-->
-                        <!--<div class="panel-google-plus-tags">-->
-                            <!--<ul>-->
-                                <!--<li>#Millennials</li>-->
-                                <!--<li>#Generation</li>-->
-                            <!--</ul>-->
-                        <!--</div>-->
-
-                        <div class="panel-heading">
-
-                            <img class="avatar" th:src="${publication.creator.getBase64Image()}" style="width: 40px; height: 40px; border-radius: 25px"
-                                 alt="jofpin"/>
-
-                            <h3 th:text="${publication.creator.fullName}"></h3>
-                            <h5><span>Shared publicly</span> - <span th:text="${publication.date}"></span></h5>
-                            <span th:each="user : ${publication.taggedUsers}">
-                                <p class="badge" th:text="${user.fullName}"></p>
-                            </span>
-                        </div>
-                        <div class="panel-body" th:text="${publication.description}"></div>
-
-                        <hr>
-                        <div th:id="${'com'+publication.id}">
-                            <div th:each="comment : ${publication.commentSet}">
-                                <span style="margin-left: 15px; padding: 10px;" class="badge badge-success" th:text="${comment.user.fullName+': '+  comment.description}"></span><br><br>
-                            </div>
-                        </div>
-
-                        <div class="panel-footer">
-                            <div class="row" th:id="${'likes'+publication.id}">
-                                <div th:if="${publication.liked == false}">
-                                    <button th:onclick="'javascript:addLike(\''+ ${publication.id} +'\', \''+ ${usuariosesion.id} +'\');'" type="button" class="btn btn-default"><span class="glyphicon glyphicon-thumbs-up "></span></button>
-                                </div>
-                                <div th:if="${publication.liked == true}">
-                                    <button th:onclick="'javascript:quitLike(\''+ ${publication.id} +'\', \''+ ${usuariosesion.id} +'\');'" style="color: blue" type="button" class="btn btn-default"><span class="glyphicon glyphicon-thumbs-up " disabled></span></button>
-                                </div>
-                                <div th:text="${publication.likeSet.size}"></div>
-                            </div>
-                            <div class="input-placeholder">Agrega un comentario...</div>
-                        </div>
-                        <div class="panel-google-plus-comment">
-                            <img class="img-circle"
-                                 src="https://lh3.googleusercontent.com/uFp_tsTJboUY7kue5XAsGA=s46"
-                                 alt="User Image"/>
-                            <div class="panel-google-plus-textarea">
-                                <textarea th:id="${'text'+publication.id}" rows="4"></textarea>
-                                <button type="submit" class="[ btn btn-success disabled ]" th:onclick="'javascript:addComment(\''+ ${publication.id} +'\', \''+ ${usuariosesion.id} +'\');'">Post comment
-                                </button>
-                                <button type="reset" class="[ btn btn-default ]">Cancel</button>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
-
-                    </th:block>
-
-
+                    <div id="posts"></div>
 
 
 
@@ -399,9 +320,9 @@
         </div>
 
         <div hidden="hidden" class="container animate-box" id="wall_friends">
-            <div th:each="user : ${usuariosesion.friends}" style="margin-top: 15px">
+            <span th:each="user : ${usuariosesion.friends}" style="margin-top: 15px">
                 <span class="badge badge-success" style="padding: 10px"><img th:src="${user.getBase64Image()}" style="width: 40px; height: 40px;">&nbsp;&nbsp;<span th:text="${user.fullName}"></span></span>
-            </div>
+            </span>
         </div>
 
 

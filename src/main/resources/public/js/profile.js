@@ -21,7 +21,7 @@ $(document).ready(function() {
                 publication.date = new Date();
                 publication.description = status; //TODO Falta la lógica de tagging
                 $.post(`/insertPublication/${JSON.stringify(taggedUsers)}`,JSON.stringify(publication),function(){
-                    window.location.href = "/profile";
+                    loadPage();
                     clean();
                 });
             }
@@ -120,30 +120,6 @@ $(document).ready(function() {
 
 });
 
-$(function () {
-    $('.panel-google-plus > .panel-footer > .input-placeholder, .panel-google-plus > .panel-google-plus-comment > .panel-google-plus-textarea > button[type="reset"]').on('click', function(event) {
-        var $panel = $(this).closest('.panel-google-plus');
-        $comment = $panel.find('.panel-google-plus-comment');
-
-        $comment.find('.btn:first-child').addClass('disabled');
-        $comment.find('textarea').val('');
-
-        $panel.toggleClass('panel-google-plus-show-comment');
-
-        if ($panel.hasClass('panel-google-plus-show-comment')) {
-            $comment.find('textarea').focus();
-        }
-    });
-    $('.panel-google-plus-comment > .panel-google-plus-textarea > textarea').on('keyup', function(event) {
-        var $comment = $(this).closest('.panel-google-plus-comment');
-
-        $comment.find('button[type="submit"]').addClass('disabled');
-        if ($(this).val().length >= 1) {
-            $comment.find('button[type="submit"]').removeClass('disabled');
-        }
-    });
-});
-
 function goToGallery(){
     $("#wall_normal").hide();
     $("#wall_editP").hide();
@@ -213,6 +189,15 @@ function addComment(idPublication, idUser){
         });
     })
 }
+
+function deleteComment(idPublication, idComment){
+    $.post(`/deleteComment/${idPublication}/${idComment}`, function(resp){
+        $.get(`/getComments/${idPublication}`, function(resp){
+            $(`#com${idPublication}`).html(resp);
+        });
+    })
+}
+
 function addLike(idPublication, idUser){
     let like = {
         action: 1
@@ -281,8 +266,51 @@ function acceptRequest(idNotification, idSender, idReceiver){
 }
 
 function deleteRequest(idNotification){
-    console.log(idNotification);
     $.post(`/deleteRequest/${idNotification}`).then(resp=>{
         $(`#req${idNotification}`).remove();
     });
 }
+
+function deletePublication(idPublication){
+    $.post(`/deletePublication/${idPublication}`).then(resp=>{
+        loadPage();
+    });
+}
+
+function loadPage(callback){
+    let id = sessionStorage.getItem("idUser");
+    if (id !== null){
+        $.get(`/loadPosts/${id}`).then(resp=>{
+            $("#posts").html(resp);
+            callback();
+        })
+    }
+}
+
+$(document).ready(function(){
+    loadPage(function(){
+        $(function () {
+            $('.panel-google-plus > .panel-footer > .input-placeholder, .panel-google-plus > .panel-google-plus-comment > .panel-google-plus-textarea > button[type="reset"]').on('click', function(event) {
+                var $panel = $(this).closest('.panel-google-plus');
+                $comment = $panel.find('.panel-google-plus-comment');
+
+                $comment.find('.btn:first-child').addClass('disabled');
+                $comment.find('textarea').val('');
+
+                $panel.toggleClass('panel-google-plus-show-comment');
+
+                if ($panel.hasClass('panel-google-plus-show-comment')) {
+                    $comment.find('textarea').focus();
+                }
+            });
+            $('.panel-google-plus-comment > .panel-google-plus-textarea > textarea').on('keyup', function(event) {
+                var $comment = $(this).closest('.panel-google-plus-comment');
+
+                $comment.find('button[type="submit"]').addClass('disabled');
+                if ($(this).val().length >= 1) {
+                    $comment.find('button[type="submit"]').removeClass('disabled');
+                }
+            });
+        });
+    });
+});

@@ -1,0 +1,67 @@
+<th:block th:each="publication, iterStat : ${publications}" xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <div class="[ panel panel-default ] panel-google-plus" >
+        <div class="dropdown" th:if="${usuariosesion.id == publication.creator.id}">
+                    <span class="dropdown-toggle" type="button" data-toggle="dropdown">
+                        <span class="[ glyphicon glyphicon-chevron-down ]"></span>
+                    </span>
+            <ul class="dropdown-menu" role="menu">
+                <li role="presentation"><a th:onclick="'javascript:deletePublication(\''+ ${publication.id} +'\',\''+ ${usuariosesion.id} +'\');'" role="menuitem" tabindex="-1" href="#">Eliminar publicación</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="panel-heading">
+
+            <img class="avatar" th:src="${publication.creator.getBase64Image()}" style="width: 40px; height: 40px; border-radius: 25px"
+                 alt="jofpin"/>
+
+            <h3 th:text="${publication.creator.fullName}"></h3>
+            <h5><span>Shared publicly</span> - <span th:text="${publication.date}"></span></h5>
+            <span th:each="user : ${publication.taggedUsers}">
+                                <p class="badge" th:text="${user.fullName}"></p>
+                            </span>
+        </div>
+        <div class="panel-body" th:text="${publication.description}"></div>
+
+        <hr>
+        <div th:id="${'com'+publication.id}">
+            <div th:each="comment : ${publication.commentSet}">
+                <div style="margin-left: 15px; padding: 10px;" class="badge badge-success" th:text="${comment.user.fullName+': '+  comment.description}"></div>
+                <span th:if="${usuariosesion.id == comment.user.id}">
+                                    <button class="btn btn-xs" style="width: 10px; height: 40px; background-color: white"
+                                            th:onclick="'javascript:deleteComment(\''+ ${publication.id} +'\', \''+ ${comment.id} +'\', \''+ ${usuariosesion.id} +'\', \''+ ${comment.user.id} +'\');'">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                <br><br>
+            </div>
+        </div>
+
+        <div class="panel-footer">
+            <div class="row" th:id="${'likes'+publication.id}">
+                <div th:if="${publication.liked == false}">
+                    <button th:onclick="'javascript:addLike(\''+ ${publication.id} +'\', \''+ ${usuariosesion.id} +'\');'" type="button" class="btn btn-default"><span class="glyphicon glyphicon-thumbs-up "></span></button>
+                </div>
+                <div th:if="${publication.liked == true}">
+                    <button th:onclick="'javascript:quitLike(\''+ ${publication.id} +'\', \''+ ${usuariosesion.id} +'\');'" style="color: blue" type="button" class="btn btn-default"><span class="glyphicon glyphicon-thumbs-up " disabled></span></button>
+                </div>
+                <div th:text="${publication.likeSet.size}"></div>
+            </div>
+            <div class="input-placeholder">Agrega un comentario...</div>
+        </div>
+        <div class="panel-google-plus-comment">
+            <img class="img-circle"
+                 src="https://lh3.googleusercontent.com/uFp_tsTJboUY7kue5XAsGA=s46"
+                 alt="User Image"/>
+            <div class="panel-google-plus-textarea">
+                <textarea th:id="${'text'+publication.id}" rows="4"></textarea>
+                <button type="submit" class="[ btn btn-success disabled ]" th:onclick="'javascript:addComment(\''+ ${publication.id} +'\', \''+ ${usuariosesion.id} +'\');'">Post comment
+                </button>
+                <button type="reset" class="[ btn btn-default ]">Cancel</button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+
+</th:block>
