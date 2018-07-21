@@ -1,6 +1,7 @@
 package internalLogic;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class Request {
@@ -13,11 +14,14 @@ public class Request {
     @ManyToOne(fetch = FetchType.EAGER)
     private User receiver;
     private String reason;
+    private Date date;
+    private int state = 0;
 
-    public Request(User sender, User receiver, String reason) {
+    public Request(User sender, User receiver, String reason, Date date) {
         this.sender = sender;
         this.receiver = receiver;
         this.reason = reason;
+        this.date = date;
     }
 
     public Request() {
@@ -55,4 +59,31 @@ public class Request {
         this.id = id;
     }
 
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    @Override
+    public String toString() {
+        return "Request{" +
+                "id=" + id +
+                ", sender=" + sender +
+                ", receiver=" + receiver +
+                ", reason='" + reason + '\'' +
+                ", date=" + date +
+                ", state=" + state +
+                '}';
+    }
 }

@@ -53,4 +53,14 @@ public class Comment {
     public void setId(long id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "description='" + description + '\'' +
+                ", date=" + date +
+                ", user=" + user +
+                ", id=" + id +
+                '}';
+    }
 }

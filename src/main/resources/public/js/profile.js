@@ -148,6 +148,15 @@ function goToGallery(){
     $("#wall_normal").hide();
     $("#wall_editP").hide();
     $("#wall_gallery").show();
+    $("#wall_friends").hide();
+}
+
+function goToFriends(){
+    $("#wall_gallery").hide();
+    $("#wall_editP").hide();
+
+    $("#wall_normal").hide();
+    $("#wall_friends").show();
 }
 
 function backToWall(){
@@ -155,12 +164,14 @@ function backToWall(){
     $("#wall_editP").hide();
 
     $("#wall_normal").show();
+    $("#wall_friends").hide();
 }
 
 function goToEditProfile(){
     $("#wall_gallery").hide();
     $("#wall_normal").hide();
     $("#wall_editP").show();
+    $("#wall_friends").hide();
 }
 
 function enableEdit(){
@@ -246,4 +257,14 @@ function tagFriend(idFriend){
 
 function deleteTag(idFriend){
     $(`#friend${idFriend}`).remove();
+}
+
+function toggleMenu(idUser){
+    $(`#menu${idUser}`).toggle(200);
+}
+
+function sendRequest(idFriend, idUser){
+    $.post(`/sendRequest/${idUser}/${idFriend}`).then(resp=>{
+        $(`#uss${idFriend}`).remove();
+    })
 }

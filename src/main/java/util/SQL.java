@@ -319,8 +319,12 @@ public class SQL {
             EntityManager enf = getEntityManager();
             EntityTransaction tr = enf.getTransaction();
             tr.begin();
-            List<User> user = enf.createNativeQuery("select * from user where id not in (select user_user.FRIENDS_ID from USER_USER where user_id = :idUser) and id <> :idUser", User.class)
+            List<User> user = enf.createNativeQuery("select * from user where id not in (select user_user.FRIENDS_ID from USER_USER where user_id = :idUser) and id <> :idUser " +
+                    "AND id not in (select REQUEST.RECEIVER_ID\n" +
+                    "from REQUEST\n" +
+                    "where REQUEST.SENDER_ID = :idUser)", User.class)
                     .setParameter("idUser",idUser)
+                    .setMaxResults(10)
                     .getResultList();
             tr.commit();
             enf.close();
@@ -392,6 +396,23 @@ public class SQL {
             EntityTransaction tr = enf.getTransaction();
             tr.begin();
             List<Notification> list = enf.createQuery("Select c from Notification c where user.id = :idUser")
+                    .setParameter("idUser", idUser)
+                    .getResultList();
+            tr.commit();
+            enf.close();
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static List<Request> getUserRequest(long idUser){
+        try {
+            EntityManager enf = getEntityManager();
+            EntityTransaction tr = enf.getTransaction();
+            tr.begin();
+            List<Request> list = enf.createQuery("Select c from Request c where receiver.id = :idUser")
                     .setParameter("idUser", idUser)
                     .getResultList();
             tr.commit();

@@ -120,4 +120,19 @@ public class Publication {
             }
         }
     }
+
+    @Override
+    public String toString() {
+        return "Publication{" +
+                "id=" + id +
+                ", commentSet=" + commentSet +
+                ", likeSet=" + likeSet +
+                ", date=" + date +
+                ", creator=" + creator +
+                ", description='" + description + '\'' +
+                ", taggedUsers=" + taggedUsers +
+                ", receiverUser=" + receiverUser +
+                ", liked=" + liked +
+                '}';
+    }
 }

@@ -27,4 +27,19 @@ public class UserAlbum extends Publication {
         this.userImages = userImages;
     }
 
+    @Override
+    public String toString() {
+        return "UserAlbum{" +
+                "userImages=" + userImages +
+                ", id=" + id +
+                ", commentSet=" + commentSet +
+                ", likeSet=" + likeSet +
+                ", date=" + date +
+                ", creator=" + creator +
+                ", description='" + description + '\'' +
+                ", taggedUsers=" + taggedUsers +
+                ", receiverUser=" + receiverUser +
+                ", liked=" + liked +
+                '}';
+    }
 }

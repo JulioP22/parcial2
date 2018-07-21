@@ -43,9 +43,9 @@
 
 
         <ul class="nav nav-pills" style="display: flex; justify-content: center; margin-top: 30%;">
-            <li onclick="friendshipHandler()"><a href="#"><span class="glyphicon glyphicon-user"></span><span class="badge">7</span></a></li>
+            <li onclick="friendshipHandler()"><a href="#"><span class="glyphicon glyphicon-user"></span><span th:if="${requests != null}"><span class="badge" th:text="${requests.size}"></span></span></a></li>
             <!--<li><a href="#"><span class="glyphicon glyphicon-comment"></span><span class="badge">9</span></a></li>-->
-            <li onclick="notificationHandler()"><a href="#"><span class="glyphicon glyphicon-bell"></span><span class="badge">3</span></a></li>
+            <li onclick="notificationHandler()"><a href="#"><span class="glyphicon glyphicon-bell"></span><span th:if="${notifications != null}"><span class="badge" th:text="${notifications.size}">3</span></span></a></li>
         </ul>
 
         <h4 hidden="hidden" class = "notif-header-text">Notificaciones</h4>
@@ -59,13 +59,9 @@
 
         <h4 hidden ="hidden" class = "friends-header-text">Solicitudes de Amistad</h4>
         <div id="activity-friends" hidden="hidden" class="activity-feed">
-            <div class="feed-item">
-                <div class="date">Sep 25</div>
-                <div class="text"><b>FULANO </b>ha enviado una solicitud de amistad”</div>
-            </div>
-            <div class="feed-item">
-                <div class="date">Sep 25</div>
-                <div class="text"><b>FULANO </b>ha enviado una solicitud de amistad”</div>
+            <div class="feed-item" th:each="req : ${requests}">
+                <div class="date" th:text="${req.date}"></div>
+                <div class="text" th:text="${req.reason}"></div>
             </div>
         </div>
 

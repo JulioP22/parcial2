@@ -4,6 +4,7 @@ package routing;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import internalLogic.*;
+import internalLogic.Request;
 import spark.*;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
 import util.Cypher;
@@ -48,6 +49,8 @@ public class Rutas {
 
             if (request.session().attribute("user")!=null){ //Si el usuario está autenticado la página principal que se carga es el feed de noticias
                 model.put("notifications",SQL.getUserNotifications(((User)request.session().attribute("user")).getId()));
+                model.put("unknownUsers",SQL.getUnknownUsers(((User)request.session().attribute("user")).getId()));
+                model.put("requests",SQL.getUserRequest(((User)request.session().attribute("user")).getId()));
                 return engine.render(new ModelAndView(model,"authenticatedIndex"));
             }else{
                 return engine.render(new ModelAndView(model,"index"));
@@ -90,6 +93,7 @@ public class Rutas {
             model.put("usuariosesion",request.session().attribute("user")); //Reemplazar esto on el objeto de usuario de la sesión, usado para validar que se muestra y que no.
             model.put("publications",SQL.getPublicationsFromUser(idUser));
             model.put("notifications",SQL.getUserNotifications(idUser));
+            model.put("requests",SQL.getUserRequest(idUser));
             refreshPublications((List<Publication>) model.get("publications"), (User) model.get("usuariosesion"));
             return engine.render(new ModelAndView(model,"profile"));
         });
@@ -192,6 +196,18 @@ public class Rutas {
             User user = SQL.getElementById(idFriend,User.class);
             user.setFriends(null);
             return parser.toJson(user);
+        });
+
+        post("/sendRequest/:idUser/:idFriend",(request, response) -> {
+            long idUser = Integer.parseInt(request.params("idUser"));
+            long idFriend = Integer.parseInt(request.params("idFriend"));
+            User user = SQL.getElementById(idUser,User.class);
+            User friend = SQL.getElementById(idFriend,User.class);
+            Request rq = new Request(user, friend, user.getFullName()+" te ha enviado una solicitud de amistad", new Date());
+
+            SQL.insert(rq);
+
+            return "";
         });
 
 

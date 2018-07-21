@@ -53,4 +53,14 @@ public class MLike { // This name was given to avoid Sara's problem with the wor
     public void setId(long id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "MLike{" +
+                "id=" + id +
+                ", action=" + action +
+                ", date=" + date +
+                ", user=" + user +
+                '}';
+    }
 }

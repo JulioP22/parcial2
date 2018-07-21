@@ -3,6 +3,7 @@ package internalLogic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Set;
 
@@ -32,4 +33,19 @@ public class UserImage extends Publication{
         this.image = image;
     }
 
+    @Override
+    public String toString() {
+        return "UserImage{" +
+                "image=" + Arrays.toString(image) +
+                ", id=" + id +
+                ", commentSet=" + commentSet +
+                ", likeSet=" + likeSet +
+                ", date=" + date +
+                ", creator=" + creator +
+                ", description='" + description + '\'' +
+                ", taggedUsers=" + taggedUsers +
+                ", receiverUser=" + receiverUser +
+                ", liked=" + liked +
+                '}';
+    }
 }

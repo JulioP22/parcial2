@@ -15,6 +15,7 @@ public class Notification {
     @ManyToOne(fetch = FetchType.EAGER)
     private Publication publication;
     private Date date;
+    private int state = 0;
 
     public Notification(String description, User user, Publication publication, Date date) {
         this.description = description;
@@ -64,5 +65,25 @@ public class Notification {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    @Override
+    public String toString() {
+        return "Notification{" +
+                "description='" + description + '\'' +
+                ", user=" + user +
+                ", id=" + id +
+                ", publication=" + publication +
+                ", date=" + date +
+                ", state=" + state +
+                '}';
     }
 }
