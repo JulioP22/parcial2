@@ -91,6 +91,10 @@ public class SQL {
                     .setParameter("FRIENDS_ID", idFriend)
                     .setParameter("USER_ID", idUser)
                     .executeUpdate();
+            enf.createNativeQuery("insert into user_user (user_id, FRIENDS_ID) values(:USER_ID, :FRIENDS_ID)")
+                    .setParameter("FRIENDS_ID", idUser)
+                    .setParameter("USER_ID", idFriend)
+                    .executeUpdate();
             tr.commit();
             enf.close();
         }
@@ -318,6 +322,23 @@ public class SQL {
             User user = (User) enf.createQuery("select c from User c where lower(c.email) like lower(:email)")
                     .setParameter("email",email)
                     .getSingleResult();
+            tr.commit();
+            enf.close();
+            return user;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static List getUnknownUsers(long idUser){
+        try {
+            EntityManager enf = getEntityManager();
+            EntityTransaction tr = enf.getTransaction();
+            tr.begin();
+            List<User> user = enf.createNativeQuery("select * from user where id not in (select user_user.FRIENDS_ID from USER_USER where user_id = :idUser) and id <> :idUser", User.class)
+                    .setParameter("idUser",idUser)
+                    .getResultList();
             tr.commit();
             enf.close();
             return user;
