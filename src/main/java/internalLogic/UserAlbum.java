@@ -1,13 +1,14 @@
 package internalLogic;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import java.util.Date;
 import java.util.Set;
 
 @Entity
 public class UserAlbum extends Publication {
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<UserImage> userImages;
 
     public UserAlbum(Set<UserImage> userImages, String description, User creator, Date date, Set<Comment> commentSet, Set<MLike> likeSet, Set<User> taggedUsers, User receiverUser) {

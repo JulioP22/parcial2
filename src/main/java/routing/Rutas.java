@@ -91,6 +91,7 @@ public class Rutas {
             Map<String,Object> model = new HashMap<>();
             long idUser = ((User)request.session().attribute("user")).getId();
             model.put("usuariosesion",request.session().attribute("user")); //Reemplazar esto on el objeto de usuario de la sesión, usado para validar que se muestra y que no.
+            model.put("albums",SQL.getUserAlbums(((User)request.session().attribute("user")).getId()));
             model.put("publications",SQL.getPublicationsFromUser(idUser));
             model.put("notifications",SQL.getUserNotifications(idUser));
             model.put("requests",SQL.getUserRequest(idUser));

@@ -142,6 +142,24 @@ public class SQL {
         catch (Exception e){
             e.printStackTrace();
         }
+
+    }
+
+    public static List<UserAlbum> getUserAlbums(long userId){
+        try {
+            EntityManager enf = getEntityManager();
+            EntityTransaction tr = enf.getTransaction();
+            tr.begin();
+            List list = enf.createQuery("select c from UserAlbum c where creator.id = :id order by id desc")
+                    .setParameter("id",userId)
+                    .getResultList();
+            tr.commit();
+            enf.close();
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static List<User> getUsers (){

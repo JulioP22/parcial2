@@ -338,65 +338,26 @@
 
         <!--Aqui empieza el código de la galería de imágenes-->
         <div hidden="hidden" class="container animate-box" id="wall_gallery" data-animate-effect="fadeIn">
+            <!--<button type="button" class="btn btn-default"></button>-->
+            <!--<button type="button" class="btn btn-default">Default</button>-->
             <section class="gallery">
+                <button type="button" class="btn btn-default">Crear album</button>
+
                 <div class="row">
                     <ul>
                         <a href="#" class="close"></a>
-                        <li>
-                            <a href="#item02">
-                                <img src="https://images.pexels.com/photos/46710/pexels-photo-46710.jpeg" alt="">
-                            </a>
-                        </li>
 
-                        <li>
-                            <a href="#item02">
-                                <img src="https://images.pexels.com/photos/46710/pexels-photo-46710.jpeg" alt="">
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#item02">
-                                <img src="https://images.pexels.com/photos/46710/pexels-photo-46710.jpeg" alt="">
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#item02">
-                                <img src="https://images.pexels.com/photos/46710/pexels-photo-46710.jpeg" alt="">
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#item02">
-                                <img src="https://images.pexels.com/photos/46710/pexels-photo-46710.jpeg" alt="">
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#item02">
-                                <img src="https://images.pexels.com/photos/46710/pexels-photo-46710.jpeg" alt="">
-                            </a>
-                        </li>
-
-                        <li>
-                            <a class="image" href="#item01">
-                                <img src="https://images.pexels.com/photos/46710/pexels-photo-46710.jpeg" alt="">
-                            </a>
-                        </li>
-                        <li>
-                            <a class="image" href="#item01">
-                                <img src="https://images.pexels.com/photos/46710/pexels-photo-46710.jpeg" alt="">
-                            </a>
-                        </li>
-                        <li>
-                            <a class="image" href="#item01">
-                                <img src="https://images.pexels.com/photos/46710/pexels-photo-46710.jpeg" alt="">
-                            </a>
-                        </li>
+                        <th:block th:each="album : ${albums}">
+                            <li>
+                                <a href="#item02">
+                                    <img th:src="${album.userImages.iterator().next().getBase64Image()}">
+                                </a>
+                            </li>
+                        </th:block>
                     </ul>
                 </div>
                 <!-- / row -->
-
+<!--TODO Ahora hacer que se puedan comentar,dar like, etc!-->
                 <!-- Item 01 -->
                 <div id="item01" class="port">
 
