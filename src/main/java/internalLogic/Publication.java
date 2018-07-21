@@ -25,6 +25,8 @@ public class Publication {
     protected Set<User> taggedUsers;
     @ManyToOne(fetch = FetchType.EAGER)
     protected User receiverUser;
+    @Transient
+    protected boolean liked = false;
 
     public Publication(Set<Comment> commentSet, Set<MLike> likeSet, Date date, User creator, String description, Set<User> taggedUsers, User receiverUser) {
         this.commentSet = commentSet;
@@ -103,5 +105,19 @@ public class Publication {
         this.receiverUser = receiverUser;
     }
 
+    public boolean isLiked() {
+        return liked;
+    }
 
+    public void setLiked(boolean liked) {
+        this.liked = liked;
+    }
+
+    public void verifyLike(User user){
+        for(MLike i: likeSet){
+            if (i.getUser().getId()==user.getId()){
+                liked = true;
+            }
+        }
+    }
 }

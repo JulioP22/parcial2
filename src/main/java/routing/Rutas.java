@@ -47,6 +47,7 @@ public class Rutas {
 
 
             if (request.session().attribute("user")!=null){ //Si el usuario está autenticado la página principal que se carga es el feed de noticias
+                model.put("notifications",SQL.getUserNotifications(((User)request.session().attribute("user")).getId()));
                 return engine.render(new ModelAndView(model,"authenticatedIndex"));
             }else{
                 return engine.render(new ModelAndView(model,"index"));
@@ -85,9 +86,11 @@ public class Rutas {
 
         get("/profile",(request, response) -> {
             Map<String,Object> model = new HashMap<>();
+            long idUser = ((User)request.session().attribute("user")).getId();
             model.put("usuariosesion",request.session().attribute("user")); //Reemplazar esto on el objeto de usuario de la sesión, usado para validar que se muestra y que no.
-            model.put("publications",SQL.getPublicationsFromUser(((User)request.session().attribute("user")).getId()));
-            System.out.println(SQL.getPublicationsFromUser(((User)request.session().attribute("user")).getId()).size());
+            model.put("publications",SQL.getPublicationsFromUser(idUser));
+            model.put("notifications",SQL.getUserNotifications(idUser));
+            refreshPublications((List<Publication>) model.get("publications"), (User) model.get("usuariosesion"));
             return engine.render(new ModelAndView(model,"profile"));
         });
 
@@ -108,12 +111,17 @@ public class Rutas {
             return "";
         });
 
-        post("/insertPublication",(request, response) -> {
+        post("/insertPublication/:taggedUsers",(request, response) -> {
             Publication publication = parser.fromJson(request.body(),Publication.class);
             publication.setCreator(request.session().attribute("user"));
             publication.setReceiverUser(request.session().attribute("user"));//TODO esto debe cambiar al usuario en cuyo perfil se está.
 
-            SQL.insert(publication);
+            long[] taggedUsers = parser.fromJson(request.params("taggedUsers"),long[].class);
+
+            Publication pub = SQL.insert(publication);
+            SQL.insertTaggedUsers(pub.getId(),taggedUsers);
+            generateNotifications(taggedUsers,pub.getId());
+
             System.out.println("Publicacion recibidia es: " + publication.getDescription() );
             return "Inserted";
         });
@@ -128,7 +136,6 @@ public class Rutas {
         });
 
         post("/saveComment/:idUser/:idPublication",(request, response) -> {
-            System.out.println(request.body());
             Comment comment = parser.fromJson(request.body(), Comment.class);
             long id = Integer.parseInt(request.params("idUser"));
             long idPublication = Integer.parseInt(request.params("idPublication"));
@@ -139,11 +146,52 @@ public class Rutas {
             return "";
         });
 
+        post("/saveLike/:idUser/:idPublication",(request, response) -> {
+            MLike like = parser.fromJson(request.body(), MLike.class);
+            long id = Integer.parseInt(request.params("idUser"));
+            long idPublication = Integer.parseInt(request.params("idPublication"));
+            User user = SQL.getElementById(id, User.class);
+            like.setUser(user);
+            like.setDate(new Date());
+            SQL.insertLikeIntoPublication(like,idPublication);
+            Publication pub = SQL.getElementById(idPublication,Publication.class);
+            pub.verifyLike(request.session().attribute("user"));
+
+            Map<String, Object> model = new HashMap<>();
+            model.put("publication", pub);
+            model.put("usuariosesion", request.session().attribute("user"));
+
+            return engine.render(new ModelAndView(model,"THBasis/likeBasis"));
+        });
+
+        post("/quitLike/:idUser/:idPublication",(request, response) -> {
+            long idUser = Integer.parseInt(request.params("idUser"));
+            long idPublication = Integer.parseInt(request.params("idPublication"));
+            MLike like = SQL.getLikeByUserId(idUser,idPublication);
+            SQL.deleteLike(idPublication,like.getId());
+            Publication pub = SQL.getElementById(idPublication,Publication.class);
+            pub.verifyLike(request.session().attribute("user"));
+            System.out.println(pub.isLiked());
+
+            Map<String, Object> model = new HashMap<>();
+            model.put("publication", pub);
+            model.put("usuariosesion", request.session().attribute("user"));
+
+            return engine.render(new ModelAndView(model,"THBasis/likeBasis"));
+        });
+
         get("/getComments/:idPublication",(request, response) -> {
             long id = Integer.parseInt(request.params("idPublication"));
             Map<String,Object> model = new HashMap<>();
             model.put("publication",SQL.getElementById(id, Publication.class));
             return engine.render( new ModelAndView(model, "THBasis/commentBasis"));
+        });
+
+        get("/getFriend/:idFriend",(request, response) -> {
+            long idFriend = Integer.parseInt(request.params("idFriend"));
+            User user = SQL.getElementById(idFriend,User.class);
+            user.setFriends(null);
+            return parser.toJson(user);
         });
 
 
@@ -192,6 +240,22 @@ public class Rutas {
             return null;
         }
     }
+
+    private void refreshPublications(List<Publication> pubs, User user){
+        for(Publication i: pubs){
+            i.verifyLike(user);
+        }
+    }
+
+    private void generateNotifications(long[] ids, long idPublication){
+        Publication pub = SQL.getElementById(idPublication, Publication.class);
+        for(long i: ids){
+            User user = SQL.getElementById(i, User.class);
+            Notification not = new Notification(pub.getCreator().getFullName()+" te ha etiquetado en una publicación",user,pub,new Date());
+            SQL.insert(not);
+        }
+    }
+
 }
 
     //
