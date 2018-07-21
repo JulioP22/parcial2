@@ -1,6 +1,6 @@
 
-<th:block th:each="publication, iterStat : ${publications}" xmlns:th="http://www.w3.org/1999/xhtml">
-<!--<div class="col-sm-12 col-md-6 col-lg-4">-->
+<th:block th:each="publication : ${publications}">
+    <div class="col-sm-12 col-md-6 col-lg-4">
     <div class="[ panel panel-default ] panel-google-plus" >
         <div class="dropdown" th:if="${usuariosesion.id == publication.creator.id}">
                     <span class="dropdown-toggle" type="button" data-toggle="dropdown">
@@ -64,6 +64,6 @@
             <div class="clearfix"></div>
         </div>
     </div>
-<!--</div>-->
+    </div>
 
 </th:block>

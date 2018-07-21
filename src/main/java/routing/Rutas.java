@@ -270,6 +270,17 @@ public class Rutas {
 
         });
 
+        get("/loadHistory",(request, response) -> {
+            Map<String,Object> model = new HashMap<>();
+            model.put("usuariosesion",request.session().attribute("user"));
+
+            model.put("publications",SQL.getPublications());
+            refreshPublications((List<Publication>) model.get("publications"), (User) model.get("usuariosesion"));
+
+            return engine.render(new ModelAndView(model,"THBasis/publicationBasisHistory"));
+
+        });
+
 
     }
 
@@ -298,22 +309,6 @@ public class Rutas {
             e.printStackTrace();
         }
         return decodedString;
-    }
-
-    public byte[] getImageInBytes(){
-        try{
-            BufferedImage originalImage =
-                    ImageIO.read(new File("C:\\Users\\Julio\\Pictures\\prueba.jpg"));
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write( originalImage, "jpg", baos );
-            baos.flush();
-            byte[] imageInByte = baos.toByteArray();
-            baos.close();
-            return imageInByte;
-        } catch(Exception e){
-            System.out.println(e.getMessage());
-            return null;
-        }
     }
 
     private void refreshPublications(List<Publication> pubs, User user){

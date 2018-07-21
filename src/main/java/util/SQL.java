@@ -240,7 +240,7 @@ public class SQL {
             EntityManager enf = getEntityManager();
             EntityTransaction tr = enf.getTransaction();
             tr.begin();
-            List list = enf.createQuery("select c from Publication c order by id desc")
+            List list = enf.createQuery("select c from Publication c where creator.id <> null order by c.id desc")
                     .setMaxResults(6)
                     .getResultList();
             tr.commit();
