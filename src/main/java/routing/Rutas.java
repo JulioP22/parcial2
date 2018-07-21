@@ -100,9 +100,10 @@ public class Rutas {
             return "Ahora va este texto";
         });
 
+        // Esta es una ruta para probar funciones usando postman
         post("/insertUser",(request, response) -> {
 
-            User user = SQL.getElementById(1, User.class);
+            List<User> list = SQL.getUnknownUsers(1);
 
             return "";
         });
