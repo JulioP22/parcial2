@@ -1,0 +1,11 @@
+
+
+
+
+<div th:if="${publication.liked == false}">
+    <button th:onclick="'javascript:addLike(\''+ ${publication.id} +'\', \''+ ${usuariosesion.id} +'\');'" type="button" class="btn btn-default"><span class="glyphicon glyphicon-thumbs-up "></span></button>
+</div>
+<div th:if="${publication.liked == true}">
+    <button th:onclick="'javascript:quitLike(\''+ ${publication.id} +'\', \''+ ${usuariosesion.id} +'\');'" style="color: blue" type="button" class="btn btn-default"><span class="glyphicon glyphicon-thumbs-up " disabled></span></button>
+</div>
+<div th:text="${publication.likeSet.size}"></div>

@@ -44,35 +44,15 @@
 
         <ul class="nav nav-pills" style="display: flex; justify-content: center; margin-top: 30%;">
             <li onclick="friendshipHandler()"><a href="#"><span class="glyphicon glyphicon-user"></span><span class="badge">7</span></a></li>
-            <li><a href="#"><span class="glyphicon glyphicon-comment"></span><span class="badge">9</span></a></li>
+            <!--<li><a href="#"><span class="glyphicon glyphicon-comment"></span><span class="badge">9</span></a></li>-->
             <li onclick="notificationHandler()"><a href="#"><span class="glyphicon glyphicon-bell"></span><span class="badge">3</span></a></li>
         </ul>
 
         <h4 hidden="hidden" class = "notif-header-text">Notificaciones</h4>
         <div id="activity-notifications" hidden="hidden" class="activity-feed">
-            <div class="feed-item">
-                <div class="date">Sep 25</div>
-                <div class="text">Responded to need <a href="single-need.php">“Volunteer opportunity”</a></div>
-            </div>
-            <div class="feed-item">
-                <div class="date">Sep 24</div>
-                <div class="text">Added an interest “Volunteer Activities”</div>
-            </div>
-            <div class="feed-item">
-                <div class="date">Sep 23</div>
-                <div class="text">Joined the group <a href="single-group.php">“Boardsmanship Forum”</a></div>
-            </div>
-            <div class="feed-item">
-                <div class="date">Sep 21</div>
-                <div class="text">Responded to need <a href="single-need.php">“In-Kind Opportunity”</a></div>
-            </div>
-            <div class="feed-item">
-                <div class="date">Sep 18</div>
-                <div class="text">Created need <a href="single-need.php">“Volunteer Opportunity”</a></div>
-            </div>
-            <div class="feed-item">
-                <div class="date">Sep 17</div>
-                <div class="text">Attending the event <a href="single-event.php">“Some New Event”</a></div>
+            <div class="feed-item" th:each="noti : ${notifications}">
+                <div class="date" th:text="${noti.date}"></div>
+                <div class="text" th:text="${noti.description}"></div>
             </div>
         </div>
 

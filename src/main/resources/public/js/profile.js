@@ -20,8 +20,9 @@ $(document).ready(function() {
                 let publication = {};
                 publication.date = new Date();
                 publication.description = status; //TODO Falta la lógica de tagging
-                $.post("/insertPublication",JSON.stringify(publication),function(){
+                $.post(`/insertPublication/${JSON.stringify(taggedUsers)}`,JSON.stringify(publication),function(){
                     window.location.href = "/profile";
+                    clean();
                 });
             }
         });
@@ -190,7 +191,59 @@ $(".gallery ul li a").click(function() {
     }, 400);
 });
 
-function addComment(idPublication){
-
+function addComment(idPublication, idUser){
+    let comment = {
+        description: $(`#text${idPublication}`).val()
+    };
+    $.post(`/saveComment/${idUser}/${idPublication}`, JSON.stringify(comment), function(resp){
+        $.get(`/getComments/${idPublication}`, function(resp){
+            console.log(resp);
+            $(`#com${idPublication}`).html(resp);
+        });
+    })
+}
+function addLike(idPublication, idUser){
+    let like = {
+        action: 1
+    };
+    $.post(`/saveLike/${idUser}/${idPublication}`, JSON.stringify(like), function(resp){
+        $(`#likes${idPublication}`).html(resp);
+    });
 }
 
+function quitLike(idPublication, idUser){
+    $.post(`/quitLike/${idUser}/${idPublication}`, JSON.stringify({}), function(resp){
+        $(`#likes${idPublication}`).html(resp);
+    });
+}
+
+let taggedUsers = [];
+
+function clean(){
+    taggedUsers = [];
+    $("#tagArea").html("");
+}
+
+function verify(idFriend){
+    for(let i in taggedUsers){
+        if (taggedUsers[i] == idFriend) return false;
+    }
+    return true;
+}
+
+function tagFriend(idFriend){
+    if (idFriend !== ""){
+        if (verify(idFriend)){
+            $.get(`/getFriend/${idFriend}`).then(resp=>{
+                let friend = JSON.parse(resp);
+                $("#tagArea").append(`<span class='badge' style="padding: 7px" onclick="deleteTag(${idFriend})" id="friend${idFriend}">${friend.fullName}</span>`)
+                taggedUsers.push(idFriend);
+            });
+        }
+        $("#tagSelector").val("");
+    }
+}
+
+function deleteTag(idFriend){
+    $(`#friend${idFriend}`).remove();
+}

@@ -43,6 +43,44 @@
     <link rel="stylesheet" href="css/gallery.css">
     <link rel="stylesheet" href="css/edit-profile.css">
 
+    <style>
+        .badge:hover {
+            color: #ffffff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .badge-error {
+            background-color: #b94a48;
+        }
+        .badge-error:hover {
+            background-color: #953b39;
+        }
+        .badge-warning {
+            background-color: #f89406;
+        }
+        .badge-warning:hover {
+            background-color: #c67605;
+        }
+        .badge-success {
+            background-color: #12eff1;
+        }
+        .badge-success:hover {
+            background-color: #221fde;
+        }
+        .badge-info {
+            background-color: #3a87ad;
+        }
+        .badge-info:hover {
+            background-color: #2d6987;
+        }
+        .badge-inverse {
+            background-color: #333333;
+        }
+        .badge-inverse:hover {
+            background-color: #1a1a1a;
+        }
+    </style>
+
 
     <!-- Modernizr JS -->
     <script src="js/modernizr-2.6.2.min.js"></script>
@@ -158,8 +196,23 @@
 
 
                 </div>
+
+                <div class="col-xs-12" style="margin-left: -15px; margin-bottom: -15px; margin-top: 15px">
+                    <div class="col-xs-4">
+                        <select id="tagSelector" class="form-control" style="height: 40px; width: 250px; margin-bottom: 30px" onchange="tagFriend(value)">
+                            <option value="">Seleccione</option>
+                            <option th:each="friend : ${usuariosesion.friends}" th:value="${friend.id}" th:text="${friend.fullName}"></option>
+                        </select>
+                    </div>
+                    <div class="col-xs-4">
+                        <button class="btn btn-success" onclick="clean()">Clean tags</button>
+                    </div>
+                </div>
+
                 <div data-animate-effect="fadeInRight" class="col-sm-12 col-md-8 col-lg-8 animate-box" style="margin-top: 15px">
                     <!--Aqui va todo lo de la derecha-->
+
+                    <div id="tagArea"></div>
                     <textarea name="editordata" id="summernote"></textarea>
 
                     <!--Una vez agregado SIEMPRE el summernote para poder hacer posts, entonces se ponen los posts!-->
@@ -172,7 +225,7 @@
 
                     <!--Este se puede considerar un panel tipo TEXTO-->
                     <!--Cambiar esto a todas las publicaciones donde este usuario sea el objetivo-->
-                    <th:block th:each="publication : ${publications}">
+                    <th:block th:each="publication, iterStat : ${publications}">
 
                     <div class="[ panel panel-default ] panel-google-plus" >
                         <div class="dropdown">
@@ -209,20 +262,29 @@
 
                             <h3 th:text="${publication.creator.fullName}"></h3>
                             <h5><span>Shared publicly</span> - <span th:text="${publication.date}"></span></h5>
+                            <span th:each="user : ${publication.taggedUsers}">
+                                <p class="badge" th:text="${user.fullName}"></p>
+                            </span>
                         </div>
-                        <div class="panel-body" th:text="${publication.description}">
-                            <!--<p>Do people born in 2000 get to choose if they are Generation Y or Generation-->
-                                <!--Z? How do you decide what generation you want to belong to?</p>-->
+                        <div class="panel-body" th:text="${publication.description}"></div>
 
-                            <hr>
-                            <div id="comments"></div>
-
+                        <hr>
+                        <div th:id="${'com'+publication.id}">
+                            <div th:each="comment : ${publication.commentSet}">
+                                <span style="margin-left: 15px; padding: 10px;" class="badge badge-success" th:text="${comment.user.fullName+': '+  comment.description}"></span><br><br>
+                            </div>
                         </div>
+
                         <div class="panel-footer">
-                            <button type="button" class="btn btn-default"><span class="glyphicon glyphicon  -thumbs-up "></span></button>
-                            <button type="button" class="btn btn-default">
-                                <span class="glyphicon glyphicon-share-alt"></span>
-                            </button>
+                            <div class="row" th:id="${'likes'+publication.id}">
+                                <div th:if="${publication.liked == false}">
+                                    <button th:onclick="'javascript:addLike(\''+ ${publication.id} +'\', \''+ ${usuariosesion.id} +'\');'" type="button" class="btn btn-default"><span class="glyphicon glyphicon-thumbs-up "></span></button>
+                                </div>
+                                <div th:if="${publication.liked == true}">
+                                    <button th:onclick="'javascript:quitLike(\''+ ${publication.id} +'\', \''+ ${usuariosesion.id} +'\');'" style="color: blue" type="button" class="btn btn-default"><span class="glyphicon glyphicon-thumbs-up " disabled></span></button>
+                                </div>
+                                <div th:text="${publication.likeSet.size}"></div>
+                            </div>
                             <div class="input-placeholder">Agrega un comentario...</div>
                         </div>
                         <div class="panel-google-plus-comment">
@@ -230,8 +292,8 @@
                                  src="https://lh3.googleusercontent.com/uFp_tsTJboUY7kue5XAsGA=s46"
                                  alt="User Image"/>
                             <div class="panel-google-plus-textarea">
-                                <textarea rows="4"></textarea>
-                                <button type="submit" class="[ btn btn-success disabled ]">Post comment
+                                <textarea th:id="${'text'+publication.id}" rows="4"></textarea>
+                                <button type="submit" class="[ btn btn-success disabled ]" th:onclick="'javascript:addComment(\''+ ${publication.id} +'\', \''+ ${usuariosesion.id} +'\');'">Post comment
                                 </button>
                                 <button type="reset" class="[ btn btn-default ]">Cancel</button>
                             </div>
@@ -314,7 +376,6 @@
         </div>
 
         <!--Aqui empieza el código de la galería de imágenes-->
-
         <div hidden="hidden" class="container animate-box" id="wall_gallery" data-animate-effect="fadeIn">
             <!--<button type="button" class="btn btn-default"></button>-->
             <!--<button type="button" class="btn btn-default">Default</button>-->
@@ -484,6 +545,7 @@
 <script src="js/popper.js"></script>
 
 
+
 <!-- Bootstrap -->
 <script src="js/bootstrap.min.js"></script>
 <!-- Waypoints -->
@@ -496,6 +558,8 @@
 <script src="js/main.js"></script>
 <script src="js/summernote-lite.js"></script>
 <script src="js/profile.js"></script>
+
+
 
 </body>
 </html>

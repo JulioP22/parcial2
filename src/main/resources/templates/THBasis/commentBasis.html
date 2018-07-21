@@ -1,0 +1,6 @@
+
+
+
+<div th:each="comment : ${publication.commentSet}" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div style="margin-left: 15px; padding: 10px;" class="badge" th:text="${comment.user.fullName+': '+  comment.description}"></div><br><br>
+</div>

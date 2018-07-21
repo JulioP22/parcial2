@@ -100,7 +100,7 @@ public class SQL {
         }
     }
 
-    public static <T> void insert (T comment){
+    public static <T> T insert (T comment){
         try{
             EntityManager enf = getEntityManager();
             EntityTransaction tr = enf.getTransaction();
@@ -108,9 +108,11 @@ public class SQL {
             enf.persist(comment);
             tr.commit();
             enf.close();
+            return comment;
         }
         catch (Exception e){
             e.printStackTrace();
+            return null;
         }
     }
 
@@ -296,22 +298,6 @@ public class SQL {
         }
     }
 
-    public static void deleteLike(long idLike, long idPublication){
-        try{
-            EntityManager enf = getEntityManager();
-            EntityTransaction tr = enf.getTransaction();
-            tr.begin();
-            enf.createNativeQuery("delete from PUBLICATION_MLIKE where PUBLICATION_ID = :PUBLICATION_ID and LIKESET_ID = :LIKESET_ID")
-                    .setParameter("PUBLICATION_ID", idPublication)
-                    .setParameter("LIKESET_ID", idLike)
-                    .executeUpdate();
-            tr.commit();
-            enf.close();
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-    }
 
     public static <T> T getElementById(long id, Class cls){
         try{
@@ -363,5 +349,76 @@ public class SQL {
         }
     }
 
+    public static MLike getLikeByUserId(long idUser, long idPublication){
+        try {
+            EntityManager enf = getEntityManager();
+            EntityTransaction tr = enf.getTransaction();
+            tr.begin();
+            MLike user = (MLike) enf.createNativeQuery("SELECT * from MLIKE inner join publication_mlike on PUBLICATION_MLIKE.LIKESET_ID = MLIKE.ID where user_id = :idUser and PUBLICATION_ID = :idPublication", MLike.class)
+                    .setParameter("idUser",idUser)
+                    .setParameter("idPublication",idPublication)
+                    .getSingleResult();
+            tr.commit();
+            enf.close();
+            return user;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static void deleteLike(long idPublication, long idLike){
+        try {
+            EntityManager enf = getEntityManager();
+            EntityTransaction tr = enf.getTransaction();
+            tr.begin();
+            enf.createNativeQuery("delete from publication_mlike where LIKESET_ID = :idLike and PUBLICATION_ID = :idPublication")
+                    .setParameter("idLike",idLike)
+                    .setParameter("idPublication",idPublication)
+                    .executeUpdate();
+            enf.createNativeQuery("delete from MLIKE where id = :id")
+                    .setParameter("id",idLike)
+                    .executeUpdate();
+            tr.commit();
+            enf.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void insertTaggedUsers(long idPublication, long[] usersIds){
+        try {
+            EntityManager enf = getEntityManager();
+            EntityTransaction tr = enf.getTransaction();
+            tr.begin();
+            for(long i: usersIds){
+                enf.createNativeQuery("insert into publication_user (publication_id, TAGGEDUSERS_ID) values (:idPublication, :idUser)")
+                        .setParameter("idPublication", idPublication)
+                        .setParameter("idUser", i)
+                        .executeUpdate();
+            }
+            tr.commit();
+            enf.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static List<Notification> getUserNotifications(long idUser){
+        try {
+            EntityManager enf = getEntityManager();
+            EntityTransaction tr = enf.getTransaction();
+            tr.begin();
+            List<Notification> list = enf.createQuery("Select c from Notification c where user.id = :idUser")
+                    .setParameter("idUser", idUser)
+                    .getResultList();
+            tr.commit();
+            enf.close();
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 }
