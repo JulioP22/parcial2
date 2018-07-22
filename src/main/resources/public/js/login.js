@@ -167,11 +167,50 @@ view.onResize = function paperOnResize() {
 
 /*Aqui van los métodos de los botones*/
 
+function compare(element){
+    return typeof element !== "undefined" && element !== null && element !== '';
+}
+
 $("#signUp").on("click",function () {
-   $.post("/register",$("#form-signup").serialize(),function(){
-       //Make validation and redirect if correct, else indicate errors.
-       window.location.href = "/";
-   })
+
+    let e = false;
+
+
+    if (!compare($("#email").val()) || $("#email").val().indexOf("@") === -1){
+        e = true;
+        $("#email").effect('shake');
+    }
+    if (!compare($("#fullname-signup").val())){
+        e = true;
+        $("#fullname-signup").effect('shake');
+    }
+    if (!compare($("#password-signup").val()) || $("#confirm-password-signup").val() !== $("#password-signup").val()){
+        e = true;
+        $("#password-signup").effect('shake');
+    }
+    if (!compare($("#birthdate-signup").val())){
+        e = true;
+        $("#birthdate-signup").effect('shake');
+    }
+    if (!$("#sex-male").is(":checked") && !$("#sex-woman").is(":checked") && !$("#sex-na").is(":checked")){
+        e = true;
+        $("#sex-male").effect('shake');
+        $("#sex-woman").effect('shake');
+        $("#sex-na").effect('shake');
+    }
+    if (!e){
+        let dat = new Date($("#birthdate-signup").val());
+        let user = {
+            fullName: $("#fullname-signup").val(),
+            email: $("#email").val(),
+            password: $("#password-signup").val(),
+            bornDate: new Date(dat.getTime()+14400000),
+            sex: $("#sex-male").is(":checked") ? "m" : ($("#sex-woman").is(":checked") ? "f" : 'n/a')
+        };
+        $.post("/register",JSON.stringify(user),function(){
+            window.location.href = "/";
+        });
+    }
 });
 
 $("#logIn").on("click",function () {

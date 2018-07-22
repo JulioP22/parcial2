@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="css/login.css">
-
+    <link rel="stylesheet" href="css/jqueryC.css">
 </head>
 
 <body>
@@ -22,13 +22,12 @@
         <div class="left">
             <div class="content">
                 <h2>Registrarse</h2>
-                <form id="form-signup" method="post" onsubmit="return false;">
-                    <div class="form-element form-stack">
+                    <div class="form-element form-stack" id="divEmail">
                         <label for="email" class="form-label">Email</label>
                         <!--<input id="email" type="email" name="email" class="needs-validation">-->
                         <input id="email" type="email" name="email" required>
                     </div>
-                    <div class="form-element form-stack">
+                    <div class="form-element form-stack" id="divName">
                         <label for="fullname-signup" class="form-label">Nombre Completo</label>
                         <input id="fullname-signup" type="text" name="fullname" required>
                     </div>
@@ -36,7 +35,7 @@
                         <label for="password-signup" class="form-label">Contraseña</label>
                         <input id="password-signup" type="password" name="password" required>
                     </div>
-                    <div class="form-element form-stack">
+                    <div class="form-element form-stack" id="divCPass">
                         <label for="confirm-password-signup" class="form-label">Confirme la contraseña</label>
                         <input id="confirm-password-signup" type="password" name="confirmpassword" required>
                     </div>
@@ -44,12 +43,12 @@
                         <!--<label for="address-signup" class="form-label">¿Donde vive?</label>-->
                         <!--<input id="address-signup" type="text" name="address">-->
                     <!--</div>-->
-                    <div class="form-element form-stack">
+                    <div class="form-element form-stack" id="divBirth">
                         <label for="birthdate-signup" class="form-label">Fecha de Nacimiento</label>
                         <input id="birthdate-signup" type="date" name="birthdate" required>
                     </div>
 
-                    <div class="form-element form-checkbox">
+                    <div class="form-element form-checkbox" id="divSex">
                         <input type="radio" aria-label="Hombre" id="sex-male" name="sex">
                         <label for="sex-male" class="form-label">Hombre</label>
                         <input type="radio" aria-label="Mujer" id="sex-woman" name="sex">
@@ -58,15 +57,14 @@
                         <label for="sex-na" class="form-label">N/A</label>
                     </div>
 
-                    <div class="form-element form-checkbox">
-                        <input id="confirm-terms" type="checkbox" name="confirm" value="yes" class="checkbox">
-                        <label for="confirm-terms">Acepto los <a href="#">Términos de Servicios</a> y <a href="#">Política de Privacidad</a></label>
-                    </div>
-                    <div class="form-element form-submit">
-                        <button id="signUp" class="signup" type="submit" name="signup">Registrarse</button>
+                    <!--<div class="form-element form-checkbox">-->
+                        <!--<input id="confirm-terms" type="checkbox" name="confirm" value="yes" class="checkbox">-->
+                        <!--<label for="confirm-terms">Acepto los <a href="#">Términos de Servicios</a> y <a href="#">Política de Privacidad</a></label>-->
+                    <!--</div>-->
+                    <div>
+                        <button id="signUp" class="signup" name="signup">Registrarse</button>
                         <button id="goLeft" class="signup off">Iniciar Sesión</button>
                     </div>
-                </form>
             </div>
         </div>
         <div class="right">
@@ -93,6 +91,8 @@
 
 <!-- jQuery -->
 <script src="js/jquery.min.js"></script>
+<script src="js/jquery1.js"></script>
+<script src="js/jquery2.js"></script>
 <!-- jQuery Easing -->
 <script src="js/jquery.easing.1.3.js"></script>
 

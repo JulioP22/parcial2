@@ -80,9 +80,9 @@ public class Rutas {
         });
 
         post("/register",(request, response) -> {
-            System.out.println("El cuerpo de registro recibido");
-            System.out.println(request.body());
-            SQL.insertUser(request.body());
+            User user = parser.fromJson(request.body(),User.class);
+            user.setPassword(Cypher.getInstance().encrypt(user.getPassword()));
+            SQL.insert(user);
             response.status(200);
             response.redirect("/");
             return "";
@@ -90,12 +90,18 @@ public class Rutas {
 
         get("/profile",(request, response) -> {
             Map<String,Object> model = new HashMap<>();
-            long idUser = ((User)request.session().attribute("user")).getId();
-            model.put("usuariosesion",request.session().attribute("user")); //Reemplazar esto on el objeto de usuario de la sesión, usado para validar que se muestra y que no.
-            model.put("albums",SQL.getUserAlbums(((User)request.session().attribute("user")).getId()));
-            model.put("notifications",SQL.getUserNotifications(idUser));
-            model.put("requests",SQL.getUserRequest(idUser));
-            return engine.render(new ModelAndView(model,"profile"));
+            model.put("usuariosesion",request.session().attribute("user"));
+            if (request.session().attribute("user")!=null){
+                long idUser = ((User)request.session().attribute("user")).getId();
+                //Reemplazar esto on el objeto de usuario de la sesión, usado para validar que se muestra y que no.
+                model.put("albums",SQL.getUserAlbums(((User)request.session().attribute("user")).getId()));
+                model.put("notifications",SQL.getUserNotifications(idUser));
+                model.put("requests",SQL.getUserRequest(idUser));
+                return engine.render(new ModelAndView(model,"profile"));
+            }
+            else{
+                return engine.render(new ModelAndView(model,"index"));
+            }
         });
 
         get("/contact",(request, response) -> {
