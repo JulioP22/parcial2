@@ -38,24 +38,34 @@ $(document).ready(function() {
         $("#imgupload").trigger('click');
     });
 
-    $("#imgupload").on("change",function () {
+    $("#albumupload").click(function () {
+        $("#albumcreate").trigger('click');
+    });
+
+    $("#albumcreate").on("change",function () {
         var input = this;
+        var pictures = [];
         if (input.files && input.files[0]) {
-            var reader = new FileReader();
+            for (let i=0; i<input.files.length; i++){
+                (function(file){
+                    console.log("ENTRANDO")
+                    var reader = new FileReader();
+                    reader.onload = function(e){
+                        let base64Image = {
+                            image: e.target.result
+                        };
+                        pictures.push(base64Image);
+                    }
+                })(input.files[i]);
+            }
 
-            reader.onload = function (e) {
-                let base64Image = {
-                    image: e.target.result
-                };
-
-                $.post("/updateProfilePic",JSON.stringify(base64Image),function(){
-                    $('#profilePic').attr('src', e.target.result); //La imagen como tal se encuntra en result
-                    // window.location.href = "/profile";
-                });
-            };
-
-            reader.readAsDataURL(input.files[0]);
+            // $.post("/updateProfilePic",JSON.stringify(base64Image),function(){
+            //     $('#profilePic').attr('src', e.target.result); //La imagen como tal se encuntra en result
+            //     window.location.href = "/profile";
+            // });
         }
+
+        console.log(pictures);
     });
 
 

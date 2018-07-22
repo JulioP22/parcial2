@@ -269,7 +269,8 @@
             <!--<button type="button" class="btn btn-default"></button>-->
             <!--<button type="button" class="btn btn-default">Default</button>-->
             <section class="gallery">
-                <button type="button" class="btn btn-default">Crear album</button>
+                <button  id="albumupload" type="button" class="btn btn-default">Crear album</button>
+                <input type="file" class="form-control-file" id="albumcreate" style="display:none" multiple/>
 
                 <div class="row">
                     <ul>
@@ -296,7 +297,7 @@
                     <div th:id="'album-'+${album.id}" class="port">
                         <div class="row">
                             <div class="description">
-                                <h1>Album X</h1>
+                                <h1>Album</h1>
                                 <!--<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus quis libero erat.-->
                                 <!--Integer ac purus est. Proin erat mi, pulvinar ut magna eget, consectetur auctor-->
                                 <!--turpis.</p>-->
@@ -305,7 +306,8 @@
                                 <div class="row">
                                     <th:block th:each="image : ${album.userImages}">
                                         <div class="col-lg-6">
-                                            <img  data-toggle="modal" th:attr="data-target='#myModal-'+ ${album.id}"  th:src="${image.getBase64Image()}" alt="">
+                                            <!--<img  data-toggle="modal" th:attr="data-target='#myModal-'+ ${album.id}"  th:src="${image.getBase64Image()}" alt="">-->
+                                            <img th:src="${image.getBase64Image()}" alt="">
                                         </div>
                                     </th:block>
                                 </div>
@@ -334,97 +336,6 @@
 
 
 
-        <!--AQUI EMPIEZA EL MODAL DE GALERIA-->
-        <!-- Trigger the modal with a button -->
-        <th:block th:each="album : ${albums}">
-        <div class="container">
-            <!-- Modal -->
-            <div class="modal fade" th:id="'myModal-' + ${album.id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <div th:id="'myCarousel-'+${album.id}" class="carousel slide" data-ride="carousel"
-                                     style="height:600px">
-                                     <!--Indicators-->
-                                    <ol class="carousel-indicators">
-                                        <li th:attr="data-target='#myCarousel-'+ ${album.id}" data-slide-to="0"></li>
-                                        <li th:attr="data-target='#myCarousel-'+ ${album.id}" data-slide-to="1"></li>
-                                        <!--<li data-target="#myCarousel" data-slide-to="2"></li>-->
-                                        <!--<li data-target="#myCarousel" data-slide-to="3"></li>-->
-                                    </ol>
-
-                                    <th:block th:each="image,iter: ${album.userImages}">
-
-                                    <!-- Wrapper for slides -->
-                                    <div class="carousel-inner" role="listbox">
-                                        <div th:if="${iter.index} eq 0" class="item active">
-                                            <img th:src="${image.getBase64Image()}" width="460" height="600">
-                                        </div>
-
-                                        <div th:if="${iter.index} &gt; 0" class="item">
-                                            <img th:src="${image.getBase64Image()}" width="460" height="600">
-                                        </div>
-
-                                    </div>
-
-                                    </th:block>
-                                    <!-- Left and right controls -->
-                                    <a class="left carousel-control" th:href="|#myCarousel-${album.id}" role="button"
-                                       data-slide="prev">
-                                                <span class="glyphicon glyphicon-chevron-left"
-                                                      aria-hidden="true"></span>
-                                        <span class="sr-only">Previous</span>
-                                    </a>
-                                    <a class="right carousel-control" th:href="|#myCarousel-${album.id}" role="button"
-                                       data-slide="next">
-                                                <span class="glyphicon glyphicon-chevron-right"
-                                                      aria-hidden="true"></span>
-                                        <span class="sr-only">Next</span>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="modal-body inline">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <img src="http://www.solidbackgrounds.com/images/2880x1800/2880x1800-tiffany-blue-solid-color-background.jpg"
-                                                 width="50" height="50" alt="..." class="img-circle">
-                                        </div>
-                                        <div class="col-md-9">
-                                            <small>Text Text Text Text</small>
-                                            <small>Text Text Text Text</small>
-                                            <small>Text Text Text Text</small>
-                                            <br/>
-                                            <span class="glyphicon glyphicon-heart"></span> Icon
-                                        </div>
-                                    </div>
-                                    <hr/>
-
-                                    <p class="text-success">Text Text Text</p>
-                                    <p>TextTextText</p>
-                                    <p class="text-mute">TextTextText</p>
-                                    <br/>
-                                    <p class="text-success">Text Text Text</p>
-                                    <p>TextTextText</p>
-                                    <p class="text-mute">TextTextText</p>
-                                    <br/>
-
-                                    <input placeholder="Comment" type="text" style="height:100px"
-                                           class="form-control"/>
-                                    <span class="text-mute">Please wrtie your openion.</span>
-                                    <button class="btn btn-sm btn-primary pull-right">Save</button>
-
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        </th:block>
 
 
         <!--AQUI EMPIEZA EL EDITAR PEFIL-->
@@ -534,7 +445,12 @@
         <!--</div>-->
         <!--</div>-->
     </div>
+
+
 </div>
+
+
+
 
 <!-- jQuery -->
 <script src="js/jquery.min.js"></script>
