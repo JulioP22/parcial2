@@ -179,6 +179,8 @@ public class SQL {
         }
     }
 
+
+
     public static void insertCommentIntoPublication(Comment comment, long idPublication){
         try{
             EntityManager enf = getEntityManager();
@@ -375,6 +377,23 @@ public class SQL {
             tr.begin();
             User user = (User) enf.createQuery("select c from User c where lower(c.email) like lower(:email)")
                     .setParameter("email",email)
+                    .getSingleResult();
+            tr.commit();
+            enf.close();
+            return user;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static User getUserByID(long id){
+        try {
+            EntityManager enf = getEntityManager();
+            EntityTransaction tr = enf.getTransaction();
+            tr.begin();
+            User user = (User) enf.createQuery("select c from User c where id = :id")
+                    .setParameter("id",id)
                     .getSingleResult();
             tr.commit();
             enf.close();

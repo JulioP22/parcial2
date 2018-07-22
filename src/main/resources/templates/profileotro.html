@@ -16,40 +16,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="shortcut icon" href="/favicon.ico">
 
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet">
 
 
     <!-- Animate.css -->
-    <link rel="stylesheet" href="css/animate.css">
+    <link  type="text/css" rel="stylesheet" href="/css/animate.css">
     <!-- Icomoon Icon Fonts-->
-    <link rel="stylesheet" href="css/icomoon.css">
+    <link rel="stylesheet" href="/css/icomoon.css">
 
-    <link rel="stylesheet" href="css/post.css">
+    <link rel="stylesheet" href="/css/post.css">
 
 
     <!-- Bootstrap  -->
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/summernote-lite.css">
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/summernote-lite.css">
 
     <!-- Flexslider  -->
-    <link rel="stylesheet" href="css/flexslider.css">
+    <link rel="stylesheet" href="/css/flexslider.css">
     <!-- Theme style  -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 
-    <link rel="stylesheet" href="css/profile-cover.css">
-    <link rel="stylesheet" href="css/post.css">
-    <link rel="stylesheet" href="css/gallery.css">
-    <link rel="stylesheet" href="css/edit-profile.css">
-    <link rel="stylesheet" href="css/badgeStyles.css">
+    <link rel="stylesheet" href="/css/profile-cover.css">
+    <link rel="stylesheet" href="/css/post.css">
+    <link rel="stylesheet" href="/css/gallery.css">
+    <link rel="stylesheet" href="/css/edit-profile.css">
+    <link rel="stylesheet" href="/css/badgeStyles.css">
 
 
     <!-- Modernizr JS -->
-    <script src="js/modernizr-2.6.2.min.js"></script>
+    <script src="/js/modernizr-2.6.2.min.js"></script>
     <!-- FOR IE9 below -->
     <!--[if lt IE 9]>
-    <script src="js/respond.min.js"></script>
+    <script src="/js/respond.min.js"></script>
     <![endif]-->
 
 </head>
@@ -72,7 +72,7 @@
                         <img class="profile-bgHome"
                              src="https://37.media.tumblr.com/88cbce9265c55a70a753beb0d6ecc2cd/tumblr_n8gxzn78qH1st5lhmo1_1280.jpg"/>
 
-                        <img id="profilePic" class="avatar" th:src="${usuariosesion.getBase64Image()}"
+                        <img id="profilePic" class="avatar" th:src="${usuariomuro.getBase64Image()}"
                              alt="jofpin"/>
                         <input type="file" class="form-control-file" id="imgupload" style="display:none"/>
 
@@ -80,13 +80,13 @@
                     <!--Thif para que el boton y la acción sean según la relación de amistad del usuario logeado.-->
                     <button>Agregar como amigo</button>
                     <div class="user-profile-data">
-                        <h1 th:text="${usuariosesion.fullName}"></h1>
+                        <h1 th:text="${usuariomuro.fullName}"></h1>
                     </div>
                     <div class="description-profile">Descripción Genérica de Usuario<a
                             href="https://twitter.com/bullgit" title="bullgit"><strong>@bullgit</strong></a> | I
                     </div>
                     <ul class="data-user">
-                        <li><a><strong th:text="${usuariosesion.friends.size}"></strong><span>Amigos</span></a></li>
+                        <li><a><strong th:text="${usuariomuro.friends.size}"></strong><span>Amigos</span></a></li>
                         <li><a><strong>718</strong><span>Fotos</span></a></li>
                         <!--<li><a><strong>239</strong><span>Following</span></a></li>-->
                     </ul>
@@ -165,7 +165,7 @@
                         style="height: 40px; width: 250px; margin-bottom: 15px; margin-top: 15px"
                         onchange="tagFriend(value)">
                     <option value="">Etiquete un usuario</option>
-                    <option th:each="friend : ${usuariosesion.friends}" th:value="${friend.id}"
+                    <option th:each="friend : ${usuariomuro.friends}" th:value="${friend.id}"
                             th:text="${friend.fullName}"></option>
                 </select>
 
@@ -322,7 +322,7 @@
         </div>
 
         <div hidden="hidden" class="container animate-box" id="wall_friends">
-            <span th:each="user : ${usuariosesion.friends}" style="margin-top: 15px">
+            <span th:each="user : ${usuariomuro.friends}" style="margin-top: 15px">
                 <span class="badge badge-success" style="padding: 10px"><img th:src="${user.getBase64Image()}"
                                                                              style="width: 40px; height: 40px;">&nbsp;&nbsp;<span
                         th:text="${user.fullName}"></span></span>
@@ -335,93 +335,93 @@
         <!--AQUI EMPIEZA EL MODAL DE GALERIA-->
         <!-- Trigger the modal with a button -->
         <th:block th:each="album : ${albums}">
-        <div class="container">
-            <!-- Modal -->
-            <div class="modal fade" th:id="'myModal-' + ${album.id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <div th:id="'myCarousel-'+${album.id}" class="carousel slide" data-ride="carousel"
-                                     style="height:600px">
-                                     <!--Indicators-->
-                                    <ol class="carousel-indicators">
-                                        <li th:attr="data-target='#myCarousel-'+ ${album.id}" data-slide-to="0"></li>
-                                        <li th:attr="data-target='#myCarousel-'+ ${album.id}" data-slide-to="1"></li>
-                                        <!--<li data-target="#myCarousel" data-slide-to="2"></li>-->
-                                        <!--<li data-target="#myCarousel" data-slide-to="3"></li>-->
-                                    </ol>
+            <div class="container">
+                <!-- Modal -->
+                <div class="modal fade" th:id="'myModal-' + ${album.id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div th:id="'myCarousel-'+${album.id}" class="carousel slide" data-ride="carousel"
+                                         style="height:600px">
+                                        <!--Indicators-->
+                                        <ol class="carousel-indicators">
+                                            <li th:attr="data-target='#myCarousel-'+ ${album.id}" data-slide-to="0"></li>
+                                            <li th:attr="data-target='#myCarousel-'+ ${album.id}" data-slide-to="1"></li>
+                                            <!--<li data-target="#myCarousel" data-slide-to="2"></li>-->
+                                            <!--<li data-target="#myCarousel" data-slide-to="3"></li>-->
+                                        </ol>
 
-                                    <th:block th:each="image,iter: ${album.userImages}">
+                                        <th:block th:each="image,iter: ${album.userImages}">
 
-                                    <!-- Wrapper for slides -->
-                                    <div class="carousel-inner" role="listbox">
-                                        <div th:if="${iter.index} eq 0" class="item active">
-                                            <img th:src="${image.getBase64Image()}" width="460" height="600">
-                                        </div>
+                                            <!-- Wrapper for slides -->
+                                            <div class="carousel-inner" role="listbox">
+                                                <div th:if="${iter.index} eq 0" class="item active">
+                                                    <img th:src="${image.getBase64Image()}" width="460" height="600">
+                                                </div>
 
-                                        <div th:if="${iter.index} &gt; 0" class="item">
-                                            <img th:src="${image.getBase64Image()}" width="460" height="600">
-                                        </div>
+                                                <div th:if="${iter.index} &gt; 0" class="item">
+                                                    <img th:src="${image.getBase64Image()}" width="460" height="600">
+                                                </div>
 
-                                    </div>
+                                            </div>
 
-                                    </th:block>
-                                    <!-- Left and right controls -->
-                                    <a class="left carousel-control" th:href="|#myCarousel-${album.id}" role="button"
-                                       data-slide="prev">
+                                        </th:block>
+                                        <!-- Left and right controls -->
+                                        <a class="left carousel-control" th:href="|#myCarousel-${album.id}" role="button"
+                                           data-slide="prev">
                                                 <span class="glyphicon glyphicon-chevron-left"
                                                       aria-hidden="true"></span>
-                                        <span class="sr-only">Previous</span>
-                                    </a>
-                                    <a class="right carousel-control" th:href="|#myCarousel-${album.id}" role="button"
-                                       data-slide="next">
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                        <a class="right carousel-control" th:href="|#myCarousel-${album.id}" role="button"
+                                           data-slide="next">
                                                 <span class="glyphicon glyphicon-chevron-right"
                                                       aria-hidden="true"></span>
-                                        <span class="sr-only">Next</span>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="modal-body inline">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <img src="http://www.solidbackgrounds.com/images/2880x1800/2880x1800-tiffany-blue-solid-color-background.jpg"
-                                                 width="50" height="50" alt="..." class="img-circle">
-                                        </div>
-                                        <div class="col-md-9">
-                                            <small>Text Text Text Text</small>
-                                            <small>Text Text Text Text</small>
-                                            <small>Text Text Text Text</small>
-                                            <br/>
-                                            <span class="glyphicon glyphicon-heart"></span> Icon
-                                        </div>
+                                            <span class="sr-only">Next</span>
+                                        </a>
                                     </div>
-                                    <hr/>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="modal-body inline">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <img src="http://www.solidbackgrounds.com/images/2880x1800/2880x1800-tiffany-blue-solid-color-background.jpg"
+                                                     width="50" height="50" alt="..." class="img-circle">
+                                            </div>
+                                            <div class="col-md-9">
+                                                <small>Text Text Text Text</small>
+                                                <small>Text Text Text Text</small>
+                                                <small>Text Text Text Text</small>
+                                                <br/>
+                                                <span class="glyphicon glyphicon-heart"></span> Icon
+                                            </div>
+                                        </div>
+                                        <hr/>
 
-                                    <p class="text-success">Text Text Text</p>
-                                    <p>TextTextText</p>
-                                    <p class="text-mute">TextTextText</p>
-                                    <br/>
-                                    <p class="text-success">Text Text Text</p>
-                                    <p>TextTextText</p>
-                                    <p class="text-mute">TextTextText</p>
-                                    <br/>
+                                        <p class="text-success">Text Text Text</p>
+                                        <p>TextTextText</p>
+                                        <p class="text-mute">TextTextText</p>
+                                        <br/>
+                                        <p class="text-success">Text Text Text</p>
+                                        <p>TextTextText</p>
+                                        <p class="text-mute">TextTextText</p>
+                                        <br/>
 
-                                    <input placeholder="Comment" type="text" style="height:100px"
-                                           class="form-control"/>
-                                    <span class="text-mute">Please wrtie your openion.</span>
-                                    <button class="btn btn-sm btn-primary pull-right">Save</button>
+                                        <input placeholder="Comment" type="text" style="height:100px"
+                                               class="form-control"/>
+                                        <span class="text-mute">Please wrtie your openion.</span>
+                                        <button class="btn btn-sm btn-primary pull-right">Save</button>
 
+                                    </div>
                                 </div>
                             </div>
+
+
                         </div>
-
-
                     </div>
                 </div>
             </div>
-        </div>
         </th:block>
 
 
@@ -533,27 +533,26 @@
 </div>
 
 <!-- jQuery -->
-<script src="js/jquery.min.js"></script>
+<script src="/js/jquery.min.js"></script>
 <!-- jQuery Easing -->
-<script src="js/jquery.easing.1.3.js"></script>
+<script src="/js/jquery.easing.1.3.js"></script>
 
-<script src="js/popper.js"></script>
+<script src="/js/popper.js"></script>
 
 
 <!-- Bootstrap -->
-<script src="js/bootstrap.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
 <!-- Waypoints -->
-<script src="js/jquery.waypoints.min.js"></script>
+<script src="/js/jquery.waypoints.min.js"></script>
 <!-- Flexslider -->
-<script src="js/jquery.flexslider-min.js"></script>
+<script src="/js/jquery.flexslider-min.js"></script>
 
 
 <!-- MAIN JS -->
-<script src="js/main.js"></script>
-<script src="js/summernote-lite.js"></script>
-<script src="js/profile.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/summernote-lite.js"></script>
+<script src="/js/profile.js"></script>
 
 
 </body>
 </html>
-
