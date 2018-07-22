@@ -103,6 +103,23 @@ public class Rutas {
             }
         });
 
+        get("/profile/:id",(request, response) ->{
+            Map<String,Object> model = new HashMap<>();
+            long idMuro = Integer.parseInt(request.params("id"));
+            User usuariomuro = SQL.getUserByID(idMuro);
+            model.put("usuariosesion",request.session().attribute("user"));
+            model.put("usuariomuro",usuariomuro);
+            if (usuariomuro!=null){
+                model.put("albums",SQL.getUserAlbums(idMuro));
+//                model.put("notifications",SQL.getUserNotifications(idMuro));
+//                model.put("requests",SQL.getUserRequest(idMuro));
+                return engine.render(new ModelAndView(model,"profileotro"));
+            }
+            else{
+                return engine.render(new ModelAndView(model,"index"));
+            }
+        });
+
         get("/contact",(request, response) -> {
             Map<String,Object> model = new HashMap<>();
             return engine.render(new ModelAndView(model,"blog"));
