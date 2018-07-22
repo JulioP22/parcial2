@@ -305,6 +305,8 @@ public class Rutas {
 
             pub.setLikeSet(null);
             pub.setCommentSet(null);
+            pub.setCreator(null);
+            pub.setReceiverUser(null);
             cleanUsers(pub.getTaggedUsers());
 
             return parser.toJson(pub);
@@ -328,6 +330,27 @@ public class Rutas {
             return "";
         });
 
+        get("/loadPublicationOnModal/:idPublication",(request, response) -> {
+            long idPublication = Integer.parseInt(request.params("idPublication"));
+            Publication pub = SQL.getElementById(idPublication,Publication.class);
+            pub.verifyLike((User)request.session().attribute("user"));
+            Map<String,Object> model = new HashMap<>();
+
+            model.put("publication",pub);
+            model.put("usuariosesion",request.session().attribute("user"));
+
+            return engine.render(new ModelAndView(model,"THBasis/publicationOnModal"));
+        });
+
+        post("/updateNotification/:idNot",(request, response) -> {
+            long idNot = Integer.parseInt(request.params("idNot"));
+
+            Notification not = SQL.getElementById(idNot,Notification.class);
+            not.setState(1);
+            SQL.update(not);
+
+            return "";
+        });
 
     }
 

@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="css/style.css">
     <!--Notifications style-->
     <link rel="stylesheet" href="css/notification.css">
+    <link rel="stylesheet" href="css/modalStyle.css">
 
 
 
@@ -54,6 +55,7 @@
             <div class="feed-item" th:each="noti : ${notifications}" th:id="${'not'+noti.id}">
                 <div class="date" ><span th:text="${noti.date}"></span></div>
                 <div class="text"><span th:text="${noti.description}"></span></div>
+                <button class="btn btn-success btn-xs" th:onclick="'javascript:goToPublication(\''+${noti.publication.id}+'\', \''+${noti.id}+'\');'"><span class="glyphicon glyphicon-share-alt"></span></button>
             </div>
         </div>
 
@@ -70,6 +72,20 @@
 
     </nav>
 </aside>
+
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+            <h4>Publicación</h4>
+        </div>
+        <div class="modal-body">
+            <div id="pub"></div>
+        </div>
+    </div>
+</div>
 
 <script src="js/jquery.min.js"></script>
 <script src="js/sidebar.js"></script>
