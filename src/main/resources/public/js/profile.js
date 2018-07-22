@@ -297,18 +297,19 @@ function deleteRequest(idNotification){
     });
 }
 
-function isFunction(possibleFunction) {
-    return typeof(possibleFunction) === typeof(Function);
-}
-
 function deletePublication(idPublication){
     $.post(`/deletePublication/${idPublication}`).then(resp=>{
-        loadPage(function () {
-            refreshPubs();
-        });
-        loadHistory(function () {
-            refreshPubs();
-        });
+        let loc = location.href.split("/");
+        if (loc[loc.length-1] === 'profile') {
+            loadPage(function () {
+                refreshPubs();
+            });
+        }
+        else {
+            loadHistory(function () {
+                refreshPubs();
+            });
+        }
     });
 }
 
@@ -327,6 +328,11 @@ function loadHistory(callback){
         $("#posts").html(resp);
         callback();
     })
+}
+
+function editPublication(idPublication){
+    sessionStorage.setItem("idPublication",idPublication);
+    location.href = `/editPublication`;
 }
 
 let loc = location.href.split("/");

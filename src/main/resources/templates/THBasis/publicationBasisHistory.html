@@ -1,5 +1,4 @@
-
-<th:block th:each="publication : ${publications}">
+<th:block th:each="publication : ${publications}" xmlns:th="http://www.w3.org/1999/xhtml">
     <div class="col-sm-12 col-md-6 col-lg-4">
     <div class="[ panel panel-default ] panel-google-plus" >
         <div class="dropdown" th:if="${usuariosesion.id == publication.creator.id}">
@@ -7,8 +6,8 @@
                         <span class="[ glyphicon glyphicon-chevron-down ]"></span>
                     </span>
             <ul class="dropdown-menu" role="menu">
-                <li role="presentation"><a th:onclick="'javascript:deletePublication(\''+ ${publication.id} +'\',\''+ ${usuariosesion.id} +'\');'" role="menuitem" tabindex="-1" href="#">Eliminar publicación</a>
-                </li>
+                <li role="presentation"><a th:onclick="'javascript:deletePublication(\''+ ${publication.id} +'\',\''+ ${usuariosesion.id} +'\');'" role="menuitem" tabindex="-1" href="#">Eliminar</a></li>
+                <li role="presentation"><a th:onclick="'javascript:editPublication(\''+ ${publication.id} +'\');'" role="menuitem" tabindex="-1" href="#">Editar</a></li>
             </ul>
         </div>
 

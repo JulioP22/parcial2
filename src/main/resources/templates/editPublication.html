@@ -1,0 +1,106 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Nullpointer.me</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <link rel="shortcut icon" href="favicon.ico">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet">
+
+
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="css/animate.css">
+    <!-- Icomoon Icon Fonts-->
+    <link rel="stylesheet" href="css/icomoon.css">
+
+    <link rel="stylesheet" href="css/post.css">
+
+
+    <!-- Bootstrap  -->
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/summernote-lite.css">
+
+    <!-- Flexslider  -->
+    <link rel="stylesheet" href="css/flexslider.css">
+    <!-- Theme style  -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="stylesheet" href="css/profile-cover.css">
+    <link rel="stylesheet" href="css/post.css">
+    <link rel="stylesheet" href="css/gallery.css">
+    <link rel="stylesheet" href="css/edit-profile.css">
+    <link rel="stylesheet" href="css/badgeStyles.css">
+
+
+    <!-- Modernizr JS -->
+    <script src="../js/modernizr-2.6.2.min.js"></script>
+    <!-- FOR IE9 below -->
+    <!--[if lt IE 9]>
+    <script src="../js/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+
+<div id="fh5co-page">
+
+    <header th:insert="sidebar :: sidebarfiles"></header>
+    <div th:replace="sidebar :: sidebar"></div>
+
+    <div class="col-sm-12">
+        <div class="col-sm-offset-3">
+            <select id="tagSelector" class="form-control" style="height: 40px; width: 250px; margin-bottom: 15px; margin-top: 15px" onchange="tagFriend(value)">
+                <option value="">Etiquete un usuario</option>
+                <option th:each="friend : ${usuariosesion.friends}" th:value="${friend.id}" th:text="${friend.fullName}"></option>
+            </select>
+
+            <div id="tagArea"></div>
+            <textarea name="editordata" id="summernote"></textarea>
+        </div>
+    </div>
+
+
+
+
+</div>
+
+<!-- jQuery -->
+<script src="js/jquery.min.js"></script>
+<!-- jQuery Easing -->
+<script src="js/jquery.easing.1.3.js"></script>
+
+<script src="js/popper.js"></script>
+
+
+
+<!-- Bootstrap -->
+<script src="js/bootstrap.min.js"></script>
+<!-- Waypoints -->
+<script src="js/jquery.waypoints.min.js"></script>
+<!-- Flexslider -->
+<script src="js/jquery.flexslider-min.js"></script>
+
+
+<!-- MAIN JS -->
+<script src="js/main.js"></script>
+<script src="js/summernote-lite.js"></script>
+<script src="js/editPublication.js"></script>
+
+
+
+</body>
+</html>
+

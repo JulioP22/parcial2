@@ -41,14 +41,14 @@ public class Rutas {
 
     public void initRoutes() {
         port(4000);
-        // Aqui se colocaran todas las rutas necesarias. Para la proxima implementacion, separar las rutas dependiendo de para que sirven
+
 
         get("/",((request, response) -> {
             Map<String,Object> model = new HashMap<>();
-            model.put("usuariosesion",request.session().attribute("user")); //Reemplazar esto on el objeto de usuario de la sesión, usado para validar que se muestra y que no.
+            model.put("usuariosesion",request.session().attribute("user"));
 
 
-            if (request.session().attribute("user")!=null){ //Si el usuario está autenticado la página principal que se carga es el feed de noticias
+            if (request.session().attribute("user")!=null){
                 model.put("notifications",SQL.getUserNotifications(((User)request.session().attribute("user")).getId()));
                 model.put("unknownUsers",SQL.getUnknownUsers(((User)request.session().attribute("user")).getId()));
                 model.put("requests",SQL.getUserRequest(((User)request.session().attribute("user")).getId()));
@@ -93,7 +93,6 @@ public class Rutas {
             model.put("usuariosesion",request.session().attribute("user"));
             if (request.session().attribute("user")!=null){
                 long idUser = ((User)request.session().attribute("user")).getId();
-                //Reemplazar esto on el objeto de usuario de la sesión, usado para validar que se muestra y que no.
                 model.put("albums",SQL.getUserAlbums(((User)request.session().attribute("user")).getId()));
                 model.put("notifications",SQL.getUserNotifications(idUser));
                 model.put("requests",SQL.getUserRequest(idUser));
@@ -113,13 +112,6 @@ public class Rutas {
             return "Ahora va este texto";
         });
 
-        // Esta es una ruta para probar funciones usando postman
-        post("/insertUser",(request, response) -> {
-
-            List<User> list = SQL.getUnknownUsers(1);
-
-            return "";
-        });
 
         post("/insertPublication/:taggedUsers",(request, response) -> {
             Publication publication = parser.fromJson(request.body(),Publication.class);
@@ -181,7 +173,6 @@ public class Rutas {
             SQL.deleteLike(idPublication,like.getId());
             Publication pub = SQL.getElementById(idPublication,Publication.class);
             pub.verifyLike(request.session().attribute("user"));
-            System.out.println(pub.isLiked());
 
             Map<String, Object> model = new HashMap<>();
             model.put("publication", pub);
@@ -256,6 +247,7 @@ public class Rutas {
 
             SQL.deleteComments(idPublication);
             SQL.deleteLikes(idPublication);
+            SQL.deleteTags(idPublication);
 
             Publication pub = SQL.getElementById(idPublication,Publication.class);
             SQL.delete(pub);
@@ -287,6 +279,55 @@ public class Rutas {
 
         });
 
+        get("/logoff",(request, response) -> {
+            request.session().attribute("user",null);
+            response.redirect("/");
+            return "";
+        });
+
+        get("/editPublication",(request, response) -> {
+
+            if (request.session().attribute("user")!=null){
+                Map<String,Object> model = new HashMap<>();
+                model.put("usuariosesion",request.session().attribute("user"));
+
+                return engine.render(new ModelAndView(model,"editPublication"));
+            }
+            else{
+                response.redirect("/");
+                return "";
+            }
+        });
+
+        get("/getPublication/:id", (request, response) -> {
+            long id = Integer.parseInt(request.params("id"));
+            Publication pub = SQL.getElementById(id, Publication.class);
+
+            pub.setLikeSet(null);
+            pub.setCommentSet(null);
+            cleanUsers(pub.getTaggedUsers());
+
+            return parser.toJson(pub);
+        });
+
+        post("/updatePublication/:taggedUsers",(request, response) -> {
+            Publication publication = parser.fromJson(request.body(),Publication.class);
+
+            System.out.println(publication.getDescription());
+
+            Publication realOne = SQL.getElementById(publication.getId(),Publication.class);
+            realOne.setDescription(publication.getDescription());
+
+            long[] taggedUsers = parser.fromJson(request.params("taggedUsers"),long[].class);
+            SQL.deleteTags(publication.getId());
+
+            SQL.insertTaggedUsers(publication.getId(),taggedUsers);
+            SQL.update(realOne);
+
+            generateNotifications(taggedUsers,publication.getId());
+            return "";
+        });
+
 
     }
 
@@ -302,7 +343,6 @@ public class Rutas {
 
         return loggedIn;
     }
-
 
     public byte[] base64ToByteArray(String base64Image){
         byte[] decodedString  = "default".getBytes();
@@ -329,6 +369,21 @@ public class Rutas {
             User user = SQL.getElementById(i, User.class);
             Notification not = new Notification(pub.getCreator().getFullName()+" te ha etiquetado en una publicación",user,pub,new Date());
             SQL.insert(not);
+        }
+    }
+
+    private void cleanUsers(Set<User> users){
+        for(User i: users){
+            i.setPassword(null);
+            i.setFriends(null);
+            i.setProfilePhoto(null);
+            i.setSex(null);
+            i.setBornDate(null);
+            i.setEmail(null);
+            i.setJobs(null);
+            i.setLocation(null);
+            i.setPortraitPhoto(null);
+            i.setRole(null);
         }
     }
 
