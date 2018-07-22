@@ -321,6 +321,22 @@ public class SQL {
             e.printStackTrace();
         }
     }
+
+    public static void deleteNotifications(long idPublication){
+        try{
+            EntityManager enf = getEntityManager();
+            EntityTransaction tr = enf.getTransaction();
+            tr.begin();
+            enf.createNativeQuery("delete from NOTIFICATION where PUBLICATION_ID = :PUBLICATION_ID")
+                    .setParameter("PUBLICATION_ID", idPublication)
+                    .executeUpdate();
+            tr.commit();
+            enf.close();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     public static void deleteTags(long idPublication){
         try{
             EntityManager enf = getEntityManager();

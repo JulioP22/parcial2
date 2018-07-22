@@ -5,6 +5,7 @@ import java.util.Date;
 
 @Entity
 public class Comment {
+    @Column(columnDefinition="text")
     private String description;
     private Date date;
     @ManyToOne(fetch = FetchType.EAGER)

@@ -91,29 +91,19 @@ public class Rutas {
         get("/profile",(request, response) -> {
             Map<String,Object> model = new HashMap<>();
             model.put("usuariosesion",request.session().attribute("user"));
+            User profileUser = request.session().attribute("user");
+            long idUser1 = getIdUserByCookies(request.cookies());
+            if (idUser1 != -1) {
+                profileUser = SQL.getElementById(idUser1,User.class);
+                response.cookie("profile","");
+            }
             if (request.session().attribute("user")!=null){
                 long idUser = ((User)request.session().attribute("user")).getId();
-                model.put("albums",SQL.getUserAlbums(((User)request.session().attribute("user")).getId()));
+                model.put("userprofile",profileUser);
+                model.put("albums",SQL.getUserAlbums(idUser1));
                 model.put("notifications",SQL.getUserNotifications(idUser));
                 model.put("requests",SQL.getUserRequest(idUser));
                 return engine.render(new ModelAndView(model,"profile"));
-            }
-            else{
-                return engine.render(new ModelAndView(model,"index"));
-            }
-        });
-
-        get("/profile/:id",(request, response) ->{
-            Map<String,Object> model = new HashMap<>();
-            long idMuro = Integer.parseInt(request.params("id"));
-            User usuariomuro = SQL.getUserByID(idMuro);
-            model.put("usuariosesion",request.session().attribute("user"));
-            model.put("usuariomuro",usuariomuro);
-            if (usuariomuro!=null){
-                model.put("albums",SQL.getUserAlbums(idMuro));
-//                model.put("notifications",SQL.getUserNotifications(idMuro));
-//                model.put("requests",SQL.getUserRequest(idMuro));
-                return engine.render(new ModelAndView(model,"profileotro"));
             }
             else{
                 return engine.render(new ModelAndView(model,"index"));
@@ -130,11 +120,14 @@ public class Rutas {
         });
 
 
-        post("/insertPublication/:taggedUsers",(request, response) -> {
+        post("/insertPublication/:taggedUsers/:idUser",(request, response) -> {
             if (request.session().attribute("user") != null){
+
+                long idReceiver = Integer.parseInt(request.params("idUser"));
+
                 Publication publication = parser.fromJson(request.body(),Publication.class);
                 publication.setCreator(request.session().attribute("user"));
-                publication.setReceiverUser(request.session().attribute("user"));//TODO esto debe cambiar al usuario en cuyo perfil se está.
+                publication.setReceiverUser(SQL.getElementById(idReceiver,User.class));//TODO esto debe cambiar al usuario en cuyo perfil se está.
 
                 long[] taggedUsers = parser.fromJson(request.params("taggedUsers"),long[].class);
 
@@ -301,6 +294,7 @@ public class Rutas {
             SQL.deleteComments(idPublication);
             SQL.deleteLikes(idPublication);
             SQL.deleteTags(idPublication);
+            SQL.deleteNotifications(idPublication);
 
             Publication pub = SQL.getElementById(idPublication,Publication.class);
             SQL.delete(pub);
@@ -498,6 +492,10 @@ public class Rutas {
         }
     }
 
-}
+    private long getIdUserByCookies(Map<String, String> cookies){
+        String val = cookies.get("profile");
+        if (val == null || val.equals("")) return -1;
+        else return Integer.parseInt(val);
+    }
 
-    //
+}

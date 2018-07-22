@@ -73,21 +73,21 @@
                         <img class="profile-bgHome"
                              src="https://37.media.tumblr.com/88cbce9265c55a70a753beb0d6ecc2cd/tumblr_n8gxzn78qH1st5lhmo1_1280.jpg"/>
 
-                        <img id="profilePic" class="avatar" th:src="${usuariosesion.getBase64Image()}"
+                        <img id="profilePic" class="avatar" th:src="${userprofile.getBase64Image()}"
                              alt="jofpin"/>
                         <input type="file" class="form-control-file" id="imgupload" style="display:none"/>
 
                     </div>
                     <!--Thif para que el boton y la acción sean según la relación de amistad del usuario logeado.-->
-                    <button>Agregar como amigo</button>
+                    <!--<button>Agregar como amigo</button>-->
                     <div class="user-profile-data">
-                        <h1 th:text="${usuariosesion.fullName}"></h1>
+                        <h1 th:text="${userprofile.fullName}"></h1>
                     </div>
                     <div class="description-profile">Descripción Genérica de Usuario<a
                             href="https://twitter.com/bullgit" title="bullgit"><strong>@bullgit</strong></a> | I
                     </div>
                     <ul class="data-user">
-                        <li><a><strong th:text="${usuariosesion.friends.size}"></strong><span>Amigos</span></a></li>
+                        <li><a><strong th:text="${userprofile.friends.size}"></strong><span>Amigos</span></a></li>
                         <li><a><strong>718</strong><span>Fotos</span></a></li>
                         <!--<li><a><strong>239</strong><span>Following</span></a></li>-->
                     </ul>
@@ -105,8 +105,8 @@
             <ul class="nav nav-tabs">
                 <li onclick="backToWall()" role="presentation" class="active"><a href="#">Perfil</a></li>
                 <li onclick="goToGallery()" role="presentation"><a href="#">Galería</a></li>
-                <li onclick="goToFriends()" role="presentation"><a href="#">Amigos</a></li>
-                <li onclick="goToEditProfile()" role="presentation"><a href="#">Editar Perfil</a></li>
+                <li th:if="${usuariosesion.id == userprofile.id}" onclick="goToFriends()" role="presentation"><a href="#">Amigos</a></li>
+                <li th:if="${usuariosesion.id == userprofile.id}" click="goToEditProfile()" role="presentation"><a href="#">Editar Perfil</a></li>
             </ul>
 
             <!--Aqui termina a barra de navegación permanente-->
@@ -182,7 +182,7 @@
                     <script th:inline="javascript">
                         /*<![CDATA[*/
 
-                        var id = /*[[${usuariosesion.id}]]*/ 'default';
+                        var id = /*[[${userprofile.id}]]*/ 'default';
                         sessionStorage.setItem("idUser", id);
 
                         /*]]>*/
@@ -322,13 +322,28 @@
 
         </div>
 
-        <div hidden="hidden" class="container animate-box" id="wall_friends">
-            <div class="col-xs-12">
-                <span class="col-xs-3" th:each="user : ${usuariosesion.friends}" style="margin-top: 15px">
-                <span class="badge badge-success" style="padding: 10px"><img th:src="${user.getBase64Image()}" style="width: 40px; height: 40px;">&nbsp;&nbsp;<span
-                        th:text="${user.fullName}"></span></span>
-            </span>
+        <div hidden="hidden" class="container animate-box" id="wall_friends" th:if="${usuariosesion.id == userprofile.id}">
+            <div class="panel panel-default" style="margin-top: 20px">
+                <div class="panel-heading"><b>Mis amigos</b></div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-xs-3" th:each="user : ${usuariosesion.friends}" th:id="${'uss'+user.id}" style="width: 33%">
+                                <div class="badge badge-success" th:onclick="'javascript:toggleMenu(\''+ ${user.id} +'\');'">
+                                    <img style=" border-radius: 30px; width: 50px; height: 50px;" th:src="${user.getBase64Image()}">&nbsp;&nbsp;&nbsp;<span th:text="${user.fullName}"></span>
+                                    <div class="dropdown">
+                                        <ul class="dropdown-menu" role="menu" th:id="${'menu'+user.id}">
+                                            <!--<li role="presentation"><a th:href="|/profile/${user.id}" role="menuitem" tabindex="-1">Visitar Perfil</a></li>-->
+                                            <li role="presentation"><a th:onclick="'javascript:goToProfile(\''+ ${user.id} +'\');'" role="menuitem" tabindex="-1">Visitar perfil</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
         </div>
 
 
@@ -430,7 +445,7 @@
         <!--AQUI EMPIEZA EL EDITAR PEFIL-->
 
 
-        <div hidden="hidden" class="container" id="wall_editP">
+        <div hidden="hidden" class="container animate-box" id="wall_editP" th:if="${usuariosesion.id == userprofile.id}">
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xs-offset-0 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 toppad">
 
