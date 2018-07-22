@@ -322,11 +322,12 @@
         </div>
 
         <div hidden="hidden" class="container animate-box" id="wall_friends">
-            <span th:each="user : ${usuariosesion.friends}" style="margin-top: 15px">
-                <span class="badge badge-success" style="padding: 10px"><img th:src="${user.getBase64Image()}"
-                                                                             style="width: 40px; height: 40px;">&nbsp;&nbsp;<span
+            <div class="col-xs-12">
+                <span class="col-xs-3" th:each="user : ${usuariosesion.friends}" style="margin-top: 15px">
+                <span class="badge badge-success" style="padding: 10px"><img th:src="${user.getBase64Image()}" style="width: 40px; height: 40px;">&nbsp;&nbsp;<span
                         th:text="${user.fullName}"></span></span>
             </span>
+            </div>
         </div>
 
 

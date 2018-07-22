@@ -40,3 +40,39 @@ function friendshipHandler(){
         $("#activity-friends").hide();
     }
 }
+
+function goToPublication(idPublication, idNotification){
+    $("#myModal").show(500);
+    sessionStorage.setItem("ids",JSON.stringify({idPublication: idPublication, idNotification: idNotification}));
+    loadPub();
+}
+
+var modal = document.getElementById('myModal');
+
+var span = document.getElementsByClassName("close")[0];
+
+function loadPub(){
+    let ids = JSON.parse(sessionStorage.getItem('ids'));
+    $.get(`/loadPublicationOnModal/${ids.idPublication}`).then(resp=>{
+        $("#pub").html(resp);
+        refreshPubs();
+    });
+}
+
+span.onclick = function() {
+    let ids = JSON.parse(sessionStorage.getItem('ids'));
+    $.post(`/updateNotification/${ids.idNotification}`).then(resp=>{
+        $(`#not${ids.idNotification}`).remove();
+        $("#myModal").hide(500);
+    });
+};
+
+window.onclick = function(event) {
+    if (event.target == modal) {
+        let ids = JSON.parse(sessionStorage.getItem('ids'));
+        $.post(`/updateNotification/${ids.idNotification}`).then(resp=>{
+            $(`#not${ids.idNotification}`).remove();
+            $("#myModal").hide(500);
+        });
+    }
+};

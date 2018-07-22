@@ -17,7 +17,7 @@
 
 $(document).ready(function () {
     let admin = {
-        email: "a@a.com",
+        email: "sad@sad1",
         password: "123"
     };
     $.post("/login",JSON.stringify(admin),function (response) {
