@@ -28,9 +28,11 @@ public class User {
     @Column( name = "PORTRAITPHOTO" )
     @Lob
     private byte[] portraitPhoto;
+    private String bornPlace;
+    private String studyPlace;
 
 
-    public User(String fullName, String email, String password, Date bornDate, String sex, String location, String jobs, Set<User> friends, String role, byte[] profilePhoto, byte[] portraitPhoto) {
+    public User(String fullName, String email, String password, Date bornDate, String sex, String location, String jobs, Set<User> friends, String role, byte[] profilePhoto, byte[] portraitPhoto, String bornPlace, String studyPlace) {
         this.fullName = fullName;
         this.email = email;
         this.password = password;
@@ -42,6 +44,8 @@ public class User {
         this.role = role;
         this.profilePhoto = profilePhoto;
         this.portraitPhoto = portraitPhoto;
+        this.bornDate = bornDate;
+        this.studyPlace = studyPlace;
     }
 
     public User() {
@@ -153,6 +157,22 @@ public class User {
 
     public void setPortraitPhoto(byte[] portraitPhoto) {
         this.portraitPhoto = portraitPhoto;
+    }
+
+    public String getBornPlace() {
+        return bornPlace;
+    }
+
+    public void setBornPlace(String bornPlace) {
+        this.bornPlace = bornPlace;
+    }
+
+    public String getStudyPlace() {
+        return studyPlace;
+    }
+
+    public void setStudyPlace(String studyPlace) {
+        this.studyPlace = studyPlace;
     }
 
     @Override

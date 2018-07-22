@@ -43,6 +43,7 @@
     <link rel="stylesheet" href="css/gallery.css">
     <link rel="stylesheet" href="css/edit-profile.css">
     <link rel="stylesheet" href="css/badgeStyles.css">
+    <link rel="stylesheet" href="css/jqueryC.css">
 
 
     <!-- Modernizr JS -->
@@ -431,15 +432,15 @@
 
         <div hidden="hidden" class="container" id="wall_editP">
             <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xs-offset-0 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 toppad">
 
                     <div class="panel panel-info">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Generico Generalizado</h3>
+                            <h3 class="panel-title" th:text="${usuariosesion.fullName}"></h3>
                         </div>
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-md-3 col-lg-3 " align="center"><img alt="User Pic"
+                                <div class="col-md-2 col-lg-2 " align="center"><img alt="User Pic"
                                                                                     src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg"
                                                                                     class="img-circle img-responsive">
                                 </div>
@@ -448,51 +449,54 @@
                                     <table class="table table-user-information">
                                         <tbody>
                                         <tr>
-                                            <td>Correo Electrónico:</td>
-                                            <td><input id="email-signup" type="email" name="email" required disabled>
+                                            <td >Correo Electrónico:</td>
+                                            <td style="width: 70%;"><input style="height: 100%; width: 60%" id="email-signup" type="email" name="email" required disabled>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>Fecha de Nacimiento:</td>
-                                            <td><input id="birthdate-edit" type="date" name="birthdate" required
-                                                       disabled></td>
+                                            <td style="width: 70%;"><input style="height: 100%; width: 60%" id="birthdate-edit" type="date" name="birthdate" required
+                                                          disabled></td>
                                         </tr>
                                         <tr>
                                             <td>Lugar de Nacimiento:</td>
-                                            <td><input id="birthplace-edit" type="text" name="birthplace" required
-                                                       disabled></td>
+                                            <td style="height: 100px; width: 70%;"><textarea style="height: 100%; width: 100%" id="birthplace-edit" type="text" name="birthplace" required
+                                                          disabled></textarea></td>
                                         </tr>
 
                                         <tr>
                                             <td>Lugar de Residencia:</td>
-                                            <td><input id="livingplace-edit" type="text" name="livingplace" required
-                                                       disabled></td>
+                                            <td style="height: 100px; width: 70%;"><textarea style="height: 100%; width: 100%" id="livingplace-edit" type="text" name="livingplace" required
+                                                          disabled></textarea></td>
                                         </tr>
 
                                         <tr>
                                             <td>Último lugar de estudio:</td>
-                                            <td><input id="laststudyplace-edit" type="text" name="laststudyplace"
-                                                       required disabled></td>
+                                            <td style="height: 100px; width: 70%;"><textarea style="height: 100%; width: 100%" id="laststudyplace-edit" type="text" name="laststudyplace"
+                                                          required disabled></textarea></td>
                                         </tr>
 
                                         <tr>
                                             <td>Último lugar de trabajo:</td>
-                                            <td><input id="lastWorkPlace-edit" type="text" name="lastWorkPlace" required
-                                                       disabled></td>
+                                            <td style="height: 100px; width: 70%;"><textarea style="height: 100%; width: 100%" id="lastWorkPlace-edit" type="text" name="lastWorkPlace" required
+                                                          disabled></textarea></td>
                                         </tr>
 
 
                                         <tr>
                                         <tr>
                                             <td>Género:</td>
-                                            <td>Medio Genérico</td>
+                                            <td>
+                                            <input type="radio" aria-label="Hombre" id="sex-male" name="sex">
+                                            <label for="sex-male" class="form-label">Hombre</label>
+                                            <input type="radio" aria-label="Mujer" id="sex-woman" name="sex">
+                                            <label for="sex-woman" class="form-label">Mujer</label>
+                                            <input type="radio" aria-label="NA" id="sex-na" name="sex">
+                                                <label for="sex-na" class="form-label">N/A</label></td>
                                         </tr>
 
                                         </tbody>
                                     </table>
-
-                                    <a href="#" class="btn btn-primary">My Sales Performance</a>
-                                    <a href="#" class="btn btn-primary">Team Sales Performance</a>
                                 </div>
                             </div>
                         </div>
@@ -501,12 +505,11 @@
                             <a onclick="enableEdit()" data-original-title="Habilitar Edición" data-toggle="tooltip"
                                type="button"
                                class="btn btn-sm btn-default"><i class="glyphicon glyphicon-edit"></i></a>
-                            <a onclick="saveEdit()" data-original-title="Guardar Cambios" data-toggle="tooltip"
+                            <a th:onclick="'javascript:saveEdit(\''+${usuariosesion.id}+'\');'" data-original-title="Guardar Cambios" data-toggle="tooltip"
                                type="button"
                                class="btn btn-sm btn-success"><i class="glyphicon glyphicon-ok"></i></a>
                         </span>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -535,6 +538,8 @@
 
 <!-- jQuery -->
 <script src="js/jquery.min.js"></script>
+<script src="js/jquery1.js"></script>
+<script src="js/jquery2.js"></script>
 <!-- jQuery Easing -->
 <script src="js/jquery.easing.1.3.js"></script>
 

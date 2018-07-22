@@ -50,7 +50,7 @@ public class SQL {
 
     private static void createDefaultUser(){
         try {
-            User user = new User("Generico Generalizado","a@a.com","j9hp49DuFChzXndy9SVmXtPYDCBKjkoCBxz49vhuUvI8MnwEbsm+0M/AHIQDpX/w",new Date(),"M","Santiago","PUCMM",null,"admin",null,null);
+            User user = new User("Generico Generalizado","a@a.com","j9hp49DuFChzXndy9SVmXtPYDCBKjkoCBxz49vhuUvI8MnwEbsm+0M/AHIQDpX/w",new Date(),"M","Santiago","PUCMM",null,"admin",null,null,null,null);
             EntityManager enf = getEntityManager();
             EntityTransaction tr = enf.getTransaction();
             tr.begin();

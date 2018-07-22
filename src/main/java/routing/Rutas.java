@@ -114,27 +114,40 @@ public class Rutas {
 
 
         post("/insertPublication/:taggedUsers",(request, response) -> {
-            Publication publication = parser.fromJson(request.body(),Publication.class);
-            publication.setCreator(request.session().attribute("user"));
-            publication.setReceiverUser(request.session().attribute("user"));//TODO esto debe cambiar al usuario en cuyo perfil se está.
+            if (request.session().attribute("user") != null){
+                Publication publication = parser.fromJson(request.body(),Publication.class);
+                publication.setCreator(request.session().attribute("user"));
+                publication.setReceiverUser(request.session().attribute("user"));//TODO esto debe cambiar al usuario en cuyo perfil se está.
 
-            long[] taggedUsers = parser.fromJson(request.params("taggedUsers"),long[].class);
+                long[] taggedUsers = parser.fromJson(request.params("taggedUsers"),long[].class);
 
-            Publication pub = SQL.insert(publication);
-            SQL.insertTaggedUsers(pub.getId(),taggedUsers);
-            generateNotifications(taggedUsers,pub.getId());
+                Publication pub = SQL.insert(publication);
+                SQL.insertTaggedUsers(pub.getId(),taggedUsers);
+                generateNotifications(taggedUsers,pub.getId());
 
-            System.out.println("Publicacion recibidia es: " + publication.getDescription() );
-            return "Inserted";
+                System.out.println("Publicacion recibidia es: " + publication.getDescription() );
+                return "Inserted";
+            }
+            else{
+                response.redirect("/");
+                return "";
+            }
         });
 
         post("/updateProfilePic",(request, response) -> {
-            Base64Image base64Image = parser.fromJson(request.body(),Base64Image.class);
-            byte[] bytesImage = base64ToByteArray(base64Image.getImage());
-            User loggedInUser = request.session().attribute("user");
-            loggedInUser.setProfilePhoto(bytesImage);
-            SQL.update(loggedInUser);
-            return "updated";
+            if (request.session().attribute("user") != null){
+                Base64Image base64Image = parser.fromJson(request.body(),Base64Image.class);
+                byte[] bytesImage = base64ToByteArray(base64Image.getImage());
+                User loggedInUser = request.session().attribute("user");
+                loggedInUser.setProfilePhoto(bytesImage);
+                SQL.update(loggedInUser);
+                return "updated";
+            }
+            else {
+                response.redirect("/");
+                return "";
+            }
+
         });
 
         post("/saveComment/:idUser/:idPublication",(request, response) -> {
@@ -149,44 +162,67 @@ public class Rutas {
         });
 
         post("/saveLike/:idUser/:idPublication",(request, response) -> {
-            MLike like = parser.fromJson(request.body(), MLike.class);
-            long id = Integer.parseInt(request.params("idUser"));
-            long idPublication = Integer.parseInt(request.params("idPublication"));
-            User user = SQL.getElementById(id, User.class);
-            like.setUser(user);
-            like.setDate(new Date());
-            SQL.insertLikeIntoPublication(like,idPublication);
-            Publication pub = SQL.getElementById(idPublication,Publication.class);
-            pub.verifyLike(request.session().attribute("user"));
+            if (request.session().attribute("user")!=null){
+                MLike like = parser.fromJson(request.body(), MLike.class);
+                long id = Integer.parseInt(request.params("idUser"));
+                long idPublication = Integer.parseInt(request.params("idPublication"));
+                User user = SQL.getElementById(id, User.class);
+                like.setUser(user);
+                like.setDate(new Date());
+                SQL.insertLikeIntoPublication(like,idPublication);
+                Publication pub = SQL.getElementById(idPublication,Publication.class);
+                pub.verifyLike(request.session().attribute("user"));
 
-            Map<String, Object> model = new HashMap<>();
-            model.put("publication", pub);
-            model.put("usuariosesion", request.session().attribute("user"));
+                Map<String, Object> model = new HashMap<>();
+                model.put("publication", pub);
+                model.put("usuariosesion", request.session().attribute("user"));
 
-            return engine.render(new ModelAndView(model,"THBasis/likeBasis"));
+                return engine.render(new ModelAndView(model,"THBasis/likeBasis"));
+            }
+            else{
+                response.redirect("/");
+                return "";
+            }
         });
 
         post("/quitLike/:idUser/:idPublication",(request, response) -> {
-            long idUser = Integer.parseInt(request.params("idUser"));
-            long idPublication = Integer.parseInt(request.params("idPublication"));
-            MLike like = SQL.getLikeByUserId(idUser,idPublication);
-            SQL.deleteLike(idPublication,like.getId());
-            Publication pub = SQL.getElementById(idPublication,Publication.class);
-            pub.verifyLike(request.session().attribute("user"));
 
-            Map<String, Object> model = new HashMap<>();
-            model.put("publication", pub);
-            model.put("usuariosesion", request.session().attribute("user"));
+            if (request.session().attribute("user")!=null){
+                long idUser = Integer.parseInt(request.params("idUser"));
+                long idPublication = Integer.parseInt(request.params("idPublication"));
+                MLike like = SQL.getLikeByUserId(idUser,idPublication);
+                SQL.deleteLike(idPublication,like.getId());
+                Publication pub = SQL.getElementById(idPublication,Publication.class);
+                pub.verifyLike(request.session().attribute("user"));
 
-            return engine.render(new ModelAndView(model,"THBasis/likeBasis"));
+                Map<String, Object> model = new HashMap<>();
+                model.put("publication", pub);
+                model.put("usuariosesion", request.session().attribute("user"));
+
+                return engine.render(new ModelAndView(model,"THBasis/likeBasis"));
+            }
+            else{
+                response.redirect("/");
+                return "";
+            }
+
+
         });
 
         get("/getComments/:idPublication",(request, response) -> {
-            long id = Integer.parseInt(request.params("idPublication"));
-            Map<String,Object> model = new HashMap<>();
-            model.put("publication",SQL.getElementById(id, Publication.class));
-            model.put("usuariosesion", request.session().attribute("user"));
-            return engine.render( new ModelAndView(model, "THBasis/commentBasis"));
+
+            if (request.session().attribute("user")!=null){
+                long id = Integer.parseInt(request.params("idPublication"));
+                Map<String,Object> model = new HashMap<>();
+                model.put("publication",SQL.getElementById(id, Publication.class));
+                model.put("usuariosesion", request.session().attribute("user"));
+                return engine.render( new ModelAndView(model, "THBasis/commentBasis"));
+            }
+            else{
+                response.redirect("/");
+                return "";
+            }
+
         });
 
         get("/getFriend/:idFriend",(request, response) -> {
@@ -257,26 +293,36 @@ public class Rutas {
 
         get("/loadPosts/:idUser",(request, response) -> {
 
-            long id = Integer.parseInt(request.params("idUser"));
-            Map<String,Object> model = new HashMap<>();
-            model.put("usuariosesion",request.session().attribute("user"));
+            if (request.session().attribute("user")!=null){
+                long id = Integer.parseInt(request.params("idUser"));
+                Map<String,Object> model = new HashMap<>();
+                model.put("usuariosesion",request.session().attribute("user"));
 
-            model.put("publications",SQL.getPublicationsFromUser(id));
-            refreshPublications((List<Publication>) model.get("publications"), (User) model.get("usuariosesion"));
+                model.put("publications",SQL.getPublicationsFromUser(id));
+                refreshPublications((List<Publication>) model.get("publications"), (User) model.get("usuariosesion"));
 
-            return engine.render(new ModelAndView(model,"THBasis/publicationBasis"));
-
+                return engine.render(new ModelAndView(model,"THBasis/publicationBasis"));
+            }
+            else{
+                response.redirect("/");
+                return "";
+            }
         });
 
         get("/loadHistory",(request, response) -> {
-            Map<String,Object> model = new HashMap<>();
-            model.put("usuariosesion",request.session().attribute("user"));
+            if (request.session().attribute("user")!=null){
+                Map<String,Object> model = new HashMap<>();
+                model.put("usuariosesion",request.session().attribute("user"));
 
-            model.put("publications",SQL.getPublications());
-            refreshPublications((List<Publication>) model.get("publications"), (User) model.get("usuariosesion"));
+                model.put("publications",SQL.getPublications());
+                refreshPublications((List<Publication>) model.get("publications"), (User) model.get("usuariosesion"));
 
-            return engine.render(new ModelAndView(model,"THBasis/publicationBasisHistory"));
-
+                return engine.render(new ModelAndView(model,"THBasis/publicationBasisHistory"));
+            }
+            else{
+                response.redirect("/");
+                return "";
+            }
         });
 
         get("/logoff",(request, response) -> {
@@ -331,15 +377,21 @@ public class Rutas {
         });
 
         get("/loadPublicationOnModal/:idPublication",(request, response) -> {
-            long idPublication = Integer.parseInt(request.params("idPublication"));
-            Publication pub = SQL.getElementById(idPublication,Publication.class);
-            pub.verifyLike((User)request.session().attribute("user"));
-            Map<String,Object> model = new HashMap<>();
+            if (request.session().attribute("user") != null){
+                long idPublication = Integer.parseInt(request.params("idPublication"));
+                Publication pub = SQL.getElementById(idPublication,Publication.class);
+                pub.verifyLike((User)request.session().attribute("user"));
+                Map<String,Object> model = new HashMap<>();
 
-            model.put("publication",pub);
-            model.put("usuariosesion",request.session().attribute("user"));
+                model.put("publication",pub);
+                model.put("usuariosesion",request.session().attribute("user"));
 
-            return engine.render(new ModelAndView(model,"THBasis/publicationOnModal"));
+                return engine.render(new ModelAndView(model,"THBasis/publicationOnModal"));
+            }
+            else{
+                response.redirect("/");
+                return "";
+            }
         });
 
         post("/updateNotification/:idNot",(request, response) -> {
@@ -348,6 +400,25 @@ public class Rutas {
             Notification not = SQL.getElementById(idNot,Notification.class);
             not.setState(1);
             SQL.update(not);
+
+            return "";
+        });
+
+        post("/editUser/:idUser",(request, response) -> {
+            long idUser = Integer.parseInt(request.params("idUser"));
+            User user = SQL.getElementById(idUser,User.class);
+
+            User edit = parser.fromJson(request.body(),User.class);
+
+            if (edit.getEmail()!= null)      user.setEmail(edit.getEmail());
+            if (edit.getBornDate()!= null)   user.setBornDate(edit.getBornDate());
+            if (edit.getBornPlace()!= null)  user.setBornPlace(edit.getBornPlace());
+            if (edit.getLocation()!= null)   user.setLocation(edit.getLocation());
+            if (edit.getStudyPlace()!= null) user.setStudyPlace(edit.getStudyPlace());
+            if (edit.getJobs()!= null)       user.setJobs(edit.getJobs());
+            if (edit.getSex()!= null)        user.setSex(edit.getSex());
+
+            SQL.update(user);
 
             return "";
         });

@@ -151,13 +151,80 @@ function goToEditProfile(){
 }
 
 function enableEdit(){
+    $("table > tbody > tr >td > textarea").each(function(){
+       $(this).removeAttr('disabled');
+    });
     $("table > tbody > tr >td > input").each(function(){
        $(this).removeAttr('disabled');
     });
 }
 
-function saveEdit(){
-//    Implement Code to save edits.
+function disableEdit(){
+    $("table > tbody > tr >td > textarea").each(function(){
+        $(this).attr('disabled', true);
+    });
+    $("table > tbody > tr >td > input").each(function(){
+        $(this).attr('disabled', true);
+    });
+}
+
+function cleanEdit(){
+    $("table > tbody > tr >td > textarea ").each(function(){
+        $(this).val("");
+    });
+    $("table > tbody > tr >td > input").each(function(){
+        $(this).val("");
+    });
+}
+
+function compare(element){
+    return typeof element !== "undefined" && element !== null && element !== '';
+}
+
+function saveEdit(idUser){
+
+    let user = {};
+
+    if (compare($("#email-signup").val()) && $("#email-signup").val().indexOf("@") !== -1){
+        user.email = $("#email-signup").val();
+    }
+    if (compare($("#birthdate-edit").val())){
+        let dat = new Date($("#birthdate-edit").val());
+        user.bornDate = new Date(dat.getTime()+14400000);
+    }
+    if (compare($("#birthplace-edit").val())){
+        user.bornPlace = $("#birthplace-edit").val();
+    }
+    if (compare($("#livingplace-edit").val())){
+        user.location = $("#livingplace-edit").val();
+    }
+    if (compare($("#laststudyplace-edit").val())){
+        user.studyPlace = $("#laststudyplace-edit").val();
+    }
+    if (compare($("#lastWorkPlace-edit").val())){
+        user.jobs = $("#lastWorkPlace-edit").val();
+    }
+    if ($("#sex-male").is(":checked") || $("#sex-woman").is(":checked") || $("#sex-na").is(":checked")){
+        user.sex = $("#sex-male").is(":checked") ? "m" : ($("#sex-woman").is(":checked") ? 'f' : 'n/a')
+    }
+
+    if (Object.keys(user).length > 0){
+        $.post(`/editUser/${idUser}`,JSON.stringify(user)).then(resp=>{
+            disableEdit();
+            cleanEdit();
+        });
+    }
+    else{
+        $("#email-signup").effect("shake");
+        $("#birthdate-edit").effect("shake");
+        $("#birthplace-edit").effect("shake");
+        $("#livingplace-edit").effect("shake");
+        $("#laststudyplace-edit").effect("shake");
+        $("#lastWorkPlace-edit").effect("shake");
+        $("#sex-male").effect("shake");
+        $("#sex-woman").effect("shake");
+        $("#sex-na").effect("shake");
+    }
 }
 
 // portfolio
