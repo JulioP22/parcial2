@@ -23,7 +23,8 @@
                                 <p class="badge" th:text="${user.fullName}"></p>
                             </span>
         </div>
-        <div class="panel-body" th:text="${publication.description}"></div>
+        <div th:if="${publication.description != ''}" class="panel-body" th:utext="${publication.description}"></div>
+        <div th:if="${publication.description == ''}" class="panel-body" th:text="${publication.description}"></div>
 
         <hr>
         <div th:id="${'com'+publication.id}">
@@ -47,7 +48,7 @@
                 <div th:if="${publication.liked == true}">
                     <button th:onclick="'javascript:quitLike(\''+ ${publication.id} +'\', \''+ ${usuariosesion.id} +'\');'" style="color: blue" type="button" class="btn btn-default"><span class="glyphicon glyphicon-thumbs-up " disabled></span></button>
                 </div>
-                <div th:text="${publication.likeSet.size}"></div>
+                <div th:utext="${publication.likeSet.size}"></div>
             </div>
             <div class="input-placeholder">Agrega un comentario...</div>
         </div>

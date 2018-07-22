@@ -16,11 +16,12 @@ $(document).ready(function() {
             tooltip: 'Actualizar Estado',
             click: function () {
                 // invoke insertText method with 'hello' on editor module.
+                let idUser = sessionStorage.getItem("idUser");
                 let status = $($("#summernote").summernote("code")).text();
                 let publication = {};
                 publication.date = new Date();
                 publication.description = status; //TODO Falta la lógica de tagging
-                $.post(`/insertPublication/${JSON.stringify(taggedUsers)}`,JSON.stringify(publication),function(){
+                $.post(`/insertPublication/${JSON.stringify(taggedUsers)}/${idUser}`,JSON.stringify(publication),function(){
                     loadPage();
                     clean();
                 });
@@ -377,7 +378,7 @@ function deleteRequest(idNotification){
 function deletePublication(idPublication){
     $.post(`/deletePublication/${idPublication}`).then(resp=>{
         let loc = location.href.split("/");
-        if (loc[loc.length-1] === 'profile') {
+        if (loc[loc.length-1] === 'profile' || loc[loc.length-1] === 'profile#') {
             loadPage(function () {
                 refreshPubs();
             });
@@ -412,8 +413,13 @@ function editPublication(idPublication){
     location.href = `/editPublication`;
 }
 
+function goToProfile(idUser){
+    document.cookie = `profile=${idUser}`;
+    location.href = "/profile"
+}
+
 let loc = location.href.split("/");
-if (loc[loc.length-1] === 'profile'){
+if (loc[loc.length-1] === 'profile' || loc[loc.length-1] === 'profile#'){
     $(document).ready(function(){
         loadPage(function(){
             refreshPubs();

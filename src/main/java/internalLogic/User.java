@@ -17,10 +17,13 @@ public class User {
     private String password;
     private Date bornDate;
     private String sex;
+    @Column(columnDefinition="text")
     private String location;
+    @Column(columnDefinition="text")
     private String jobs;
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<User> friends;
+    @Column(columnDefinition="text")
     private String role;
     @Column( name = "PROFILEPHOTO" )
     @Lob
@@ -28,7 +31,9 @@ public class User {
     @Column( name = "PORTRAITPHOTO" )
     @Lob
     private byte[] portraitPhoto;
+    @Column(columnDefinition="text")
     private String bornPlace;
+    @Column(columnDefinition="text")
     private String studyPlace;
 
 
