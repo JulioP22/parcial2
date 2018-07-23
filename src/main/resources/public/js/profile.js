@@ -43,30 +43,49 @@ $(document).ready(function() {
         $("#albumcreate").trigger('click');
     });
 
+
+    function setupReader(file,pictures,counter,totalfiles){
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function(e){
+            let base64Image = {
+                image: e.target.result
+            };
+            pictures.push(base64Image);
+            incrementCounter(counter,totalfiles,pictures);
+            // logPictures(pictures);
+        }
+    }
+
+    function incrementCounter(counter,totalfiles,pictures){
+        counter.counter++;
+        console.log("Counter: " + counter.counter);
+        console.log("TotalFiles: " + totalfiles);
+        if (counter.counter === totalfiles) {
+            $.post("/createAlbum",JSON.stringify(pictures),function(){
+                // $('#profilePic').attr('src', e.target.result); //La imagen como tal se encuntra en result
+                window.location.href = "/profile";
+            });
+        }
+    }
+
+    // function logPictures(pictures){
+    //     console.log(JSON.stringify(pictures[0]));
+    //
+    // }
+
     $("#albumcreate").on("change",function () {
         var input = this;
         var pictures = [];
+        let counter = {};
+        counter.counter = 0;
         if (input.files && input.files[0]) {
             for (let i=0; i<input.files.length; i++){
-                (function(file){
-                    console.log("ENTRANDO")
-                    var reader = new FileReader();
-                    reader.onload = function(e){
-                        let base64Image = {
-                            image: e.target.result
-                        };
-                        pictures.push(base64Image);
-                    }
-                })(input.files[i]);
+                setupReader(input.files[i],pictures,counter,input.files.length);
             }
 
-            // $.post("/updateProfilePic",JSON.stringify(base64Image),function(){
-            //     $('#profilePic').attr('src', e.target.result); //La imagen como tal se encuntra en result
-            //     window.location.href = "/profile";
-            // });
         }
 
-        console.log(pictures);
     });
 
 
