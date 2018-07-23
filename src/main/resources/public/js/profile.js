@@ -80,10 +80,6 @@ $(document).ready(function() {
         }
     }
 
-    // function logPictures(pictures){
-    //     console.log(JSON.stringify(pictures[0]));
-    //
-    // }
 
     $("#albumcreate").on("change",function () {
         var input = this;

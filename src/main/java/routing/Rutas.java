@@ -88,21 +88,28 @@ public class Rutas {
 
 
         post("/createAlbum",(request, response) -> {
-            Type listType = new TypeToken<ArrayList<Base64Image>>(){}.getType();
-            List<Base64Image> base64Images = parser.fromJson(request.body(),listType);
-            UserAlbum userAlbum = new UserAlbum();
-            Set<UserImage> userImages = new HashSet<>();
-            for (int i = 0; i<base64Images.size();i++){
-                byte[] bytesImage = base64ToByteArray(base64Images.get(i).getImage());
-                UserImage userImage = new UserImage();
-                userImage.setImage(bytesImage);
-                userImage.setCreator(request.session().attribute("user"));
-                userImages.add(userImage);
-                SQL.insert(userImage);
+            if (request.session().attribute("user")!=null){
+                Type listType = new TypeToken<ArrayList<Base64Image>>(){}.getType();
+                List<Base64Image> base64Images = parser.fromJson(request.body(),listType);
+                UserAlbum userAlbum = new UserAlbum();
+                Set<UserImage> userImages = new HashSet<>();
+                for (int i = 0; i<base64Images.size();i++){
+                    byte[] bytesImage = base64ToByteArray(base64Images.get(i).getImage());
+                    UserImage userImage = new UserImage();
+                    userImage.setImage(bytesImage);
+                    userImage.setCreator(request.session().attribute("user"));
+                    userImages.add(userImage);
+                    SQL.insert(userImage);
+                }
+                userAlbum.setUserImages(userImages);
+                userAlbum.setCreator(request.session().attribute("user"));
+                userAlbum.setReceiverUser(request.session().attribute("user"));
+                SQL.insert(userAlbum);
+                return "Yes";
             }
-            userAlbum.setUserImages(userImages);
-            SQL.insert(userAlbum);
-            return "Yes";
+            else{
+                return "No";
+            }
         });
 
 
@@ -118,8 +125,9 @@ public class Rutas {
             }
             if (request.session().attribute("user")!=null){
                 long idUser = ((User)request.session().attribute("user")).getId();
+                System.out.println(SQL.getUserAlbums((idUser1 != -1) ? idUser1 : idUser).size());
                 model.put("userprofile",profileUser);
-                model.put("albums",SQL.getUserAlbums(idUser1));
+                model.put("albums",SQL.getUserAlbums((idUser1 != -1)?idUser1:idUser));
                 model.put("notifications",SQL.getUserNotifications(idUser));
                 model.put("requests",SQL.getUserRequest(idUser));
                 return engine.render(new ModelAndView(model,"profile"));

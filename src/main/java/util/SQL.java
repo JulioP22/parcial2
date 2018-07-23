@@ -224,7 +224,7 @@ public class SQL {
             EntityManager enf = getEntityManager();
             EntityTransaction tr = enf.getTransaction();
             tr.begin();
-            List list = enf.createNativeQuery("select * from Publication where receiverUser_id = :id order by id desc", UserImage.class)
+            List list = enf.createNativeQuery("select * from Publication where receiverUser_id = :id and CREATOR_ID is not null and RECEIVERUSER_ID is not null and DTYPE <> 'UserAlbum' order by id desc", UserImage.class)
                     .setParameter("id",idUser)
                     .getResultList();
             tr.commit();
@@ -256,7 +256,8 @@ public class SQL {
             EntityManager enf = getEntityManager();
             EntityTransaction tr = enf.getTransaction();
             tr.begin();
-            List list = enf.createNativeQuery("select PUBLICATION.* from PUBLICATION where CREATOR_ID in ( select FRIENDS_ID from USER_USER where user_id = :idUser) or CREATOR_ID = :idUser order by PUBLICATION.id desc ", UserImage.class)
+            List list = enf.createNativeQuery("select PUBLICATION.* from PUBLICATION where CREATOR_ID in ( select FRIENDS_ID from USER_USER where user_id = :idUser) or CREATOR_ID = :idUser " +
+                    "and CREATOR_ID is not null and RECEIVERUSER_ID is not null and DTYPE <> 'UserAlbum' order by PUBLICATION.id desc ", UserImage.class)
                     .setParameter("idUser",idUser)
                     .getResultList();
             tr.commit();
