@@ -3,6 +3,7 @@ package routing;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import internalLogic.*;
 import internalLogic.Request;
 import spark.*;
@@ -10,13 +11,9 @@ import spark.template.thymeleaf.ThymeleafTemplateEngine;
 import util.Cypher;
 import util.SQL;
 
-import javax.crypto.interfaces.PBEKey;
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
+
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.*;
 
 import static spark.Spark.*;
@@ -88,6 +85,27 @@ public class Rutas {
             response.redirect("/");
             return "";
         });
+
+
+        post("/createAlbum",(request, response) -> {
+            Type listType = new TypeToken<ArrayList<Base64Image>>(){}.getType();
+            List<Base64Image> base64Images = parser.fromJson(request.body(),listType);
+            UserAlbum userAlbum = new UserAlbum();
+            Set<UserImage> userImages = new HashSet<>();
+            for (int i = 0; i<base64Images.size();i++){
+                byte[] bytesImage = base64ToByteArray(base64Images.get(i).getImage());
+                UserImage userImage = new UserImage();
+                userImage.setImage(bytesImage);
+                userImage.setCreator(request.session().attribute("user"));
+                userImages.add(userImage);
+                SQL.insert(userImage);
+            }
+            userAlbum.setUserImages(userImages);
+            SQL.insert(userAlbum);
+            return "Yes";
+        });
+
+
 
         get("/profile",(request, response) -> {
             Map<String,Object> model = new HashMap<>();

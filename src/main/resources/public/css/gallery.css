@@ -140,7 +140,7 @@ a {
     border-bottom: 1px solid #d0d0d0;
     -webkit-transition: all 0.5s ease-in-out;
     -moz-transition: all 0.5s ease-in-out;
-    overflow-y: scroll;
+    /*overflow-y: scroll;*/
     transition: all 0.5s ease-in-out;
 }
 .port img {
