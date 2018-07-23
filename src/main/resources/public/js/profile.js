@@ -29,8 +29,11 @@ $(document).ready(function() {
                 }
                 if (publication.strImage !== '' || publication.description !== ''){
                     $.post(`/insertPublication/${JSON.stringify(taggedUsers)}/${idUser}`,JSON.stringify(publication),function(){
-                        loadPage();
+                        loadPage(function () {
+                            refreshPubs();
+                        });
                         clean();
+                        $("#summernote").summernote("code","");
                     });
                 }
                 else{
@@ -295,7 +298,7 @@ function addComment(idPublication, idUser){
     };
     $.post(`/saveComment/${idUser}/${idPublication}`, JSON.stringify(comment), function(resp){
         $.get(`/getComments/${idPublication}`, function(resp){
-            console.log(resp);
+            $(`#text${idPublication}`).val("")
             $(`#com${idPublication}`).html(resp);
         });
     })

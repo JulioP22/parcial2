@@ -217,21 +217,27 @@
                 <div class="row">
                     <ul>
                         <a href="#" class="close"></a>
-
                         <th:block th:each="album : ${albums}">
                             <li>
                                 <a th:href="|#album-${album.id}">
                                     <img th:src="${album.userImages.iterator().next().getBase64Image()}">
                                 </a>
                             </li>
+                            <div th:each="comment : ${album.commentSet}">
+                                <div style="margin-left: 15px; padding: 10px;" class="badge badge-success" th:text="${comment.user.fullName+': '+  comment.description}"></div>
+                                <span th:if="${usuariosesion.id == comment.user.id}">
+                                    <button class="btn btn-xs" style="width: 10px; height: 40px; background-color: white"
+                                            th:onclick="'javascript:deleteComment(\''+ ${album.id} +'\', \''+ ${comment.id} +'\', \''+ ${usuariosesion.id} +'\', \''+ ${comment.user.id} +'\');'">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </span>
+                                <br><br>
+                            </div>
                         </th:block>
                     </ul>
                 </div>
                 <!-- / row -->
                 <!--TODO Ahora hacer que se puedan comentar,dar like, etc!-->
-
-
-
 
 
                 <!-- Item 01 -->
@@ -240,24 +246,18 @@
                         <div class="row">
                             <div class="description">
                                 <h1>Album</h1>
-                                <!--<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus quis libero erat.-->
-                                <!--Integer ac purus est. Proin erat mi, pulvinar ut magna eget, consectetur auctor-->
-                                <!--turpis.</p>-->
                             </div>
                             <div class="container">
                                 <div class="row">
                                     <th:block th:each="image : ${album.userImages}">
-                                        <div class="col-lg-6">
-                                            <!--<img  data-toggle="modal" th:attr="data-target='#myModal-'+ ${album.id}"  th:src="${image.getBase64Image()}" alt="">-->
+                                        <div class="col-sm-4">
                                             <img th:src="${image.getBase64Image()}" alt="">
                                         </div>
                                     </th:block>
                                 </div>
                             </div>
-
                         </div>
                     </div>
-
                 </th:block>
                 <!-- / row -->
 

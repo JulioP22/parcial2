@@ -15,16 +15,16 @@
 //     xhr.send();
 // }
 
-$(document).ready(function () {
-    let admin = {
-        email: "a@a.com",
-        password: "123"
-    };
-    $.post("/login",JSON.stringify(admin),function (response) {
-        console.log("YEEEEEEEEEI");
-        window.location.href = "/";
-    }).fail(function () {
-        console.log("SE JODiÓ") //TODO Hacer algo bonito front End aqui.
-    })
-});
+// $(document).ready(function () {
+//     let admin = {
+//         email: "a@a.com",
+//         password: "123"
+//     };
+//     $.post("/login",JSON.stringify(admin),function (response) {
+//         console.log("YEEEEEEEEEI");
+//         window.location.href = "/";
+//     }).fail(function () {
+//         console.log("SE JODiÓ") //TODO Hacer algo bonito front End aqui.
+//     })
+// });
 

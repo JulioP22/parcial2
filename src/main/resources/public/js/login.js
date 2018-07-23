@@ -217,7 +217,8 @@ $("#logIn").on("click",function () {
     $.post("/login",formToJson($("#form-login")),function (response) {
         window.location.href = "/";
     }).fail(function () {
-        console.log("SE JODiÓ") //TODO Hacer algo bonito front End aqui.
+        $("#email-login").effect('shake');
+        $("#password-login").effect('shake');
     })
 });
 
