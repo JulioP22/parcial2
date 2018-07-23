@@ -17,14 +17,25 @@ $(document).ready(function() {
             click: function () {
                 // invoke insertText method with 'hello' on editor module.
                 let idUser = sessionStorage.getItem("idUser");
+
+                let img = getImgString($("#summernote")[0].value);
+
                 let status = $($("#summernote").summernote("code")).text();
                 let publication = {};
                 publication.date = new Date();
                 publication.description = status; //TODO Falta la lógica de tagging
-                $.post(`/insertPublication/${JSON.stringify(taggedUsers)}/${idUser}`,JSON.stringify(publication),function(){
-                    loadPage();
-                    clean();
-                });
+                if (img !== '') {
+                    publication.strImage = img;
+                }
+                if (publication.strImage !== '' || publication.description !== ''){
+                    $.post(`/insertPublication/${JSON.stringify(taggedUsers)}/${idUser}`,JSON.stringify(publication),function(){
+                        loadPage();
+                        clean();
+                    });
+                }
+                else{
+                    $("#summernote").effect("shake");
+                }
             }
         });
 
@@ -62,18 +73,16 @@ $(document).ready(function() {
 
     //Sumernote
     $('#summernote').summernote({
-        height: editorHeight,
-        minHeight:editorHeight,
-        maxHeight: editorHeight,
+        height: 250,
+        minHeight:200,
+        maxHeight: 300,
         focus:true,
         disableResizeEditor: true,
         toolbar: [
-            // [groupName, [list of button]]
             ['style', ['bold', 'clear']],
             'picture',
             'addComment'
         ],
-
         buttons:{
             addComment: addButton
         }
@@ -121,6 +130,13 @@ $(document).ready(function() {
 
 });
 
+function getImgString(str) {
+    let idx = str.indexOf(`src="`);
+    let nwStr = str.substr(idx+5);
+    let idx2 = nwStr.indexOf(`"`);
+    return nwStr.substr(0, idx2-1);
+}
+
 function goToGallery(){
     $("#wall_normal").hide();
     $("#wall_editP").hide();
@@ -149,6 +165,8 @@ function goToEditProfile(){
     $("#wall_normal").hide();
     $("#wall_editP").show();
     $("#wall_friends").hide();
+    console.log('sasadsad')
+    console.log($("#wall_editP"));
 }
 
 function enableEdit(){
@@ -392,7 +410,8 @@ function loadPage(callback){
 }
 
 function loadHistory(callback){
-    $.get(`/loadHistory`).then(resp=>{
+    let id = sessionStorage.getItem("idUser");
+    $.get(`/loadHistory/${id}`).then(resp=>{
         $("#posts").html(resp);
         callback();
     })

@@ -25,6 +25,8 @@
         <div th:if="${publication.description != ''}" class="panel-body" th:utext="${publication.description}"></div>
         <div th:if="${publication.description == ''}" class="panel-body" th:text="${publication.description}"></div>
 
+        <img class="avatar" th:if="${publication.image != null}" th:src="${publication.getBase64Image()}" alt="jofpin" style="width: 100%; height: 100%;">
+
         <hr>
         <div th:id="${'com'+publication.id}">
             <div th:each="comment : ${publication.commentSet}">

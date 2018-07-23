@@ -23,8 +23,19 @@
                                 <p class="badge" th:text="${user.fullName}"></p>
                             </span>
         </div>
+
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+
+            var id = /*[[${publication.image}]]*/ 'default';
+            console.log(id);
+            /*]]>*/
+        </script>
+
         <div th:if="${publication.description != ''}" class="panel-body" th:utext="${publication.description}"></div>
         <div th:if="${publication.description == ''}" class="panel-body" th:text="${publication.description}"></div>
+
+        <img class="avatar" th:if="${publication.image != null}" th:src="${publication.getBase64Image()}" alt="jofpin">
 
         <hr>
         <div th:id="${'com'+publication.id}">

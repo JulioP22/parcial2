@@ -224,9 +224,8 @@ public class SQL {
             EntityManager enf = getEntityManager();
             EntityTransaction tr = enf.getTransaction();
             tr.begin();
-            List list = enf.createQuery("select c from Publication c where receiverUser_id = :id order by id desc")
+            List list = enf.createNativeQuery("select * from Publication where receiverUser_id = :id order by id desc", UserImage.class)
                     .setParameter("id",idUser)
-                    .setMaxResults(6)
                     .getResultList();
             tr.commit();
             enf.close();
@@ -237,13 +236,28 @@ public class SQL {
         }
     }
 
-    public static List getPublications() {
+    public static void deleteImage(long idPublication){
         try {
             EntityManager enf = getEntityManager();
             EntityTransaction tr = enf.getTransaction();
             tr.begin();
-            List list = enf.createQuery("select c from Publication c where creator.id <> null order by c.id desc")
-                    .setMaxResults(6)
+            enf.createNativeQuery("update PUBLICATION set IMAGE = null where id = :idPublication")
+                    .setParameter("idPublication",idPublication)
+                    .executeUpdate();
+            tr.commit();
+            enf.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static List getPublications(long idUser) {
+        try {
+            EntityManager enf = getEntityManager();
+            EntityTransaction tr = enf.getTransaction();
+            tr.begin();
+            List list = enf.createNativeQuery("select PUBLICATION.* from PUBLICATION where CREATOR_ID in ( select FRIENDS_ID from USER_USER where user_id = :idUser) or CREATOR_ID = :idUser order by PUBLICATION.id desc ", UserImage.class)
+                    .setParameter("idUser",idUser)
                     .getResultList();
             tr.commit();
             enf.close();

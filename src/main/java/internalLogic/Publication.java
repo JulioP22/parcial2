@@ -121,6 +121,9 @@ public class Publication {
         }
     }
 
+    public UserImage transform(){
+        return new UserImage(null,this.commentSet,this.likeSet,this.date,this.creator,this.description,this.taggedUsers,this.receiverUser);
+    }
     @Override
     public String toString() {
         return "Publication{" +

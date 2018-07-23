@@ -16,6 +16,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Method;
 import java.util.*;
 
 import static spark.Spark.*;
@@ -125,17 +126,31 @@ public class Rutas {
 
                 long idReceiver = Integer.parseInt(request.params("idUser"));
 
-                Publication publication = parser.fromJson(request.body(),Publication.class);
-                publication.setCreator(request.session().attribute("user"));
-                publication.setReceiverUser(SQL.getElementById(idReceiver,User.class));//TODO esto debe cambiar al usuario en cuyo perfil se está.
+                UserImage pub1 = parser.fromJson(request.body(),UserImage.class);
 
-                long[] taggedUsers = parser.fromJson(request.params("taggedUsers"),long[].class);
+                if (pub1.getStrImage()!=null){
+                    pub1.setCreator(request.session().attribute("user"));
+                    pub1.setReceiverUser(SQL.getElementById(idReceiver,User.class));//TODO esto debe cambiar al usuario en cuyo perfil se está.
+                    pub1.setImage(base64ToByteArray(pub1.getStrImage()));
 
-                Publication pub = SQL.insert(publication);
-                SQL.insertTaggedUsers(pub.getId(),taggedUsers);
-                generateNotifications(taggedUsers,pub.getId());
+                    long[] taggedUsers = parser.fromJson(request.params("taggedUsers"),long[].class);
 
-                System.out.println("Publicacion recibidia es: " + publication.getDescription() );
+                    Publication pub = SQL.insert(pub1);
+                    SQL.insertTaggedUsers(pub.getId(),taggedUsers);
+                    generateNotifications(taggedUsers,pub.getId());
+                }
+                else{
+                    Publication publication = parser.fromJson(request.body(),Publication.class);
+                    publication.setCreator(request.session().attribute("user"));
+                    publication.setReceiverUser(SQL.getElementById(idReceiver,User.class));//TODO esto debe cambiar al usuario en cuyo perfil se está.
+
+                    long[] taggedUsers = parser.fromJson(request.params("taggedUsers"),long[].class);
+
+                    Publication pub = SQL.insert(publication);
+                    SQL.insertTaggedUsers(pub.getId(),taggedUsers);
+                    generateNotifications(taggedUsers,pub.getId());
+                }
+
                 return "Inserted";
             }
             else{
@@ -310,7 +325,7 @@ public class Rutas {
                 model.put("usuariosesion",request.session().attribute("user"));
 
                 model.put("publications",SQL.getPublicationsFromUser(id));
-                refreshPublications((List<Publication>) model.get("publications"), (User) model.get("usuariosesion"));
+                refreshPublications((List<UserImage>) model.get("publications"), (User) model.get("usuariosesion"));
 
                 return engine.render(new ModelAndView(model,"THBasis/publicationBasis"));
             }
@@ -320,13 +335,15 @@ public class Rutas {
             }
         });
 
-        get("/loadHistory",(request, response) -> {
+        get("/loadHistory/:idUser",(request, response) -> {
             if (request.session().attribute("user")!=null){
+                long idUser = Integer.parseInt(request.params("idUser"));
                 Map<String,Object> model = new HashMap<>();
                 model.put("usuariosesion",request.session().attribute("user"));
 
-                model.put("publications",SQL.getPublications());
-                refreshPublications((List<Publication>) model.get("publications"), (User) model.get("usuariosesion"));
+                model.put("publications",SQL.getPublications(idUser));
+
+                refreshPublications((List<UserImage>) model.get("publications"), (User) model.get("usuariosesion"));
 
                 return engine.render(new ModelAndView(model,"THBasis/publicationBasisHistory"));
             }
@@ -358,32 +375,36 @@ public class Rutas {
 
         get("/getPublication/:id", (request, response) -> {
             long id = Integer.parseInt(request.params("id"));
-            Publication pub = SQL.getElementById(id, Publication.class);
-
+            UserImage pub = SQL.getElementById(id, UserImage.class);
+            if (pub == null) {
+                Publication pub1 = SQL.getElementById(id, Publication.class);
+                pub1.setLikeSet(null);
+                pub1.setCommentSet(null);
+                pub1.setCreator(null);
+                pub1.setReceiverUser(null);
+                cleanUsers(pub1.getTaggedUsers());
+                return parser.toJson(pub1);
+            }
             pub.setLikeSet(null);
             pub.setCommentSet(null);
             pub.setCreator(null);
             pub.setReceiverUser(null);
+            pub.setStrImage(pub.getBase64Image());
             cleanUsers(pub.getTaggedUsers());
-
             return parser.toJson(pub);
+
         });
 
         post("/updatePublication/:taggedUsers",(request, response) -> {
             Publication publication = parser.fromJson(request.body(),Publication.class);
-
-            System.out.println(publication.getDescription());
-
             Publication realOne = SQL.getElementById(publication.getId(),Publication.class);
             realOne.setDescription(publication.getDescription());
-
             long[] taggedUsers = parser.fromJson(request.params("taggedUsers"),long[].class);
             SQL.deleteTags(publication.getId());
-
             SQL.insertTaggedUsers(publication.getId(),taggedUsers);
             SQL.update(realOne);
-
             generateNotifications(taggedUsers,publication.getId());
+            SQL.deleteImage(publication.getId());
             return "";
         });
 
@@ -436,6 +457,15 @@ public class Rutas {
 
     }
 
+    private void deletePub(long idPublication){
+        SQL.deleteComments(idPublication);
+        SQL.deleteLikes(idPublication);
+        SQL.deleteTags(idPublication);
+        SQL.deleteNotifications(idPublication);
+
+        Publication pub = SQL.getElementById(idPublication,Publication.class);
+        SQL.delete(pub);
+    }
     private boolean loginUser(User user){
         boolean loggedIn = false;
         List<User> usuarios = SQL.getUsers();
@@ -462,8 +492,8 @@ public class Rutas {
         return decodedString;
     }
 
-    private void refreshPublications(List<Publication> pubs, User user){
-        for(Publication i: pubs){
+    private void refreshPublications(List<UserImage> pubs, User user){
+        for(UserImage i: pubs){
             i.verifyLike(user);
         }
     }

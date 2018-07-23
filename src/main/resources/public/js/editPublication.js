@@ -15,6 +15,14 @@ function verify(idFriend){
     return true;
 }
 
+function getImgString(str) {
+    let idx = str.indexOf(`src="`);
+    let nwStr = str.substr(idx+5);
+    let idx2 = nwStr.indexOf(`"`);
+    return nwStr.substr(0, idx2-1);
+}
+
+
 function tagFriend(idFriend){
     if (idFriend !== ""){
         if (verify(idFriend)){
@@ -45,10 +53,11 @@ $(document).ready(function () {
                 let publication = {};
                 publication.description = status;
                 publication.id = idPublication;
-                console.log(publication);
                 $.post(`/updatePublication/${JSON.stringify(taggedUsers)}`,JSON.stringify(publication),function(){
                     location.href = "/";
                 });
+
+
             }
         });
 
@@ -77,7 +86,18 @@ $(document).ready(function () {
 
     $.get(`/getPublication/${idPublication}`).then(resp=>{
         let publication = JSON.parse(resp);
+        console.log(publication);
         $('#summernote').summernote('code',publication.description);
+
+        if (publication.hasOwnProperty('strImage')){
+            var x = document.createElement("IMG");
+            x.setAttribute("src", publication.strImage);
+            x.setAttribute("width", "100%");
+            x.setAttribute("height", "100%");
+            x.setAttribute("alt", "Image");
+            $(".note-editable").append(x);
+        }
+
         if (publication.hasOwnProperty('taggedUsers')){
             for (let i in publication.taggedUsers){
                 taggedUsers.push(publication.taggedUsers[i].id);
